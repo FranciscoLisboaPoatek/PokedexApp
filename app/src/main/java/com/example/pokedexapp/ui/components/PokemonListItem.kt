@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -149,6 +150,8 @@ fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Int, modifier: Modifie
             Text(
                 text = pokemon.name,
                 textAlign = TextAlign.Center,
+                color = Color.Black,
+                style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()

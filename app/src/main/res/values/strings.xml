@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">PokedexApp</string>
+    <string name="pokemon_search_hint">Type a Pokemon name</string>
+    <string name="close_search">Close Search</string>
+    <string name="open_search">Open Search</string>
 </resources>
