@@ -59,7 +59,7 @@ fun PokemonTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogoPokemonTopAppBar(
+private fun LogoPokemonTopAppBar(
     onSearchClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
@@ -83,7 +83,7 @@ fun LogoPokemonTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchPokemonTopAppBar(
+private fun SearchPokemonTopAppBar(
     onSearchTextChange: (String) -> Unit,
     onCloseSearchCLick: () -> Unit
 ) {
@@ -133,7 +133,7 @@ fun SearchPokemonTopAppBar(
 }
 
 @Composable
-fun SearchTextField(
+private fun SearchTextField(
     text: String,
     onSearchTextChange: (String) -> Unit,
     focusRequester: FocusRequester,
@@ -164,7 +164,7 @@ fun SearchTextField(
 }
 
 @Composable
-fun PokemonLogo(
+private fun PokemonLogo(
     modifier: Modifier = Modifier
 ) {
     Image(
@@ -176,7 +176,7 @@ fun PokemonLogo(
 }
 
 @Composable
-fun TopAppBarIconButton(
+private fun TopAppBarIconButton(
     icon: ImageVector,
     onClick: () -> Unit,
     contentDescription: String? = null

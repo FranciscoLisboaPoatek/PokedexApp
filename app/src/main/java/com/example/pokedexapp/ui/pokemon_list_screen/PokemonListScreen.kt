@@ -13,18 +13,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.domain.models.PokemonModel
-import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.ui.components.PokemonListItem
 import com.example.pokedexapp.ui.components.PokemonTopAppBar
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun PokemonListScreen(
@@ -61,7 +56,7 @@ fun PokemonListScreen(
 }
 
 @Composable
-fun PokemonListScreenContent(pokemonList: List<PokemonModel>, modifier: Modifier) {
+private fun PokemonListScreenContent(pokemonList: List<PokemonModel>, modifier: Modifier) {
 
     Surface(
         modifier = modifier.fillMaxSize(),
