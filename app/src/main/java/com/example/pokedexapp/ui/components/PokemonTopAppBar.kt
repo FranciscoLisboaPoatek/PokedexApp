@@ -37,23 +37,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.R
-import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenOnEvent
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
 @Composable
 fun PokemonTopAppBar(
     searchMode: Boolean,
-    onEvent: (PokemonListScreenOnEvent) -> Unit,
+    onSearchTextChange: (String) -> Unit,
+    handleSearchClick: () -> Unit
 ) {
 
     if (searchMode) SearchPokemonTopAppBar(
-        onSearchTextChange = {
-            onEvent(
-                PokemonListScreenOnEvent.OnSearchTextValueChange(it)
-            )
-        },
-        onCloseSearchCLick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) })
-    else LogoPokemonTopAppBar(onSearchClick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) })
+        onSearchTextChange = { onSearchTextChange(it) },
+        onCloseSearchCLick = { handleSearchClick() })
+    else LogoPokemonTopAppBar(onSearchClick = { handleSearchClick() })
 
 }
 
@@ -193,7 +189,7 @@ private fun TopAppBarIconButton(
 @Preview
 @Composable
 fun PokemonTopAppBarPreview() {
-    PokemonTopAppBar(false) {
+    PokemonTopAppBar(false,{}) {
 
     }
 }
@@ -201,7 +197,7 @@ fun PokemonTopAppBarPreview() {
 @Preview
 @Composable
 fun PokemonTopAppBarSearchModePreview() {
-    PokemonTopAppBar(true) {
+    PokemonTopAppBar(true,{}) {
 
     }
 }

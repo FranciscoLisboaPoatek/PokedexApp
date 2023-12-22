@@ -15,11 +15,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.ui.components.PokemonListItem
 import com.example.pokedexapp.ui.components.PokemonTopAppBar
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 
 @Composable
 fun PokemonListScreen(
@@ -43,20 +45,34 @@ fun PokemonListScreen(
         }
     }
 
+    PokemonListScreenContent(
+        isSearchMode = state.isSearchMode,
+        pokemonList = state.pokemonList,
+        onEvent = ::onEvent
+    )
+}
+
+@Composable
+private fun PokemonListScreenContent(
+    isSearchMode: Boolean,
+    pokemonList: List<PokemonModel>,
+    onEvent: (PokemonListScreenOnEvent) -> Unit
+) {
     Scaffold(
         topBar = {
             PokemonTopAppBar(
-                searchMode = state.isSearchMode,
-                onEvent = ::onEvent
+                searchMode = isSearchMode,
+                onSearchTextChange = { onEvent(PokemonListScreenOnEvent.OnSearchTextValueChange(it)) },
+                handleSearchClick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) }
             )
         }
     ) {
-        PokemonListScreenContent(pokemonList = state.pokemonList, modifier = Modifier.padding(it))
+        PokemonList(pokemonList = pokemonList, modifier = Modifier.padding(it))
     }
 }
 
 @Composable
-private fun PokemonListScreenContent(pokemonList: List<PokemonModel>, modifier: Modifier) {
+private fun PokemonList(pokemonList: List<PokemonModel>, modifier: Modifier) {
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -73,4 +89,24 @@ private fun PokemonListScreenContent(pokemonList: List<PokemonModel>, modifier: 
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PokemonListScreenPreview() {
+    PokemonListScreenContent(
+        isSearchMode = false,
+        pokemonList = PokemonSampleData.pokemonListSampleData(),
+        onEvent = {}
+    )
+}
+
+@Preview
+@Composable
+fun PokemonListScreenSearchPreview() {
+    PokemonListScreenContent(
+        isSearchMode = true,
+        pokemonList = PokemonSampleData.pokemonListSampleData(),
+        onEvent = {}
+    )
 }
