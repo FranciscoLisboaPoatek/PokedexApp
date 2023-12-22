@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,23 +17,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.pokedexapp.domain.models.PokemonModel
+import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 
 
 @Composable
 fun TwoColorStrokeBox(
     firstColor: Color,
     secondColor: Color,
-    strokeWidthDp: Int,
+    strokeWidthDp: Dp,
     modifier: Modifier,
     content: @Composable () -> Unit
 ) {
     Box(
         modifier = modifier
             .drawBehind {
-                val strokeWidthPx = strokeWidthDp.dp.toPx()
+                val strokeWidthPx = strokeWidthDp.toPx()
                 val offset = strokeWidthPx / 2
                 //top line
                 drawLine(
@@ -108,7 +109,7 @@ fun TwoColorStrokeBox(
                 )
             },
     ) {
-        Box(modifier = Modifier.padding((strokeWidthDp - 0.5f).dp)) {
+        Box(modifier = Modifier.padding(strokeWidthDp - 0.4.dp)) {
             content()
         }
     }
@@ -117,16 +118,19 @@ fun TwoColorStrokeBox(
 @Preview
 @Composable
 fun PokemonListItemPreview() {
-
+    PokemonListItem(
+        pokemon = PokemonSampleData.singlePokemonSampleData(),
+        strokeWidthDp = 10.dp,
+        modifier = Modifier.size(186.dp, 210.dp))
 }
 
 @Composable
-fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Int, modifier: Modifier = Modifier) {
+fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Dp, modifier: Modifier = Modifier) {
     TwoColorStrokeBox(
         pokemon.primaryType.color,
         pokemon.secondaryType?.color ?: pokemon.primaryType.color,
         strokeWidthDp,
-        modifier = modifier.size(186.dp, 210.dp)
+        modifier = modifier
     ) {
         Column(
             modifier = Modifier.background(
@@ -138,20 +142,16 @@ fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Int, modifier: Modifie
                 )
             )
         ) {
-            AsyncImage(
-                model = pokemon.frontDefaultImageUrl,
-                contentDescription = null,
+            PokemonImage(
+                image = pokemon.frontDefaultImageUrl,
                 modifier = Modifier
                     .padding(top = 5.dp, start = 5.dp, end = 5.dp)
                     .weight(3f)
                     .fillMaxWidth()
             )
 
-            Text(
-                text = pokemon.name,
-                textAlign = TextAlign.Center,
-                color = Color.Black,
-                style = MaterialTheme.typography.titleMedium,
+            PokemonName(
+                name = pokemon.name,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
@@ -159,4 +159,29 @@ fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Int, modifier: Modifie
 
         }
     }
+}
+
+@Composable
+private fun PokemonImage(
+    image: Any,
+    modifier: Modifier = Modifier
+) {
+    AsyncImage(
+        model = image,
+        contentDescription = null,
+        modifier = modifier
+
+    )
+}
+
+@Composable
+private fun PokemonName(
+    name: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = name,
+        textAlign = TextAlign.Center,
+        modifier = modifier
+    )
 }

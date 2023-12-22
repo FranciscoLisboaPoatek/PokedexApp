@@ -13,7 +13,7 @@ class PokemonSampleData {
                 PokemonTypes.NORMAL,
                 null,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png"
             ),
             PokemonModel(
                 2,
@@ -21,7 +21,7 @@ class PokemonSampleData {
                 PokemonTypes.FIGHTING,
                 PokemonTypes.STEEL,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/448.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/448.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/448.png"
             ),
             PokemonModel(
                 3,
@@ -29,7 +29,7 @@ class PokemonSampleData {
                 PokemonTypes.FLYING,
                 PokemonTypes.DRAGON,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/715.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/715.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/715.png"
             ),
             PokemonModel(
                 4,
@@ -37,7 +37,7 @@ class PokemonSampleData {
                 PokemonTypes.POISON,
                 PokemonTypes.FLYING,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/169.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/169.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/169.png"
             ),
             PokemonModel(
                 5,
@@ -45,7 +45,7 @@ class PokemonSampleData {
                 PokemonTypes.GROUND,
                 PokemonTypes.DARK,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/553.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/553.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/553.png"
             ),
             PokemonModel(
                 6,
@@ -53,7 +53,7 @@ class PokemonSampleData {
                 PokemonTypes.ROCK,
                 PokemonTypes.WATER,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/138.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/138.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/138.png"
             ),
             PokemonModel(
                 7,
@@ -61,7 +61,7 @@ class PokemonSampleData {
                 PokemonTypes.BUG,
                 PokemonTypes.FIRE,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/637.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/637.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/637.png"
             ),
             PokemonModel(
                 8,
@@ -69,7 +69,7 @@ class PokemonSampleData {
                 PokemonTypes.GHOST,
                 PokemonTypes.POISON,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/94.png"
             ),
             PokemonModel(
                 9,
@@ -77,7 +77,7 @@ class PokemonSampleData {
                 PokemonTypes.STEEL,
                 PokemonTypes.PSYCHIC,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/385.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/385.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/385.png"
             ),
             PokemonModel(
                 10,
@@ -85,7 +85,7 @@ class PokemonSampleData {
                 PokemonTypes.FIRE,
                 PokemonTypes.FLYING,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/250.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/250.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/250.png"
             ),
             PokemonModel(
                 11,
@@ -93,7 +93,7 @@ class PokemonSampleData {
                 PokemonTypes.WATER,
                 null,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/9.png"
             ),
             PokemonModel(
                 12,
@@ -101,7 +101,7 @@ class PokemonSampleData {
                 PokemonTypes.GRASS,
                 PokemonTypes.POISON,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/407.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/407.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/407.png"
             ),
             PokemonModel(
                 13,
@@ -109,7 +109,7 @@ class PokemonSampleData {
                 PokemonTypes.ELECTRIC,
                 PokemonTypes.GHOST,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/479.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/479.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/479.png"
             ),
             PokemonModel(
                 14,
@@ -117,7 +117,7 @@ class PokemonSampleData {
                 PokemonTypes.PSYCHIC,
                 PokemonTypes.FAIRY,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/858.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/858.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/858.png"
             ),
             PokemonModel(
                 15,
@@ -125,7 +125,7 @@ class PokemonSampleData {
                 PokemonTypes.ICE,
                 PokemonTypes.WATER,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/363.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/363.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/363.png"
             ),
             PokemonModel(
                 16,
@@ -133,7 +133,7 @@ class PokemonSampleData {
                 PokemonTypes.DRAGON,
                 PokemonTypes.GHOST,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/887.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/887.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/887.png"
             ),
             PokemonModel(
                 17,
@@ -141,7 +141,7 @@ class PokemonSampleData {
                 PokemonTypes.DARK,
                 null,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/491.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/491.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/491.png"
             ),
             PokemonModel(
                 18,
@@ -149,18 +149,18 @@ class PokemonSampleData {
                 PokemonTypes.FAIRY,
                 null,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/670.png"
             ),
         )
 
-        fun pokemonSearchSampleListData(): List<PokemonModel> = listOf(
+        fun pokemonSearchListSampleData(): List<PokemonModel> = listOf(
             PokemonModel(
                 1,
                 "???",
                 PokemonTypes.NORMAL,
                 null,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/365.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/365.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/365.png"
             ),
             PokemonModel(
                 1,
@@ -168,8 +168,17 @@ class PokemonSampleData {
                 PokemonTypes.NORMAL,
                 null,
                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/578.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/578.png"
+                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/578.png"
             ),
+        )
+
+        fun singlePokemonSampleData(): PokemonModel = PokemonModel(
+            id = 1,
+            name = "Bulbasaur",
+            primaryType = PokemonTypes.GRASS,
+            secondaryType = PokemonTypes.POISON,
+            frontDefaultImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+            frontShinyImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1.png"
         )
     }
 }

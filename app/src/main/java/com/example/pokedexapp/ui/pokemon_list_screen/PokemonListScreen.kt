@@ -4,6 +4,7 @@ package com.example.pokedexapp.ui.pokemon_list_screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -85,7 +86,7 @@ private fun PokemonList(pokemonList: List<PokemonModel>, modifier: Modifier) {
             contentPadding = PaddingValues(16.dp)
         ) {
             items(pokemonList) { pokemon ->
-                PokemonListItem(pokemon = pokemon, strokeWidthDp = 10)
+                PokemonListItem(pokemon = pokemon, strokeWidthDp = 10.dp, modifier = Modifier.height(210.dp))
             }
         }
     }

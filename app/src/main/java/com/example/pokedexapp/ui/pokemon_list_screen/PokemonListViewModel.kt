@@ -32,7 +32,7 @@ class PokemonListViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-            state.value = state.value.copy(pokemonList = PokemonSampleData.pokemonSearchSampleListData())
+            state.value = state.value.copy(pokemonList = PokemonSampleData.pokemonSearchListSampleData())
         }
     }
 
