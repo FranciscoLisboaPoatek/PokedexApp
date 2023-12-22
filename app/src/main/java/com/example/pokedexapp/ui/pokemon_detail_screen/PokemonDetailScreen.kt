@@ -68,6 +68,7 @@ fun PokemonDetailScreenContent(pokemon: PokemonModel, modifier: Modifier = Modif
         {
             PokemonInformationSheet(
                 pokemon = pokemon,
+                contentOffset = pokemonImageSize/2 + 10.dp,
                 modifier = Modifier.padding(
                     top = pokemonImageTopPadding + pokemonImageSize/2 ,
                     start = 30.dp,
@@ -99,7 +100,7 @@ private fun PokemonImage(image: Any?, imageSize: Dp, modifier: Modifier = Modifi
 }
 
 @Composable
-fun PokemonInformationSheet(pokemon: PokemonModel, modifier: Modifier = Modifier) {
+fun PokemonInformationSheet(pokemon: PokemonModel,contentOffset: Dp, modifier: Modifier = Modifier) {
     Surface(
         color = Color.White,
         shape = RoundedCornerShape(10.dp),
@@ -110,7 +111,7 @@ fun PokemonInformationSheet(pokemon: PokemonModel, modifier: Modifier = Modifier
             modifier = Modifier.fillMaxWidth()
         ) {
 
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(contentOffset).fillMaxWidth())
 
             PokemonName(
                 pokemonId = pokemon.id,
