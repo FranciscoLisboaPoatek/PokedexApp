@@ -28,17 +28,19 @@ class PokemonDetailViewModel @Inject constructor() : ViewModel() {
                 ),
                 PokemonTypes.GRASS,
                 PokemonTypes.POISON,
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
-                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/265.png"
+                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"),
+                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1.png")
             )
         )
     )
 
     val state get() = _state
-    fun changePokemonSprite(pokemonSprite: PokemonSprite){
-        val sprite = when(pokemonSprite){
-            PokemonSprite.FRONT_DEFAULT -> state.value.pokemonModel.frontDefaultImageUrl
-            PokemonSprite.FRONT_SHINY_DEFAULT -> state.value.pokemonModel.frontShinyImageUrl
+    fun changePokemonSprite(actualPokemonSprite: SpriteType){
+        val sprite = when(actualPokemonSprite){
+            SpriteType.FRONT_DEFAULT -> state.value.pokemonModel.frontShinySprite
+            SpriteType.FRONT_SHINY_DEFAULT -> state.value.pokemonModel.frontDefaultSprite
+            SpriteType.BACK_DEFAULT -> TODO()
+            SpriteType.BACK_SHINY_DEFAULT -> TODO()
         }
         _state.value = _state.value.copy(pokemonSprite = sprite)
     }

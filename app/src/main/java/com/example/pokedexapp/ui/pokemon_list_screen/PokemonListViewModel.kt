@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.models.PokemonTypes
+import com.example.pokedexapp.ui.pokemon_detail_screen.PokemonSprite
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -55,8 +56,8 @@ class PokemonListViewModel @Inject constructor(
             ),
             PokemonTypes.NORMAL,
             null,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/365.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/365.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/365.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/365.png")
         ),
         PokemonModel(
             1,
@@ -74,8 +75,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.NORMAL,
             null,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/578.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/578.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/578.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/578.png")
         ),
     )
 
@@ -96,8 +97,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.NORMAL,
             null,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png")
         ),
         PokemonModel(
             2,
@@ -115,8 +116,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.FIGHTING,
             PokemonTypes.STEEL,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/448.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/448.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/448.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/448.png")
         ),
         PokemonModel(
             3,
@@ -134,8 +135,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.FLYING,
             PokemonTypes.DRAGON,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/715.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/715.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/715.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/715.png")
         ),
         PokemonModel(
             4,
@@ -153,8 +154,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.POISON,
             PokemonTypes.FLYING,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/169.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/169.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/169.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/169.png")
         ),
         PokemonModel(
             5,
@@ -172,8 +173,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.GROUND,
             PokemonTypes.DARK,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/553.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/553.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/553.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/553.png")
         ),
         PokemonModel(
             6,
@@ -191,8 +192,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.ROCK,
             PokemonTypes.WATER,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/138.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/138.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/138.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/138.png")
         ),
         PokemonModel(
             7,
@@ -210,8 +211,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.BUG,
             PokemonTypes.FIRE,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/637.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/637.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/637.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/637.png")
         ),
         PokemonModel(
             8,
@@ -229,8 +230,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.GHOST,
             PokemonTypes.POISON,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/94.png")
         ),
         PokemonModel(
             9,
@@ -248,8 +249,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.STEEL,
             PokemonTypes.PSYCHIC,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/385.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/385.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/385.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/385.png")
         ),
         PokemonModel(
             10,
@@ -267,8 +268,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.FIRE,
             PokemonTypes.FLYING,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/250.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/250.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/250.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/250.png")
         ),
         PokemonModel(
             11,
@@ -286,8 +287,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.WATER,
             null,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/9.png")
         ),
         PokemonModel(
             12,
@@ -305,8 +306,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.GRASS,
             PokemonTypes.POISON,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/407.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/407.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/407.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/407.png")
         ),
         PokemonModel(
             13,
@@ -324,8 +325,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.ELECTRIC,
             PokemonTypes.GHOST,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/479.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/479.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/479.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/479.png")
         ),
         PokemonModel(
             14,
@@ -343,8 +344,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.PSYCHIC,
             PokemonTypes.FAIRY,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/858.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/858.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/858.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/858.png")
         ),
         PokemonModel(
             15,
@@ -362,8 +363,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.ICE,
             PokemonTypes.WATER,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/363.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/363.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/363.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/363.png")
         ),
         PokemonModel(
             16,
@@ -381,8 +382,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.DRAGON,
             PokemonTypes.GHOST,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/887.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/887.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/887.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/887.png")
         ),
         PokemonModel(
             17,
@@ -400,8 +401,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.DARK,
             null,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/491.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/491.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/491.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/491.png")
         ),
         PokemonModel(
             18,
@@ -419,8 +420,8 @@ class PokemonListViewModel @Inject constructor(
 
             PokemonTypes.FAIRY,
             null,
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670.png",
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670.png"
+            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670.png"),
+            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/670.png")
         ),
     )
 

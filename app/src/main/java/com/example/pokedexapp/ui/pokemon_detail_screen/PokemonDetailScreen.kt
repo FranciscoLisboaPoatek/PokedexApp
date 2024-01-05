@@ -42,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -64,17 +65,16 @@ fun PokemonDetailScreen(
 
     PokemonDetailScreenContent(
         pokemon = pokemonDetailState.pokemonModel,
-        pokemonImage = pokemonDetailState.pokemonSprite
+        currentSprite = pokemonDetailState.pokemonSprite,
+        changeShinySprite = { pokemonDetailViewModel.changePokemonSprite(it) }
     )
 }
 
 @Composable
-private fun PokemonDetailScreenContent(pokemon: PokemonModel, pokemonImage:String, modifier: Modifier = Modifier) {
+private fun PokemonDetailScreenContent(pokemon: PokemonModel, currentSprite:PokemonSprite, changeShinySprite: (SpriteType) -> Unit, modifier: Modifier = Modifier) {
     val pokemonImageSize = 200.dp
     val pokemonImageTopPadding = 80.dp
-    var isShinySprite by remember {
-        mutableStateOf(false)
-    }
+
     Surface(
         modifier = modifier.fillMaxSize()
     ) {
@@ -93,8 +93,8 @@ private fun PokemonDetailScreenContent(pokemon: PokemonModel, pokemonImage:Strin
                 .padding(bottom = 32.dp)
         )
         {
-            PokemonDetailTopAppBar(isShinySprite = isShinySprite) {
-                isShinySprite = !isShinySprite
+            PokemonDetailTopAppBar(isShinySprite = currentSprite.spriteType.isShiny) {
+                changeShinySprite( currentSprite.spriteType )
             }
             PokemonInformationSheet(
                 pokemon = pokemon,
@@ -106,7 +106,7 @@ private fun PokemonDetailScreenContent(pokemon: PokemonModel, pokemonImage:Strin
                 )
             )
             PokemonImage(
-                pokemonImage,
+                currentSprite.spriteUrl,
                 pokemonImageSize,
                 modifier = Modifier.padding(top = pokemonImageTopPadding)
             )
@@ -176,7 +176,7 @@ private fun PokemonInformationSheet(
             PokemonHeightWeight(
                 pokemonHeight = pokemon.height,
                 pokemonWeight = pokemon.weight,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -263,7 +263,7 @@ private fun PokemonMeasurement(
             tint = color,
             modifier = Modifier.size(48.dp)
         )
-        Text(text = content, color = color, style = MaterialTheme.typography.titleLarge)
+        Text(text = content, color = color, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 
@@ -283,14 +283,14 @@ private fun PokemonHeightWeight(
             stringResource(id = R.string.weight_in_kg, pokemonWeight.toString()),
             painterResource(id = R.drawable.weight_icon),
             Color.Gray,
-            Modifier.width(120.dp),
+            Modifier.weight(1f),
             Arrangement.End
         )
         PokemonMeasurement(
             stringResource(id = R.string.height_in_m, pokemonHeight.toString()),
             painterResource(id = R.drawable.height_icon),
             Color.Gray,
-            Modifier.width(120.dp)
+            Modifier.weight(1f)
         )
     }
 }

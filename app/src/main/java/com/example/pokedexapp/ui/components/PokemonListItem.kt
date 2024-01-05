@@ -139,7 +139,7 @@ fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Int, modifier: Modifie
             )
         ) {
             AsyncImage(
-                model = pokemon.frontDefaultImageUrl,
+                model = pokemon.frontDefaultSprite.spriteUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .padding(top = 5.dp, start = 5.dp, end = 5.dp)
