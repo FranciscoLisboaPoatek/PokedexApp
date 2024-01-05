@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
+import com.example.pokedexapp.ui.utils.updateState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -14,25 +15,28 @@ class PokemonListViewModel @Inject constructor(
 
 ): ViewModel() {
 
-    private var _state = MutableStateFlow(PokemonListScreenUiState())
+    private val _state = MutableStateFlow(PokemonListScreenUiState())
     val state get() = _state
 
-    private var pokemonList = listOf<PokemonModel>()
+    private var defaultPokemonList = listOf<PokemonModel>()
+    private var searchPokemonList = listOf<PokemonModel>()
+
     init {
-        pokemonList = PokemonSampleData.pokemonListSampleData()
-        _state.value = _state.value.copy(pokemonList = pokemonList)
+        defaultPokemonList = PokemonSampleData.pokemonListSampleData()
+        _state.updateState { copy(pokemonList = defaultPokemonList) }
     }
     fun changeIsSearchMode(){
-        _state.value = _state.value.copy(isSearchMode = !_state.value.isSearchMode)
+        _state.updateState { copy(isSearchMode = !_state.value.isSearchMode) }
     }
 
     fun searchPokemonByName(pokemonName:String){
         if (pokemonName.isBlank()) {
-            state.value = state.value.copy(pokemonList = pokemonList)
+            _state.updateState { copy(pokemonList = defaultPokemonList) }
             return
         }
         viewModelScope.launch {
-            state.value = state.value.copy(pokemonList = PokemonSampleData.pokemonSearchListSampleData())
+            searchPokemonList = PokemonSampleData.pokemonSearchListSampleData()
+            _state.updateState { copy(pokemonList = searchPokemonList) }
         }
     }
 
