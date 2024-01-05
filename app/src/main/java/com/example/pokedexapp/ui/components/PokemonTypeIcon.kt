@@ -1,5 +1,6 @@
 package com.example.pokedexapp.ui.components
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
@@ -17,7 +18,7 @@ import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.ui.theme.PokedexAppTheme
 
 @Composable
-fun PokemonTypeIcon(pokemonType: PokemonTypes, textStyle: TextStyle, modifier: Modifier = Modifier) {
+fun PokemonTypeIcon(pokemonType: PokemonTypes,textPaddingValues: PaddingValues, textStyle: TextStyle, modifier: Modifier = Modifier) {
     Surface(
         color = pokemonType.color,
         shape = CircleShape,
@@ -27,7 +28,7 @@ fun PokemonTypeIcon(pokemonType: PokemonTypes, textStyle: TextStyle, modifier: M
             text = pokemonType.name,
             color = Color.White,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 5.dp),
+            modifier = Modifier.padding(textPaddingValues),
             style = textStyle,
         )
     }
@@ -39,6 +40,7 @@ fun PokemonTypeIconPreview() {
     PokedexAppTheme{
         PokemonTypeIcon(
             PokemonTypes.POISON,
+            PaddingValues(horizontal = 5.dp),
             MaterialTheme.typography.titleLarge,
             modifier = Modifier.wrapContentSize()
         )
