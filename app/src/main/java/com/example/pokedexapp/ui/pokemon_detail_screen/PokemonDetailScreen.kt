@@ -1,5 +1,6 @@
 package com.example.pokedexapp.ui.pokemon_detail_screen
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -19,6 +20,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -54,8 +58,10 @@ import com.example.pokedexapp.R
 import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.models.PokemonTypes
+import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.ui.components.PokemonDetailTopAppBar
 import com.example.pokedexapp.ui.components.PokemonTypeIcon
+import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
 @Composable
 fun PokemonDetailScreen(
@@ -64,17 +70,23 @@ fun PokemonDetailScreen(
     val pokemonDetailState by pokemonDetailViewModel.state.collectAsState()
 
     PokemonDetailScreenContent(
+        isLoading = pokemonDetailState.isLoading,
+        isError = pokemonDetailState.isError,
         pokemon = pokemonDetailState.pokemonModel,
         currentSprite = pokemonDetailState.pokemonSprite,
-        changeShinySprite = { pokemonDetailViewModel.changePokemonSprite(it) }
+        changeShinySprite = { pokemonDetailViewModel.changeShinyPokemonSprite(it) },
+        rotateSprite = { pokemonDetailViewModel.rotatePokemonSprite(it) }
     )
 }
 
 @Composable
 private fun PokemonDetailScreenContent(
+    isLoading: Boolean,
+    isError: Boolean,
     pokemon: PokemonModel?,
     currentSprite: PokemonSprite?,
     changeShinySprite: (SpriteType) -> Unit,
+    rotateSprite: (SpriteType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val pokemonImageSize = 200.dp
@@ -85,11 +97,10 @@ private fun PokemonDetailScreenContent(
     ) {
         Box(
             modifier = Modifier
-
                 .background(
                     Brush.linearGradient(
                         colorStops = arrayOf(
-                            0f to (pokemon?.primaryType?.color ?: Color.Black),
+                            0f to (pokemon?.primaryType?.color ?: TopBarBlueColor),
                             1f to (pokemon?.secondaryType?.color ?: Color.White)
                         )
                     )
@@ -98,24 +109,31 @@ private fun PokemonDetailScreenContent(
                 .padding(bottom = 32.dp)
         )
         {
-            if (currentSprite == null) {
-                PokemonDetailTopAppBar(isShinySprite = false) { }
-            } else {
-                PokemonDetailTopAppBar(isShinySprite = currentSprite.spriteType.isShiny) {
+            if (currentSprite != null) {
+                PokemonDetailTopAppBar(
+                    isShinySprite = currentSprite.spriteType.isShiny,
+                    rotateSprite = { rotateSprite(currentSprite.spriteType) }) {
                     changeShinySprite(currentSprite.spriteType)
                 }
+            } else {
+                PokemonDetailTopAppBar(isShinySprite = false, { }) { }
             }
-            if (pokemon != null) {
-                PokemonInformationSheet(
-                    pokemon = pokemon,
-                    contentTopSpace = pokemonImageSize / 2 - 20.dp,
-                    modifier = Modifier.padding(
+
+            PokemonInformationSheetWrapper(
+                isLoading = isLoading,
+                isError = isError,
+                pokemon = pokemon,
+                contentTopSpace = pokemonImageSize / 2 - 20.dp,
+                modifier = Modifier
+                    .animateContentSize()
+                    .padding(
                         top = pokemonImageTopPadding + pokemonImageSize / 2 + 20.dp,
                         start = 30.dp,
                         end = 30.dp
                     )
-                )
-            }
+                    .fillMaxWidth()
+            )
+
             PokemonImage(
                 currentSprite?.spriteUrl,
                 pokemonImageSize,
@@ -124,6 +142,7 @@ private fun PokemonDetailScreenContent(
         }
     }
 }
+
 
 @Composable
 private fun PokemonImage(image: Any?, imageSize: Dp, modifier: Modifier = Modifier) {
@@ -146,64 +165,112 @@ private fun PokemonImage(image: Any?, imageSize: Dp, modifier: Modifier = Modifi
 }
 
 @Composable
-private fun PokemonInformationSheet(
-    pokemon: PokemonModel,
+private fun PokemonInformationSheetWrapper(
+    isLoading: Boolean,
+    isError: Boolean,
+    pokemon: PokemonModel?,
     contentTopSpace: Dp,
     modifier: Modifier = Modifier
 ) {
+    val informationSheetModifier = Modifier.padding(vertical = contentTopSpace)
     Surface(
         color = Color.White,
         shape = RoundedCornerShape(10.dp),
         shadowElevation = 10.dp,
         modifier = modifier
-
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-
-            Spacer(
-                modifier = Modifier
-                    .height(contentTopSpace)
-                    .fillMaxWidth()
+        if (isLoading) {
+            LoadingPokemonInformationSheet(
+                modifier = informationSheetModifier
             )
-
-            PokemonName(
-                pokemonId = pokemon.id,
-                pokemonName = pokemon.name,
-                modifier = Modifier.fillMaxWidth()
+        } else if (isError) {
+            ErrorPokemonInformationSheet(
+                modifier = informationSheetModifier
             )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            PokemonTypesIcons(
-                primaryType = pokemon.primaryType,
-                secondaryType = pokemon.secondaryType,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            PokemonHeightWeight(
-                pokemonHeight = pokemon.height,
-                pokemonWeight = pokemon.weight,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            PokemonBaseStatsGraph(
-                pokemon = pokemon,
-                modifier = Modifier.padding(horizontal = 12.dp)
-            )
-
-            Spacer(modifier = Modifier.height(48.dp))
-
+        } else {
+            if (pokemon != null) {
+                PokemonInformationSheet(
+                    pokemon = pokemon,
+                    modifier = informationSheetModifier
+                )
+            }
         }
     }
+}
 
+@Composable
+private fun LoadingPokemonInformationSheet(modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(100.dp)
+        )
+    }
+}
+
+@Composable
+private fun ErrorPokemonInformationSheet(modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = Icons.Default.Warning,
+            contentDescription = null,
+            modifier = Modifier.size(100.dp),
+            tint = Color.Red
+        )
+        Text(
+            text = stringResource(R.string.pokemon_information_sheet_error),
+            style = MaterialTheme.typography.titleLarge,
+            color = Color.Red
+        )
+    }
+}
+
+@Composable
+private fun PokemonInformationSheet(
+    pokemon: PokemonModel,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+
+        PokemonName(
+            pokemonId = pokemon.id,
+            pokemonName = pokemon.name,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        PokemonTypesIcons(
+            primaryType = pokemon.primaryType,
+            secondaryType = pokemon.secondaryType,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        PokemonHeightWeight(
+            pokemonHeight = pokemon.height,
+            pokemonWeight = pokemon.weight,
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        PokemonBaseStatsGraph(
+            pokemon = pokemon,
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
+
+    }
 }
 
 @Composable
@@ -401,24 +468,47 @@ private fun PokemonBaseStatsGraph(pokemon: PokemonModel, modifier: Modifier = Mo
 
 @Preview
 @Composable
-private fun PokemonBaseStatsColumnPrev() {
-    //PokemonBaseStatsColumn(PokemonBaseStats(45, 49, 49, 65, 65, 45))
-}
-
-@Preview
-@Composable
 private fun PokemonBaseStatPreview() {
-    //PokemonBaseStat(0.5f, Color.Red, Modifier.fillMaxWidth())
+    Surface(color = Color.White) { PokemonBaseStatsGraph(pokemon = PokemonSampleData.singlePokemonSampleData()) }
 }
 
 @Preview
 @Composable
 private fun PokemonHeightWeightPrev() {
-//    PokemonHeightWeight()
+    PokemonHeightWeight(
+        pokemonWeight = 10f,
+        pokemonHeight = 10f
+    )
 }
 
 @Preview
 @Composable
 private fun PokemonDetailScreenPreview() {
     PokemonDetailScreen()
+}
+
+@Preview
+@Composable
+private fun PokemonDetailScreenLoadingPreview() {
+    PokemonDetailScreenContent(
+        isLoading = true,
+        isError = false,
+        pokemon = null,
+        currentSprite = null,
+        changeShinySprite = { },
+        rotateSprite = { }
+    )
+}
+
+@Preview
+@Composable
+private fun PokemonDetailScreenErrorPreview() {
+    PokemonDetailScreenContent(
+        isLoading = false,
+        isError = true,
+        pokemon = null,
+        currentSprite = null,
+        changeShinySprite = { },
+        rotateSprite = { }
+    )
 }

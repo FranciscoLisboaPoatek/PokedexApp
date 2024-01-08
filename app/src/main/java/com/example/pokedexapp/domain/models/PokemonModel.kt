@@ -12,6 +12,6 @@ data class PokemonModel(
     val secondaryType: PokemonTypes?,
     val frontDefaultSprite: PokemonSprite.FrontDefaultSprite,
     val frontShinySprite: PokemonSprite.FrontShinySprite,
-    val backDefaultSprite: PokemonSprite.BackDefaultSprite? = null,
-    val backShinySprite: PokemonSprite.BackShinySprite? = null
+    val backDefaultSprite: PokemonSprite.BackDefaultSprite,
+    val backShinySprite: PokemonSprite.BackShinySprite
 )
