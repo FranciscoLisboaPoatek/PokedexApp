@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.pokedexapp.domain.models.PokemonModel
-import com.example.pokedexapp.domain.models.PokemonTypes
+import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 
 
 @Composable
@@ -119,14 +119,7 @@ fun TwoColorStrokeBox(
 @Composable
 fun PokemonListItemPreview() {
     PokemonListItem(
-        pokemon = PokemonModel(
-            id = 1,
-            name = "Bulbasaur",
-            primaryType = PokemonTypes.GRASS,
-            secondaryType = PokemonTypes.POISON,
-            frontDefaultImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
-            frontShinyImageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
-        ),
+        pokemon = PokemonSampleData.singlePokemonSampleData(),
         strokeWidthDp = 10.dp,
         modifier = Modifier.size(186.dp, 210.dp))
 }
