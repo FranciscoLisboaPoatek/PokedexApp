@@ -4,6 +4,6 @@ import com.example.pokedexapp.domain.models.PokemonModel
 
 data class PokemonDetailScreenUiState(
     val isLoading: Boolean = true,
-    val pokemonModel: PokemonModel,
-    val pokemonSprite: PokemonSprite = pokemonModel.frontDefaultSprite
+    val pokemonModel: PokemonModel? = null,
+    val pokemonSprite: PokemonSprite? = pokemonModel?.frontDefaultSprite
 )

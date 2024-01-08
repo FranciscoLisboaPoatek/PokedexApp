@@ -71,7 +71,12 @@ fun PokemonDetailScreen(
 }
 
 @Composable
-private fun PokemonDetailScreenContent(pokemon: PokemonModel, currentSprite:PokemonSprite, changeShinySprite: (SpriteType) -> Unit, modifier: Modifier = Modifier) {
+private fun PokemonDetailScreenContent(
+    pokemon: PokemonModel?,
+    currentSprite: PokemonSprite?,
+    changeShinySprite: (SpriteType) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val pokemonImageSize = 200.dp
     val pokemonImageTopPadding = 80.dp
 
@@ -84,8 +89,8 @@ private fun PokemonDetailScreenContent(pokemon: PokemonModel, currentSprite:Poke
                 .background(
                     Brush.linearGradient(
                         colorStops = arrayOf(
-                            0f to pokemon.primaryType.color,
-                            1f to (pokemon.secondaryType?.color ?: Color.White)
+                            0f to (pokemon?.primaryType?.color ?: Color.Black),
+                            1f to (pokemon?.secondaryType?.color ?: Color.White)
                         )
                     )
                 )
@@ -93,20 +98,26 @@ private fun PokemonDetailScreenContent(pokemon: PokemonModel, currentSprite:Poke
                 .padding(bottom = 32.dp)
         )
         {
-            PokemonDetailTopAppBar(isShinySprite = currentSprite.spriteType.isShiny) {
-                changeShinySprite( currentSprite.spriteType )
+            if (currentSprite == null) {
+                PokemonDetailTopAppBar(isShinySprite = false) { }
+            } else {
+                PokemonDetailTopAppBar(isShinySprite = currentSprite.spriteType.isShiny) {
+                    changeShinySprite(currentSprite.spriteType)
+                }
             }
-            PokemonInformationSheet(
-                pokemon = pokemon,
-                contentTopSpace = pokemonImageSize / 2 - 20.dp,
-                modifier = Modifier.padding(
-                    top = pokemonImageTopPadding + pokemonImageSize / 2 + 20.dp,
-                    start = 30.dp,
-                    end = 30.dp
+            if (pokemon != null) {
+                PokemonInformationSheet(
+                    pokemon = pokemon,
+                    contentTopSpace = pokemonImageSize / 2 - 20.dp,
+                    modifier = Modifier.padding(
+                        top = pokemonImageTopPadding + pokemonImageSize / 2 + 20.dp,
+                        start = 30.dp,
+                        end = 30.dp
+                    )
                 )
-            )
+            }
             PokemonImage(
-                currentSprite.spriteUrl,
+                currentSprite?.spriteUrl,
                 pokemonImageSize,
                 modifier = Modifier.padding(top = pokemonImageTopPadding)
             )
@@ -176,7 +187,9 @@ private fun PokemonInformationSheet(
             PokemonHeightWeight(
                 pokemonHeight = pokemon.height,
                 pokemonWeight = pokemon.weight,
-                modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth()
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -263,7 +276,13 @@ private fun PokemonMeasurement(
             tint = color,
             modifier = Modifier.size(48.dp)
         )
-        Text(text = content, color = color, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(
+            text = content,
+            color = color,
+            style = MaterialTheme.typography.titleLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 

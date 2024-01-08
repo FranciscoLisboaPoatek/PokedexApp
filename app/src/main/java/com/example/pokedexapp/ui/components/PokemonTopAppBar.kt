@@ -37,29 +37,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.R
-import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenOnEvent
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
 @Composable
 fun PokemonTopAppBar(
     searchMode: Boolean,
-    onEvent: (PokemonListScreenOnEvent) -> Unit,
+    onSearchTextChange: (String) -> Unit,
+    handleSearchClick: () -> Unit
 ) {
 
     if (searchMode) SearchPokemonTopAppBar(
-        onSearchTextChange = {
-            onEvent(
-                PokemonListScreenOnEvent.OnSearchTextValueChange(it)
-            )
-        },
-        onCloseSearchCLick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) })
-    else LogoPokemonTopAppBar(onSearchClick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) })
+        onSearchTextChange = { onSearchTextChange(it) },
+        onCloseSearchCLick = { handleSearchClick() })
+    else LogoPokemonTopAppBar(onSearchClick = { handleSearchClick() })
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogoPokemonTopAppBar(
+private fun LogoPokemonTopAppBar(
     onSearchClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
@@ -83,7 +79,7 @@ fun LogoPokemonTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchPokemonTopAppBar(
+private fun SearchPokemonTopAppBar(
     onSearchTextChange: (String) -> Unit,
     onCloseSearchCLick: () -> Unit
 ) {
@@ -133,7 +129,7 @@ fun SearchPokemonTopAppBar(
 }
 
 @Composable
-fun SearchTextField(
+private fun SearchTextField(
     text: String,
     onSearchTextChange: (String) -> Unit,
     focusRequester: FocusRequester,
@@ -164,7 +160,7 @@ fun SearchTextField(
 }
 
 @Composable
-fun PokemonLogo(
+private fun PokemonLogo(
     modifier: Modifier = Modifier
 ) {
     Image(
@@ -176,7 +172,7 @@ fun PokemonLogo(
 }
 
 @Composable
-fun TopAppBarIconButton(
+private fun TopAppBarIconButton(
     icon: ImageVector,
     onClick: () -> Unit,
     contentDescription: String? = null
@@ -193,7 +189,7 @@ fun TopAppBarIconButton(
 @Preview
 @Composable
 fun PokemonTopAppBarPreview() {
-    PokemonTopAppBar(false) {
+    PokemonTopAppBar(false,{}) {
 
     }
 }
@@ -201,7 +197,7 @@ fun PokemonTopAppBarPreview() {
 @Preview
 @Composable
 fun PokemonTopAppBarSearchModePreview() {
-    PokemonTopAppBar(true) {
+    PokemonTopAppBar(true,{}) {
 
     }
 }

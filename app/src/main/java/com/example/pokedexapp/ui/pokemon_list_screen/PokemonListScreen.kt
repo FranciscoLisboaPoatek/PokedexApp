@@ -4,6 +4,7 @@ package com.example.pokedexapp.ui.pokemon_list_screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -13,18 +14,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.domain.models.PokemonModel
-import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.ui.components.PokemonListItem
 import com.example.pokedexapp.ui.components.PokemonTopAppBar
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 
 @Composable
 fun PokemonListScreen(
@@ -48,20 +46,34 @@ fun PokemonListScreen(
         }
     }
 
+    PokemonListScreenContent(
+        isSearchMode = state.isSearchMode,
+        pokemonList = state.pokemonList,
+        onEvent = ::onEvent
+    )
+}
+
+@Composable
+private fun PokemonListScreenContent(
+    isSearchMode: Boolean,
+    pokemonList: List<PokemonModel>,
+    onEvent: (PokemonListScreenOnEvent) -> Unit
+) {
     Scaffold(
         topBar = {
             PokemonTopAppBar(
-                searchMode = state.isSearchMode,
-                onEvent = ::onEvent
+                searchMode = isSearchMode,
+                onSearchTextChange = { onEvent(PokemonListScreenOnEvent.OnSearchTextValueChange(it)) },
+                handleSearchClick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) }
             )
         }
     ) {
-        PokemonListScreenContent(pokemonList = state.pokemonList, modifier = Modifier.padding(it))
+        PokemonList(pokemonList = pokemonList, modifier = Modifier.padding(it))
     }
 }
 
 @Composable
-fun PokemonListScreenContent(pokemonList: List<PokemonModel>, modifier: Modifier) {
+private fun PokemonList(pokemonList: List<PokemonModel>, modifier: Modifier) {
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -74,8 +86,28 @@ fun PokemonListScreenContent(pokemonList: List<PokemonModel>, modifier: Modifier
             contentPadding = PaddingValues(16.dp)
         ) {
             items(pokemonList) { pokemon ->
-                PokemonListItem(pokemon = pokemon, strokeWidthDp = 10)
+                PokemonListItem(pokemon = pokemon, strokeWidthDp = 10.dp, modifier = Modifier.height(210.dp))
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PokemonListScreenPreview() {
+    PokemonListScreenContent(
+        isSearchMode = false,
+        pokemonList = PokemonSampleData.pokemonListSampleData(),
+        onEvent = {}
+    )
+}
+
+@Preview
+@Composable
+fun PokemonListScreenSearchPreview() {
+    PokemonListScreenContent(
+        isSearchMode = true,
+        pokemonList = PokemonSampleData.pokemonListSampleData(),
+        onEvent = {}
+    )
 }
