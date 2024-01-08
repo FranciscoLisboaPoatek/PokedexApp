@@ -13,6 +13,13 @@ val Pink40 = Color(0xFF7D5260)
 
 val TopBarBlueColor = Color(0xFF235FC4)
 
+val HpStatColor = Color.Red
+val AttackStatColor = Color(0xFFF08030)
+val DefenseStatColor = Color(0xFFFFCC00)
+val SpAttackStatColor = Color(0xFF6890F0)
+val SpDefenseStatColor = Color(0xFF78C850)
+val SpeedStatColor = Color(0xFFF85888)
+
 val NormalTypeColor = Color(0xFFA8A878)
 val FightingTypeColor = Color(0xFFC03028)
 val FlyingTypeColor = Color(0xFFA890F0)
