@@ -44,7 +44,7 @@ fun PokedexApp() {
     }
 }
 
-private fun NavController.navigateToPokemonDetail(pokemonId: Int){
+private fun NavController.navigateToPokemonDetail(pokemonId: String){
     this.navigate("${ Screen.PokemonDetailScreen.route }/$pokemonId")
 }
 

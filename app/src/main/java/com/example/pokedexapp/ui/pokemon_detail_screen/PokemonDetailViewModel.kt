@@ -16,11 +16,11 @@ class PokemonDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val pokemonId: Int = checkNotNull(savedStateHandle["pokemon_id"])
+    private val pokemonId: String = checkNotNull(savedStateHandle["pokemon_id"])
     private val _state = MutableStateFlow( PokemonDetailScreenUiState() )
 
     init {
-        Log.w("nav","$pokemonId")
+        Log.w("nav",pokemonId)
         viewModelScope.launch {
             _state.updateState { copy(pokemonModel = PokemonSampleData.singlePokemonSampleData()) }
             _state.updateState { copy(isLoading = false, isError = false,pokemonSprite = pokemonModel?.frontDefaultSprite) }
