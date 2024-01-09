@@ -27,7 +27,7 @@ import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 @Composable
 fun PokemonListScreen(
     viewModel: PokemonListViewModel = hiltViewModel(),
-    navigateToDetails: (Int) -> Unit
+    navigateToDetails: (String) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 

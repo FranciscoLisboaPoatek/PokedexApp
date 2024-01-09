@@ -277,7 +277,7 @@ private fun PokemonInformationSheet(
 }
 
 @Composable
-private fun PokemonName(pokemonId: Int, pokemonName: String, modifier: Modifier = Modifier) {
+private fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = modifier.fillMaxWidth()

@@ -3,7 +3,7 @@ package com.example.pokedexapp.domain.models
 import com.example.pokedexapp.ui.pokemon_detail_screen.PokemonSprite
 
 data class PokemonModel(
-    val id: Int,
+    val id: String,
     val name: String,
     val height: Float,
     val weight: Float,

@@ -14,7 +14,7 @@ sealed class Screen() {
         val routeWithArgs = "$route/{$pokemonIdArg}"
         val arguments = listOf(
             navArgument("pokemon_id"){
-                type = NavType.IntType
+                type = NavType.StringType
             }
         )
     }
