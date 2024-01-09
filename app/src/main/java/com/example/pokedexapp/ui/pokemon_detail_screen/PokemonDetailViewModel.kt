@@ -1,5 +1,7 @@
 package com.example.pokedexapp.ui.pokemon_detail_screen
 
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
@@ -10,11 +12,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PokemonDetailViewModel @Inject constructor() : ViewModel() {
+class PokemonDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
+    private val pokemonId: Int = checkNotNull(savedStateHandle["pokemon_id"])
     private val _state = MutableStateFlow( PokemonDetailScreenUiState() )
 
     init {
+        Log.w("nav","$pokemonId")
         viewModelScope.launch {
             _state.updateState { copy(pokemonModel = PokemonSampleData.singlePokemonSampleData()) }
             _state.updateState { copy(isLoading = false, isError = false,pokemonSprite = pokemonModel?.frontDefaultSprite) }

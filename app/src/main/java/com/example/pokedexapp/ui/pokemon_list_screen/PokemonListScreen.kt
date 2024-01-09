@@ -26,7 +26,8 @@ import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 
 @Composable
 fun PokemonListScreen(
-    viewModel: PokemonListViewModel = hiltViewModel()
+    viewModel: PokemonListViewModel = hiltViewModel(),
+    navigateToDetails: (Int) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -41,7 +42,7 @@ fun PokemonListScreen(
             }
 
             is PokemonListScreenOnEvent.OnPokemonCLick -> {
-                //TODO
+                navigateToDetails(event.pokemonId)
             }
         }
     }
@@ -68,12 +69,12 @@ private fun PokemonListScreenContent(
             )
         }
     ) {
-        PokemonList(pokemonList = pokemonList, modifier = Modifier.padding(it))
+        PokemonList(pokemonList = pokemonList, onEvent = onEvent ,modifier = Modifier.padding(it))
     }
 }
 
 @Composable
-private fun PokemonList(pokemonList: List<PokemonModel>, modifier: Modifier) {
+private fun PokemonList(pokemonList: List<PokemonModel>,onEvent: (PokemonListScreenOnEvent) -> Unit, modifier: Modifier) {
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -86,7 +87,12 @@ private fun PokemonList(pokemonList: List<PokemonModel>, modifier: Modifier) {
             contentPadding = PaddingValues(16.dp)
         ) {
             items(pokemonList) { pokemon ->
-                PokemonListItem(pokemon = pokemon, strokeWidthDp = 10.dp, modifier = Modifier.height(210.dp))
+                PokemonListItem(
+                    pokemon = pokemon,
+                    strokeWidthDp = 10.dp,
+                    onClick = { onEvent(PokemonListScreenOnEvent.OnPokemonCLick(pokemon.id)) },
+                    modifier = Modifier.height(210.dp)
+                )
             }
         }
     }
