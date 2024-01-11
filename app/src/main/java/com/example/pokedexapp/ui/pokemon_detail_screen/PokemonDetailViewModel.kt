@@ -1,5 +1,6 @@
 package com.example.pokedexapp.ui.pokemon_detail_screen
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -44,9 +45,18 @@ class PokemonDetailViewModel @Inject constructor(
     }
 
     fun updatePokemon(pokemonId: String){
+        _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
-            _state.updateState { copy(pokemonModel = pokemonDetailUseCase.getPokemonById(pokemonId = pokemonId)) }
-            _state.updateState { copy(isLoading = false, isError = false,pokemonSprite = pokemonModel?.frontDefaultSprite) }
+            try {
+                Log.w("detail", "view model")
+
+                _state.updateState { copy(pokemonModel = pokemonDetailUseCase.getPokemonById(pokemonId = pokemonId)) }
+                _state.updateState { copy(isLoading = false, isError = false, pokemonSprite = pokemonModel?.frontDefaultSprite) }
+            }catch (ex: Exception){
+                Log.w("detail", ex.toString())
+                _state.updateState { copy(isError = true, isLoading = false) }
+            }
+
         }
     }
 }
