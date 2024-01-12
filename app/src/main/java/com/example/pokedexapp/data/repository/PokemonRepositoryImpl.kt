@@ -13,7 +13,6 @@ class PokemonRepositoryImpl @Inject constructor(
    private val pokemonApi: PokemonApi,
 ): PokemonRepository {
     override suspend fun getPokemonById(pokemonId: String): PokemonModel =
-
           withContext(Dispatchers.IO){
               Log.w("detail", "${pokemonId.toInt()}")
 
@@ -21,5 +20,12 @@ class PokemonRepositoryImpl @Inject constructor(
               Log.w("detail", "$pokemonApiDto")
               return@withContext PokemonMapper.pokemonApiDtoToPokemonModel(pokemonApiDto)
           }
+
+    override suspend fun savePokemonList() {
+        withContext(Dispatchers.IO){
+            pokemonApi.getPokemonEntireList()
+            //TODO SAVE IN LOCAL DATABASE
+        }
+    }
 
 }

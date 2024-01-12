@@ -8,4 +8,7 @@ interface PokemonApi {
     suspend fun getPokemonById(
         @Path("id") id:Int
     ):PokemonApiDto
+
+    @GET("pokemon?limit=100000")
+    suspend fun getPokemonEntireList():List<PokemonListItemApiDto>
 }
