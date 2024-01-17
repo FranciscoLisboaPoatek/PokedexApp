@@ -1,8 +1,12 @@
 package com.example.pokedexapp.di
 
 import android.content.Context
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.room.Room
 import com.example.pokedexapp.BuildConfig
+import com.example.pokedexapp.data.local_database.PokemonDao
+import com.example.pokedexapp.data.local_database.PokemonDaoDto
 import com.example.pokedexapp.data.local_database.PokemonDatabase
 import com.example.pokedexapp.data.network.PokemonApi
 import com.example.pokedexapp.domain.repository.PokemonRepository
@@ -46,6 +50,17 @@ object PokemonModule {
         ).build()
     }
 
+    @Provides
+    @Singleton
+    fun providePokemonDaoPager(pokemonDao: PokemonDao): Pager<Int, PokemonDaoDto>{
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = { pokemonDao.pokemonPagination() }
+        )
+    }
     @Provides
     @Singleton
     fun providePokemonDao(pokemonDatabase: PokemonDatabase) = pokemonDatabase.pokemonDao()
