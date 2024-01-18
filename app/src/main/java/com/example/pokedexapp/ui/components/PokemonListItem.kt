@@ -168,7 +168,7 @@ fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Dp, onClick: () -> Uni
 
 @Composable
 private fun PokemonImage(
-    image: Any,
+    image: Any?,
     modifier: Modifier = Modifier
 ) {
     AsyncImage(

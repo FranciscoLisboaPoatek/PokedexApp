@@ -1,5 +1,6 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonModel
@@ -19,24 +20,30 @@ class PokemonListViewModel @Inject constructor(
     private val _state = MutableStateFlow(PokemonListScreenUiState())
     val state get() = _state
 
-    private var defaultPokemonList = listOf<PokemonModel>()
+    private var defaultPokemonList = mutableListOf<PokemonModel>()
     private var searchPokemonList = listOf<PokemonModel>()
 
     init {
+        _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
             pokemonListUseCase.insertAllPokemon()
-            getPokemonList(0)
-        }
+            defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(0))
+            Log.w("list","${defaultPokemonList.size}")
 
+            _state.updateState { copy(pokemonList = defaultPokemonList , isLoading = false) }
+        }
     }
 
-    fun getPokemonList(offset: Int) {
+    fun getPokemonList() {
+        if(_state.value.isLoadingAppend) return
+        _state.updateState { copy(isLoadingAppend = true) }
         viewModelScope.launch {
             try {
-                defaultPokemonList = pokemonListUseCase.getPokemonList(offset)
-                _state.updateState { copy(pokemonList = defaultPokemonList) }
+                defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(offset = defaultPokemonList.size))
+                _state.updateState { copy(isLoadingAppend = false) }
+                Log.w("list","${defaultPokemonList.size}")
             } catch (ex: Exception) {
-                _state.updateState { copy(pokemonList = defaultPokemonList) }
+                _state.updateState { copy(isLoadingAppend = false, isError = true) }
             }
         }
     }
