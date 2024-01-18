@@ -447,6 +447,7 @@ private fun BaseStatProgressBar(
 @Composable
 private fun PokemonBaseStatsGraph(pokemon: PokemonModel, modifier: Modifier = Modifier) {
     BaseStatsGraph(
+        modifier = modifier,
         spaceBetweenHorizontally = 8.dp,
         spaceBetweenVertically = 12.dp,
         baseStatsIndex = pokemon.baseStats.size,
@@ -465,7 +466,6 @@ private fun PokemonBaseStatsGraph(pokemon: PokemonModel, modifier: Modifier = Mo
         baseStatValue = {
             BaseStatValue(pokemonBaseStats = pokemon.baseStats[it])
         },
-        modifier = modifier
     )
 }
 

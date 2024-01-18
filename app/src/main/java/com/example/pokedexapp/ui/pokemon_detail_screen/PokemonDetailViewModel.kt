@@ -1,6 +1,5 @@
 package com.example.pokedexapp.ui.pokemon_detail_screen
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,17 +17,25 @@ class PokemonDetailViewModel @Inject constructor(
 
     private val pokemonId: String = checkNotNull(savedStateHandle["pokemon_id"])
     private val _state = MutableStateFlow( PokemonDetailScreenUiState() )
+    val state get() = _state
 
     init {
-        Log.w("nav",pokemonId)
         viewModelScope.launch {
-            _state.updateState { copy(pokemonModel = PokemonSampleData.singlePokemonSampleData()) }
-            _state.updateState { copy(isLoading = false, isError = false,pokemonSprite = pokemonModel?.frontDefaultSprite) }
+            _state.updateState {
+                val pokemon = PokemonSampleData.singlePokemonSampleData()
+                copy(
+                    pokemonModel = pokemon,
+                    isLoading = false,
+                    isError = false,
+                    pokemonSprite = pokemon.frontDefaultSprite
+                )
+            }
+
         }
     }
-    val state get() = _state
-    fun changeShinyPokemonSprite(actualPokemonSprite: SpriteType){
-        val sprite = when(actualPokemonSprite){
+
+    fun changeShinyPokemonSprite(actualPokemonSprite: SpriteType) {
+        val sprite = when (actualPokemonSprite) {
             SpriteType.FRONT_DEFAULT -> state.value.pokemonModel?.frontShinySprite
             SpriteType.FRONT_SHINY_DEFAULT -> state.value.pokemonModel?.frontDefaultSprite
             SpriteType.BACK_DEFAULT -> state.value.pokemonModel?.backShinySprite
@@ -37,8 +44,8 @@ class PokemonDetailViewModel @Inject constructor(
         _state.updateState { copy(pokemonSprite = sprite) }
     }
 
-    fun rotatePokemonSprite(actualPokemonSprite: SpriteType){
-        val sprite = when(actualPokemonSprite){
+    fun rotatePokemonSprite(actualPokemonSprite: SpriteType) {
+        val sprite = when (actualPokemonSprite) {
             SpriteType.FRONT_DEFAULT -> state.value.pokemonModel?.backDefaultSprite
             SpriteType.FRONT_SHINY_DEFAULT -> state.value.pokemonModel?.backShinySprite
             SpriteType.BACK_DEFAULT -> state.value.pokemonModel?.frontDefaultSprite
