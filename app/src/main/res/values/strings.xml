@@ -3,4 +3,15 @@
     <string name="pokemon_search_hint">Type a Pokemon name</string>
     <string name="close_search">Close Search</string>
     <string name="open_search">Open Search</string>
+    <string name="hp_base_stat">Hp</string>
+    <string name="attack_base_stat">Attack</string>
+    <string name="defense_base_stat">Defense</string>
+    <string name="special_attack_base_stat">Sp.Atk</string>
+    <string name="special_defense_base_stat">Sp.Def</string>
+    <string name="speed_base_stat">Speed</string>
+    <string name="weight_in_kg">%1$s kg</string>
+    <string name="height_in_m">%1$s m</string>
+    <string name="pokemon_information_sheet_error">Error loading content</string>
+    <string name="shiny_icon_button">shiny icon button</string>
+    <string name="rotate_sprite_icon_button">rotate pokemon</string>
 </resources>

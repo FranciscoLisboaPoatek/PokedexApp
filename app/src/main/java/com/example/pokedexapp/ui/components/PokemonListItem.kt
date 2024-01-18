@@ -143,7 +143,7 @@ fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Dp, modifier: Modifier
             )
         ) {
             PokemonImage(
-                image = pokemon.frontDefaultImageUrl,
+                image = pokemon.frontDefaultSprite.spriteUrl,
                 modifier = Modifier
                     .padding(top = 5.dp, start = 5.dp, end = 5.dp)
                     .weight(3f)

@@ -2,6 +2,12 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="PokemonDetailScreenErrorPreview">
+        <State />
+      </entry>
+      <entry key="PokemonDetailScreenLoadingPreview">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
