@@ -7,6 +7,8 @@ data class PokemonListScreenUiState(
     val isLoadingAppend: Boolean = false,
     val isError: Boolean = false,
     val isSearchMode: Boolean = false,
+    val isDefaultList: Boolean = true,
+    val searchText: String = "",
     val pokemonList: List<PokemonModel> = listOf()
 
 )

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CircularProgressIndicator
@@ -19,8 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -61,6 +64,8 @@ fun PokemonListScreen(
         isLoading = state.isLoading,
         isLoadingAppend = state.isLoadingAppend,
         isSearchMode = state.isSearchMode,
+        isDefaultList = state.isDefaultList,
+        searchText = state.searchText,
         pokemonList = state.pokemonList,
         onEvent = ::onEvent
     )
@@ -71,12 +76,16 @@ private fun PokemonListScreenContent(
     isLoading: Boolean,
     isLoadingAppend: Boolean,
     isSearchMode: Boolean,
+    isDefaultList: Boolean,
+    searchText: String,
     pokemonList: List<PokemonModel>,
     onEvent: (PokemonListScreenOnEvent) -> Unit
 ) {
+    val defaultListState = rememberLazyGridState()
     Scaffold(
         topBar = {
             PokemonTopAppBar(
+                searchText = searchText,
                 searchMode = isSearchMode,
                 onSearchTextChange = { onEvent(PokemonListScreenOnEvent.OnSearchTextValueChange(it)) },
                 handleSearchClick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) }
@@ -98,6 +107,7 @@ private fun PokemonListScreenContent(
         } else {
             PokemonList(
                 pokemonList = pokemonList,
+                state = if (isDefaultList) defaultListState else rememberLazyGridState(),
                 onEvent = onEvent,
                 isLoadingAppend = isLoadingAppend,
                 modifier = Modifier.padding(it)
@@ -106,15 +116,16 @@ private fun PokemonListScreenContent(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun PokemonList(
     pokemonList: List<PokemonModel>,
+    state: LazyGridState,
     onEvent: (PokemonListScreenOnEvent) -> Unit,
     isLoadingAppend: Boolean,
     modifier: Modifier
 ) {
-    val state = rememberLazyGridState()
-
+    val controller = LocalSoftwareKeyboardController.current
     val GRID_SPAN = 2
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -141,7 +152,7 @@ private fun PokemonList(
                     modifier = Modifier.height(210.dp)
                 )
             }
-
+            if (state.isScrollInProgress) controller?.hide()
             if (isLoadingAppend) {
                 item(span = { GridItemSpan(GRID_SPAN) }) {
                     Box(Modifier.height(100.dp), contentAlignment = Alignment.Center) {
@@ -160,6 +171,8 @@ fun PokemonListScreenPreview() {
         isLoading = false,
         isLoadingAppend = false,
         isSearchMode = false,
+        isDefaultList = true,
+        searchText = "",
         pokemonList = PokemonSampleData.pokemonListSampleData(),
         onEvent = {}
     )
@@ -172,6 +185,8 @@ fun PokemonListScreenSearchPreview() {
         isLoading = false,
         isLoadingAppend = false,
         isSearchMode = true,
+        isDefaultList = false,
+        searchText = "",
         pokemonList = PokemonSampleData.pokemonListSampleData(),
         onEvent = {}
     )

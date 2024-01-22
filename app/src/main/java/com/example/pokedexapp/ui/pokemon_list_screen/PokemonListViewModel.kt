@@ -32,7 +32,7 @@ class PokemonListViewModel @Inject constructor(
             pokemonListUseCase.insertAllPokemon()
             defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(0))
 
-            _state.updateState { copy(pokemonList = defaultPokemonList, isLoading = false) }
+            _state.updateState { copy(pokemonList = defaultPokemonList, isLoading = false, isDefaultList = true) }
         }
 
         observerSearchText()
@@ -55,7 +55,7 @@ class PokemonListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(offset = defaultPokemonList.size))
-                _state.updateState { copy(isLoadingAppend = false) }
+                _state.updateState { copy(pokemonList = defaultPokemonList, isLoadingAppend = false, isDefaultList = true) }
             } catch (ex: Exception) {
                 _state.updateState { copy(isLoadingAppend = false, isError = true) }
             }
@@ -68,7 +68,7 @@ class PokemonListViewModel @Inject constructor(
 
     fun searchPokemonListByName(pokemonName: String) {
         if (pokemonName.isBlank()) {
-            _state.updateState { copy(pokemonList = defaultPokemonList) }
+            _state.updateState { copy(pokemonList = defaultPokemonList, isDefaultList = true) }
             return
         }
 
@@ -78,7 +78,7 @@ class PokemonListViewModel @Inject constructor(
                 searchPokemonList =
                     pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
                         .toMutableList()
-                _state.updateState { copy(isLoading = false, pokemonList = searchPokemonList) }
+                _state.updateState { copy(isLoading = false, pokemonList = searchPokemonList, isDefaultList = false) }
             }
         } catch (ex: Exception) {
             _state.updateState { copy(isLoading = false, isError = true) }
@@ -87,6 +87,7 @@ class PokemonListViewModel @Inject constructor(
 
     fun changeSearchText(pokemonName: String) {
         _searchText.value = pokemonName
+        _state.updateState { copy(searchText = _searchText.value) }
     }
 
     fun appendSearchList() {
@@ -106,6 +107,7 @@ class PokemonListViewModel @Inject constructor(
                 _state.updateState {
                     copy(
                         isLoadingAppend = false,
+                        isDefaultList = false,
                         pokemonList = searchPokemonList
                     )
                 }
