@@ -13,4 +13,8 @@ class PokemonListUseCase(
     suspend fun getPokemonList(offset: Int, limit: Int = 20): List<PokemonModel> {
         return repository.getPokemonList(offset = offset, limit = limit)
     }
+
+    suspend fun getPokemonSearchList(name: String, offset: Int, limit: Int = 20): List<PokemonModel> {
+        return repository.getPokemonSearchList(name = name, offset = offset, limit = limit)
+    }
 }

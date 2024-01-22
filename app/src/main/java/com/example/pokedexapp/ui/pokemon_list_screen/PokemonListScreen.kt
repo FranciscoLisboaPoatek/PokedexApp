@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -42,15 +43,16 @@ fun PokemonListScreen(
             }
 
             is PokemonListScreenOnEvent.OnSearchTextValueChange -> {
-                viewModel.searchPokemonByName(event.text)
+                viewModel.changeSearchText(event.text)
             }
 
             is PokemonListScreenOnEvent.OnPokemonCLick -> {
                 navigateToDetails(event.pokemonId)
             }
 
-            PokemonListScreenOnEvent.appendToDefaultList -> {
-                viewModel.getPokemonList()
+            PokemonListScreenOnEvent.AppendToList -> {
+                if (state.isSearchMode) viewModel.appendSearchList()
+                else viewModel.getPokemonList()
             }
         }
     }
@@ -81,13 +83,26 @@ private fun PokemonListScreenContent(
             )
         }
     ) {
+        if (isLoading) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(it)
+                    .fillMaxSize()
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(100.dp)
+                )
+            }
+        } else {
             PokemonList(
                 pokemonList = pokemonList,
                 onEvent = onEvent,
                 isLoadingAppend = isLoadingAppend,
                 modifier = Modifier.padding(it)
             )
-
+        }
     }
 }
 
@@ -99,6 +114,7 @@ private fun PokemonList(
     modifier: Modifier
 ) {
     val state = rememberLazyGridState()
+
     val GRID_SPAN = 2
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -115,7 +131,7 @@ private fun PokemonList(
                 val pokemon = pokemonList[pokemonIndex]
 
                 if (pokemonIndex == pokemonList.size - 10) {
-                    onEvent(PokemonListScreenOnEvent.appendToDefaultList)
+                    onEvent(PokemonListScreenOnEvent.AppendToList)
                 }
 
                 PokemonListItem(

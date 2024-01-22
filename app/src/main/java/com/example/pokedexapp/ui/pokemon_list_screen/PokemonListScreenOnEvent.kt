@@ -4,5 +4,5 @@ sealed class PokemonListScreenOnEvent() {
     object OnSearchClick: PokemonListScreenOnEvent()
     data class OnSearchTextValueChange(val text:String): PokemonListScreenOnEvent()
     data class OnPokemonCLick(val pokemonId: String): PokemonListScreenOnEvent()
-    object appendToDefaultList: PokemonListScreenOnEvent()
+    object AppendToList: PokemonListScreenOnEvent()
 }
