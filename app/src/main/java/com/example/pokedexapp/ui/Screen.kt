@@ -2,8 +2,8 @@ package com.example.pokedexapp.ui
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
 
-const val POKEMON_ID_KEY = "pokemon_id"
 
 sealed class Screen(val route: String) {
     data object PokemonListScreen: Screen(ScreenRoute.LIST_SCREEN.route)
