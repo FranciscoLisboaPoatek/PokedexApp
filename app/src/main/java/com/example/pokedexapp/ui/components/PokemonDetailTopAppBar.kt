@@ -1,5 +1,7 @@
 package com.example.pokedexapp.ui.components
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,11 +18,13 @@ import com.example.pokedexapp.R
 @Composable
 fun PokemonDetailTopAppBar(
     isShinySprite: Boolean,
+    navigateUp: () -> Unit,
     rotateSprite: () -> Unit,
     changeShinySprite: () -> Unit
 ) {
     TopAppBar(
         title = @Composable {},
+        navigationIcon = { NavigateUpIconButton(navigateUp) },
         actions = {
             RotateIconButton(rotateSprite)
             ShinyIconButton(isShinySprite, changeShinySprite)
@@ -29,6 +33,15 @@ fun PokemonDetailTopAppBar(
             containerColor = Color.Transparent
         )
     )
+}
+
+@Composable
+fun NavigateUpIconButton(
+    navigateUp: () -> Unit
+) {
+    IconButton(onClick = { navigateUp() }) {
+        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(R.string.navigate_up), tint = Color.Black )
+    }
 }
 
 @Composable
@@ -67,11 +80,11 @@ fun RotateIconButton(
 @Preview
 @Composable
 private fun PokemonDetailTopAppBarPreview() {
-    PokemonDetailTopAppBar(false,{}) {}
+    PokemonDetailTopAppBar(false,{}, {}) {}
 }
 
 @Preview
 @Composable
 private fun PokemonDetailTopAppBarShinyPreview() {
-    PokemonDetailTopAppBar(true,{}) {}
+    PokemonDetailTopAppBar(true,{}, {}) {}
 }

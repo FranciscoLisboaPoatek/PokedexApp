@@ -65,7 +65,8 @@ import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
 @Composable
 fun PokemonDetailScreen(
-    pokemonDetailViewModel: PokemonDetailViewModel = hiltViewModel()
+    pokemonDetailViewModel: PokemonDetailViewModel = hiltViewModel(),
+    navigateUp: () -> Unit
 ) {
     val pokemonDetailState by pokemonDetailViewModel.state.collectAsState()
 
@@ -75,7 +76,8 @@ fun PokemonDetailScreen(
         pokemon = pokemonDetailState.pokemonModel,
         currentSprite = pokemonDetailState.pokemonSprite,
         changeShinySprite = { pokemonDetailViewModel.changeShinyPokemonSprite(it) },
-        rotateSprite = { pokemonDetailViewModel.rotatePokemonSprite(it) }
+        rotateSprite = { pokemonDetailViewModel.rotatePokemonSprite(it) },
+        navigateUp = { navigateUp() }
     )
 }
 
@@ -87,6 +89,7 @@ private fun PokemonDetailScreenContent(
     currentSprite: PokemonSprite?,
     changeShinySprite: (SpriteType) -> Unit,
     rotateSprite: (SpriteType) -> Unit,
+    navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val pokemonImageSize = 200.dp
@@ -112,11 +115,11 @@ private fun PokemonDetailScreenContent(
             if (currentSprite != null) {
                 PokemonDetailTopAppBar(
                     isShinySprite = currentSprite.spriteType.isShiny,
-                    rotateSprite = { rotateSprite(currentSprite.spriteType) }) {
-                    changeShinySprite(currentSprite.spriteType)
-                }
+                    rotateSprite = { rotateSprite(currentSprite.spriteType) },
+                    changeShinySprite = { changeShinySprite(currentSprite.spriteType) },
+                    navigateUp = { navigateUp() })
             } else {
-                PokemonDetailTopAppBar(isShinySprite = false, { }) { }
+                PokemonDetailTopAppBar(isShinySprite = false, { }, { }, { })
             }
 
             PokemonInformationSheetWrapper(
@@ -274,7 +277,7 @@ private fun PokemonInformationSheet(
 }
 
 @Composable
-private fun PokemonName(pokemonId: Int, pokemonName: String, modifier: Modifier = Modifier) {
+private fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = modifier.fillMaxWidth()
@@ -484,7 +487,9 @@ private fun PokemonHeightWeightPrev() {
 @Preview
 @Composable
 private fun PokemonDetailScreenPreview() {
-    PokemonDetailScreen()
+    PokemonDetailScreen(
+        navigateUp = { }
+    )
 }
 
 @Preview
@@ -496,7 +501,8 @@ private fun PokemonDetailScreenLoadingPreview() {
         pokemon = null,
         currentSprite = null,
         changeShinySprite = { },
-        rotateSprite = { }
+        rotateSprite = { },
+        navigateUp = { }
     )
 }
 
@@ -509,6 +515,7 @@ private fun PokemonDetailScreenErrorPreview() {
         pokemon = null,
         currentSprite = null,
         changeShinySprite = { },
-        rotateSprite = { }
+        rotateSprite = { },
+        navigateUp = { }
     )
 }

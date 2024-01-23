@@ -14,4 +14,5 @@
     <string name="pokemon_information_sheet_error">Error loading content</string>
     <string name="shiny_icon_button">shiny icon button</string>
     <string name="rotate_sprite_icon_button">rotate pokemon</string>
+    <string name="navigate_up">navigate up</string>
 </resources>

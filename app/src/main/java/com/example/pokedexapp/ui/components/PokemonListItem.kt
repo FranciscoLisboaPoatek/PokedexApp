@@ -2,6 +2,7 @@ package com.example.pokedexapp.ui.components
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,10 +31,12 @@ fun TwoColorStrokeBox(
     secondColor: Color,
     strokeWidthDp: Dp,
     modifier: Modifier,
+    onClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
     Box(
         modifier = modifier
+            .clickable { onClick() }
             .drawBehind {
                 val strokeWidthPx = strokeWidthDp.toPx()
                 val offset = strokeWidthPx / 2
@@ -121,15 +124,17 @@ fun PokemonListItemPreview() {
     PokemonListItem(
         pokemon = PokemonSampleData.singlePokemonSampleData(),
         strokeWidthDp = 10.dp,
+        onClick = { },
         modifier = Modifier.size(186.dp, 210.dp))
 }
 
 @Composable
-fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Dp, modifier: Modifier = Modifier) {
+fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Dp, onClick: () -> Unit,modifier: Modifier = Modifier) {
     TwoColorStrokeBox(
         pokemon.primaryType.color,
         pokemon.secondaryType?.color ?: pokemon.primaryType.color,
         strokeWidthDp,
+        onClick = { onClick() },
         modifier = modifier
     ) {
         Column(
