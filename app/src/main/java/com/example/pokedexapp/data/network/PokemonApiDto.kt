@@ -10,10 +10,10 @@ data class PokemonApiDto(
     val types: List<TypeListItem>
 )
 data class SpritesDto(
-    val back_default: String,
-    val back_shiny: String,
-    val front_default: String,
-    val front_shiny: String,
+    val back_default: String?,
+    val back_shiny: String?,
+    val front_default: String?,
+    val front_shiny: String?,
 )
 
 data class StatListItem(
