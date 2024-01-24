@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -142,7 +143,7 @@ fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Dp, onClick: () -> Uni
                 Brush.verticalGradient(
                     colorStops = arrayOf(
                         0f to pokemon.primaryType.color,
-                        1f to Color.White
+                        1f to MaterialTheme.colorScheme.background
                     )
                 )
             )

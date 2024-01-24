@@ -106,12 +106,11 @@ private fun PokemonDetailScreenContent(
                     Brush.linearGradient(
                         colorStops = arrayOf(
                             0f to (pokemon?.primaryType?.color ?: TopBarBlueColor),
-                            1f to (pokemon?.secondaryType?.color ?: Color.White)
+                            1f to (pokemon?.secondaryType?.color ?: MaterialTheme.colorScheme.background)
                         )
                     )
                 )
                 .verticalScroll(rememberScrollState())
-                .padding(bottom = 32.dp)
         )
         {
             if (currentSprite != null) {
@@ -140,7 +139,9 @@ private fun PokemonDetailScreenContent(
                         start = 30.dp,
                         end = 30.dp
                     )
+                    .padding(bottom = 32.dp)
                     .fillMaxWidth()
+
             )
 
             PokemonImage(
@@ -183,7 +184,7 @@ private fun PokemonInformationSheetWrapper(
 ) {
     val informationSheetModifier = Modifier.padding(vertical = contentTopSpace)
     Surface(
-        color = Color.White,
+        color = MaterialTheme.colorScheme.background,
         shape = RoundedCornerShape(10.dp),
         shadowElevation = 10.dp,
         modifier = modifier
@@ -293,7 +294,7 @@ private fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifi
                 withStyle(style = SpanStyle(color = Color.Gray)) {
                     append("#$pokemonId ")
                 }
-                withStyle(style = SpanStyle(color = Color.Black)) {
+                withStyle(style = SpanStyle()) {
                     append(pokemonName.replaceFirst(pokemonName.first(),pokemonName.first().uppercaseChar()))
                 }
             },
@@ -493,9 +494,15 @@ private fun PokemonHeightWeightPrev() {
 @Preview
 @Composable
 private fun PokemonDetailScreenPreview() {
-    PokemonDetailScreen(
-        navigateUp = { }
-    )
+    val pokemon = PokemonSampleData.singlePokemonSampleData()
+    PokemonDetailScreenContent(
+        isLoading = false,
+        isError = false,
+        pokemon = pokemon,
+        currentSprite = pokemon.frontDefaultSprite,
+        changeShinySprite = { },
+        rotateSprite = { },
+        navigateUp = { }    )
 }
 
 @Preview
