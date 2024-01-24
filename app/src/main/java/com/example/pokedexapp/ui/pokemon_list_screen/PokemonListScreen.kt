@@ -93,17 +93,11 @@ private fun PokemonListScreenContent(
         }
     ) {
         if (isLoading) {
-            Box(
-                contentAlignment = Alignment.Center,
+            LoadingScreen(
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(100.dp)
-                )
-            }
+            )
         } else {
             PokemonList(
                 pokemonList = pokemonList,
@@ -141,7 +135,7 @@ private fun PokemonList(
             items(pokemonList.size) { pokemonIndex ->
                 val pokemon = pokemonList[pokemonIndex]
 
-                if (pokemonIndex == pokemonList.size - 10) {
+                if (pokemonIndex == pokemonList.size - 10 && !isLoadingAppend) {
                     onEvent(PokemonListScreenOnEvent.AppendToList)
                 }
 
@@ -161,6 +155,19 @@ private fun PokemonList(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun LoadingScreen(modifier: Modifier = Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .size(50.dp)
+        )
     }
 }
 
@@ -188,6 +195,34 @@ fun PokemonListScreenSearchPreview() {
         isDefaultList = false,
         searchText = "",
         pokemonList = PokemonSampleData.pokemonListSampleData(),
+        onEvent = {}
+    )
+}
+
+@Preview
+@Composable
+fun PokemonListScreenLoadingPreview() {
+    PokemonListScreenContent(
+        isLoading = true,
+        isLoadingAppend = false,
+        isSearchMode = false,
+        isDefaultList = true,
+        searchText = "",
+        pokemonList = PokemonSampleData.pokemonListSampleData(),
+        onEvent = {}
+    )
+}
+
+@Preview
+@Composable
+fun PokemonListScreenLoadingAppendPreview() {
+    PokemonListScreenContent(
+        isLoading = false,
+        isLoadingAppend = true,
+        isSearchMode = false,
+        isDefaultList = true,
+        searchText = "",
+        pokemonList = PokemonSampleData.pokemonSearchListSampleData(),
         onEvent = {}
     )
 }
