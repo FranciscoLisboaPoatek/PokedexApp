@@ -1,6 +1,5 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonModel
@@ -44,6 +43,10 @@ class PokemonListViewModel @Inject constructor(
         observerSearchText()
     }
 
+    fun changeIsSearchMode() {
+        _state.updateState { copy(isSearchMode = !_state.value.isSearchMode) }
+    }
+
     @OptIn(FlowPreview::class)
     private fun observerSearchText() {
         viewModelScope.launch {
@@ -55,39 +58,44 @@ class PokemonListViewModel @Inject constructor(
         }
     }
 
-    fun getPokemonList() {
-        if (_state.value.isLoadingAppend) return
-        _state.updateState { copy(isLoadingAppend = true) }
-        viewModelScope.launch {
-            try {
-                defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(offset = defaultPokemonList.size))
-                _state.updateState {
-                    copy(
-                        pokemonList = defaultPokemonList,
-                        isLoadingAppend = false,
-                        isDefaultList = true
-                    )
-                }
-            } catch (ex: Exception) {
-                _state.updateState { copy(isLoadingAppend = false, isError = true) }
-            }
-        }
+    fun changeSearchText(pokemonName: String) {
+        _searchText.value = pokemonName
+        _state.updateState { copy(searchText = _searchText.value) }
     }
 
-    fun changeIsSearchMode() {
-        _state.updateState { copy(isSearchMode = !_state.value.isSearchMode) }
+    fun getPokemonList() {
+            _state.updateState { copy(isLoadingAppend = true) }
+        try {
+
+            viewModelScope.launch {
+                val appendList = pokemonListUseCase.getPokemonList(offset = defaultPokemonList.size)
+
+                if (appendList.isEmpty()) {
+                    _state.updateState { copy(defaultListEnded = true, isLoadingAppend = false) }
+                } else {
+                    defaultPokemonList.addAll(appendList)
+                    _state.updateState {
+                        copy(
+                            pokemonList = defaultPokemonList,
+                            isLoadingAppend = false,
+                            isDefaultList = true
+                        )
+                    }
+                }
+            }
+        } catch (ex: Exception) {
+            _state.updateState { copy(isLoadingAppend = false, isError = true) }
+        }
     }
 
     fun searchPokemonListByName(pokemonName: String) {
-        if (pokemonName.isBlank()) {
-            _state.updateState { copy(pokemonList = defaultPokemonList, isDefaultList = true) }
-            return
-        }
-
         try {
-            Log.w("searchList", "search pokemon list, name: $pokemonName")
+            if (pokemonName.isBlank()) {
+                _state.updateState { copy(pokemonList = defaultPokemonList, isDefaultList = true) }
+                return
+            }
 
-            _state.updateState { copy(isLoading = true) }
+            _state.updateState { copy(isLoading = true, searchListEnded = false) }
             viewModelScope.launch {
                 searchPokemonList =
                     pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
@@ -105,36 +113,30 @@ class PokemonListViewModel @Inject constructor(
         }
     }
 
-    fun changeSearchText(pokemonName: String) {
-        _searchText.value = pokemonName
-        _state.updateState { copy(searchText = _searchText.value) }
-    }
-
     fun appendSearchList() {
-        if (_searchText.value.isBlank()) {
-            getPokemonList()
-            return
-        }
         try {
-            Log.w(
-                "searchList",
-                "appendSearchList, size: ${searchPokemonList.size} name: ${_state.value.searchText}"
-            )
+            if (_searchText.value.isBlank()) {
+                getPokemonList()
+                return
+            }
             _state.updateState { copy(isLoadingAppend = true) }
+
             viewModelScope.launch {
-                searchPokemonList =
-                    searchPokemonList.plus(
-                        pokemonListUseCase.getPokemonSearchList(
-                            name = _searchText.value,
-                            offset = searchPokemonList.size
+                val appendList = pokemonListUseCase.getPokemonSearchList(
+                    name = _searchText.value,
+                    offset = searchPokemonList.size
+                )
+                if (appendList.isEmpty()){
+                    _state.updateState { copy(searchListEnded = true, isLoadingAppend = false) }
+                }else {
+                    searchPokemonList.addAll(appendList)
+                    _state.updateState {
+                        copy(
+                            isLoadingAppend = false,
+                            isDefaultList = false,
+                            pokemonList = searchPokemonList
                         )
-                    ).toMutableList()
-                _state.updateState {
-                    copy(
-                        isLoadingAppend = false,
-                        isDefaultList = false,
-                        pokemonList = searchPokemonList
-                    )
+                    }
                 }
             }
         } catch (ex: Exception) {

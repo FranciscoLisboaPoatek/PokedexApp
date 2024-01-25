@@ -8,6 +8,8 @@ data class PokemonListScreenUiState(
     val isError: Boolean = false,
     val isSearchMode: Boolean = false,
     val isDefaultList: Boolean = true,
+    val defaultListEnded: Boolean = false,
+    val searchListEnded: Boolean = false,
     val searchText: String = "",
     val pokemonList: List<PokemonModel> = listOf()
 

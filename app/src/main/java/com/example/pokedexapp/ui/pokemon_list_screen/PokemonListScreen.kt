@@ -54,8 +54,8 @@ fun PokemonListScreen(
             }
 
             PokemonListScreenOnEvent.AppendToList -> {
-                if (state.isSearchMode) viewModel.appendSearchList()
-                else viewModel.getPokemonList()
+                if (state.isSearchMode && !state.searchListEnded) viewModel.appendSearchList()
+                else if (!state.defaultListEnded) viewModel.getPokemonList()
             }
         }
     }
