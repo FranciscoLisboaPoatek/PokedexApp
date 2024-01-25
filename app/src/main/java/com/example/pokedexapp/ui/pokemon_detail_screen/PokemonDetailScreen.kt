@@ -152,7 +152,7 @@ private fun PokemonDetailScreenContent(
 
 
 @Composable
-private fun PokemonImage(image: Any?, imageSize: Dp, modifier: Modifier = Modifier) {
+private fun PokemonImage(image: String?, imageSize: Dp, modifier: Modifier = Modifier) {
     Surface(
         color = Color.Transparent,
         modifier = modifier

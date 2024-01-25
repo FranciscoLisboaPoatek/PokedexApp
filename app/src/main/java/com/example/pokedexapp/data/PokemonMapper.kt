@@ -6,6 +6,7 @@ import com.example.pokedexapp.data.network.TypeListItem
 import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.models.PokemonTypes
+import com.example.pokedexapp.domain.models.PokemonTypes.Companion.getPokemonTypeByString
 import com.example.pokedexapp.ui.pokemon_detail_screen.PokemonSprite
 
 object PokemonMapper {
@@ -29,39 +30,13 @@ object PokemonMapper {
 }
 
 private fun pokemonApiDtoTypeToPokemonTypes(typeListItem: TypeListItem): PokemonTypes?{
-    return when(typeListItem.type.name){
-        "normal" -> PokemonTypes.NORMAL
-        "fighting" -> PokemonTypes.FIGHTING
-        "flying" -> PokemonTypes.FLYING
-        "poison" -> PokemonTypes.POISON
-        "ground" -> PokemonTypes.GROUND
-        "rock" -> PokemonTypes.ROCK
-        "bug" -> PokemonTypes.BUG
-        "ghost" -> PokemonTypes.GHOST
-        "steel" -> PokemonTypes.STEEL
-        "fire" -> PokemonTypes.FIRE
-        "water" -> PokemonTypes.WATER
-        "grass" -> PokemonTypes.GRASS
-        "electric" -> PokemonTypes.ELECTRIC
-        "psychic" -> PokemonTypes.PSYCHIC
-        "ice" -> PokemonTypes.ICE
-        "dragon" -> PokemonTypes.DRAGON
-        "dark" -> PokemonTypes.DARK
-        "fairy" -> PokemonTypes.FAIRY
-        else-> null
-    }
+    return getPokemonTypeByString(typeListItem.type.name)
 }
 private fun pokemonApiDtoStatListToPokemonBaseStat(stats: List<StatListItem>): MutableList<PokemonBaseStats> {
     val pokemonBaseStatsList = mutableListOf<PokemonBaseStats>()
     stats.forEach{
-        when(it.stat.name){
-            "hp" -> pokemonBaseStatsList.add(PokemonBaseStats.Hp(it.base_stat))
-            "attack" ->pokemonBaseStatsList.add(PokemonBaseStats.Attack(it.base_stat))
-            "defense" ->pokemonBaseStatsList.add(PokemonBaseStats.Defense(it.base_stat))
-            "special-attack" ->pokemonBaseStatsList.add(PokemonBaseStats.SpecialAttack(it.base_stat))
-            "special-defense" ->pokemonBaseStatsList.add(PokemonBaseStats.SpecialDefense(it.base_stat))
-            "speed" ->pokemonBaseStatsList.add(PokemonBaseStats.Speed(it.base_stat))
-        }
+        PokemonBaseStats.getPokemonBaseStatByString(it.stat.name, it.base_stat)
+            ?.let { pokemonBaseState -> pokemonBaseStatsList.add(pokemonBaseState) }
     }
     return pokemonBaseStatsList
 }

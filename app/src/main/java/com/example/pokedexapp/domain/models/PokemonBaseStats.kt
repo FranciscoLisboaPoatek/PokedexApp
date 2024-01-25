@@ -15,4 +15,21 @@ sealed class PokemonBaseStats(val value: Int, val color: Color) {
     class SpecialAttack(stat: Int):PokemonBaseStats(value = stat, color = SpAttackStatColor)
     class SpecialDefense(stat: Int):PokemonBaseStats(value = stat, color = SpDefenseStatColor)
     class Speed(stat: Int):PokemonBaseStats(value = stat, color = SpeedStatColor)
+
+    companion object {
+        fun getPokemonBaseStatByString(
+            pokemonBaseStatString: String,
+            baseStatValue: Int
+        ): PokemonBaseStats? {
+            return when (pokemonBaseStatString) {
+                "hp" -> Hp(baseStatValue)
+                "attack" -> Attack(baseStatValue)
+                "defense" -> Defense(baseStatValue)
+                "special-attack" -> SpecialAttack(baseStatValue)
+                "special-defense" -> SpecialDefense(baseStatValue)
+                "speed" -> Speed(baseStatValue)
+                else -> null
+            }
+        }
+    }
 }
