@@ -119,7 +119,11 @@ private fun PokemonDetailScreenContent(
                     changeShinySprite = { changeShinySprite(currentSprite.spriteType) },
                     navigateUp = { navigateUp() })
             } else {
-                PokemonDetailTopAppBar(isShinySprite = false, { }, { }, { })
+                PokemonDetailTopAppBar(
+                    isShinySprite = false,
+                    rotateSprite = { },
+                    changeShinySprite = { },
+                    navigateUp = { navigateUp() })
             }
 
             PokemonInformationSheetWrapper(
@@ -148,7 +152,7 @@ private fun PokemonDetailScreenContent(
 
 
 @Composable
-private fun PokemonImage(image: Any?, imageSize: Dp, modifier: Modifier = Modifier) {
+private fun PokemonImage(image: String?, imageSize: Dp, modifier: Modifier = Modifier) {
     Surface(
         color = Color.Transparent,
         modifier = modifier
@@ -285,10 +289,10 @@ private fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifi
         Text(
             buildAnnotatedString {
                 withStyle(style = SpanStyle(color = Color.Gray)) {
-                    append("#$pokemonId")
+                    append("#$pokemonId ")
                 }
                 withStyle(style = SpanStyle(color = Color.Black)) {
-                    append(" $pokemonName")
+                    append(pokemonName.replaceFirst(pokemonName.first(),pokemonName.first().uppercaseChar()))
                 }
             },
             style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp)

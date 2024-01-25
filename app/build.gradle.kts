@@ -9,7 +9,9 @@ plugins {
 android {
     namespace = "com.example.pokedexapp"
     compileSdk = 34
-
+    buildFeatures{
+        buildConfig = true
+    }
     defaultConfig {
         applicationId = "com.example.pokedexapp"
         minSdk = 24
@@ -21,6 +23,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "POKEMON_API_BASE_URL", "\"https://pokeapi.co/api/v2/\"")
+
     }
 
     buildTypes {
@@ -72,13 +77,16 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.5.0")
 
-    implementation("com.google.dagger:hilt-android:2.48.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.46.1")
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     implementation("androidx.navigation:navigation-compose:2.7.6")
 
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
 }
 
 kapt {
