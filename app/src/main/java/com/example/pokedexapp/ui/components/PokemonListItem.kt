@@ -148,13 +148,20 @@ fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Dp, onClick: () -> Uni
                 )
             )
         ) {
-            PokemonImage(
-                image = pokemon.frontDefaultSprite.spriteUrl,
-                modifier = Modifier
-                    .padding(top = 5.dp, start = 5.dp, end = 5.dp)
+            if (pokemon.frontDefaultSprite.spriteUrl != null) {
+                PokemonImage(
+                    image = pokemon.frontDefaultSprite.spriteUrl,
+                    modifier = Modifier
+                        .padding(top = 5.dp, start = 5.dp, end = 5.dp)
+                        .weight(3f)
+                        .fillMaxWidth()
+                )
+            }else {
+                NoPokemonImageIcon(tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier
+                    .padding(top = 40.dp, bottom = 20.dp, start = 40.dp, end = 40.dp)
                     .weight(3f)
-                    .fillMaxWidth()
-            )
+                    .fillMaxWidth())
+            }
 
             PokemonName(
                 name = pokemon.name,
