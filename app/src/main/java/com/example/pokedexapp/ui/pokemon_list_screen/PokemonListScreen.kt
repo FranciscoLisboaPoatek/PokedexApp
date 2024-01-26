@@ -17,6 +17,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -54,8 +56,8 @@ fun PokemonListScreen(
             }
 
             PokemonListScreenOnEvent.AppendToList -> {
-                if (state.isSearchMode && !state.searchListEnded) viewModel.appendSearchList()
-                else if (!state.defaultListEnded) viewModel.getPokemonList()
+                if (state.isSearchMode && !state.searchListEnded && !state.isLoadingAppend) viewModel.appendSearchList()
+                else if (!state.defaultListEnded && !state.isLoadingAppend) viewModel.getPokemonList()
             }
         }
     }
@@ -120,6 +122,9 @@ private fun PokemonList(
     modifier: Modifier
 ) {
     val controller = LocalSoftwareKeyboardController.current
+    SideEffect {
+        if (state.isScrollInProgress) controller?.hide()
+    }
     val GRID_SPAN = 2
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -132,11 +137,13 @@ private fun PokemonList(
             contentPadding = PaddingValues(16.dp),
             state = state
         ) {
-            items(pokemonList.size) { pokemonIndex ->
+            items(pokemonList.size, key = { pokemonList[it].id }) { pokemonIndex ->
                 val pokemon = pokemonList[pokemonIndex]
 
-                if (pokemonIndex == pokemonList.size - 10 && !isLoadingAppend) {
-                    onEvent(PokemonListScreenOnEvent.AppendToList)
+                LaunchedEffect(pokemonList.size) {
+                    if (pokemonIndex == pokemonList.size - 10) {
+                        onEvent(PokemonListScreenOnEvent.AppendToList)
+                    }
                 }
 
                 PokemonListItem(
@@ -146,7 +153,7 @@ private fun PokemonList(
                     modifier = Modifier.height(210.dp)
                 )
             }
-            if (state.isScrollInProgress) controller?.hide()
+
             if (isLoadingAppend) {
                 item(span = { GridItemSpan(GRID_SPAN) }) {
                     Box(Modifier.height(100.dp), contentAlignment = Alignment.Center) {
