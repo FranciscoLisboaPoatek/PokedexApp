@@ -57,7 +57,7 @@ fun PokemonListScreen(
 
             PokemonListScreenOnEvent.AppendToList -> {
                 if (state.isSearchMode && !state.searchListEnded && !state.isLoadingAppend) viewModel.appendSearchList()
-                else if (!state.defaultListEnded && !state.isLoadingAppend) viewModel.getPokemonList()
+                else if (!state.isSearchMode && !state.defaultListEnded && !state.isLoadingAppend) viewModel.getPokemonList()
             }
         }
     }

@@ -22,24 +22,22 @@ class PokemonListViewModel @Inject constructor(
 
     private val _searchText = MutableStateFlow("")
 
-    private val defaultPokemonList = mutableListOf<PokemonModel>()
-    private var searchPokemonList = mutableListOf<PokemonModel>()
+    private var defaultPokemonList = listOf<PokemonModel>()
+    private var searchPokemonList = listOf<PokemonModel>()
 
     init {
         _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
             pokemonListUseCase.insertAllPokemon()
-            defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(0))
+            defaultPokemonList = pokemonListUseCase.getPokemonList(0)
 
             _state.updateState {
                 copy(
                     pokemonList = defaultPokemonList,
                     isLoading = false,
-                    isDefaultList = true
                 )
             }
         }
-
         observerSearchText()
     }
 
@@ -64,7 +62,7 @@ class PokemonListViewModel @Inject constructor(
     }
 
     fun getPokemonList() {
-            _state.updateState { copy(isLoadingAppend = true) }
+        _state.updateState { copy(isLoadingAppend = true) }
         try {
 
             viewModelScope.launch {
@@ -73,8 +71,8 @@ class PokemonListViewModel @Inject constructor(
                 if (appendList.isEmpty()) {
                     _state.updateState { copy(defaultListEnded = true, isLoadingAppend = false) }
                 } else {
-                    defaultPokemonList.addAll(appendList)
                     _state.updateState {
+                        defaultPokemonList = defaultPokemonList.plus(appendList)
                         copy(
                             pokemonList = defaultPokemonList,
                             isLoadingAppend = false,
@@ -99,7 +97,6 @@ class PokemonListViewModel @Inject constructor(
             viewModelScope.launch {
                 searchPokemonList =
                     pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
-                        .toMutableList()
                 _state.updateState {
                     copy(
                         isLoading = false,
@@ -126,10 +123,10 @@ class PokemonListViewModel @Inject constructor(
                     name = _searchText.value,
                     offset = searchPokemonList.size
                 )
-                if (appendList.isEmpty()){
+                if (appendList.isEmpty()) {
                     _state.updateState { copy(searchListEnded = true, isLoadingAppend = false) }
-                }else {
-                    searchPokemonList.addAll(appendList)
+                } else {
+                    searchPokemonList = searchPokemonList.plus(appendList)
                     _state.updateState {
                         copy(
                             isLoadingAppend = false,
