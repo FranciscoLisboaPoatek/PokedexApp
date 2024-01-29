@@ -9,6 +9,8 @@ import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.models.PokemonSprite
+import com.example.pokedexapp.ui.utils.extractPokemonIdFromUrl
+import com.example.pokedexapp.ui.utils.treatName
 
 object PokemonMapper {
     fun PokemonApiDto.toPokemonModel(): PokemonModel {
@@ -30,7 +32,7 @@ object PokemonMapper {
     }
 
     fun PokemonListItemApiDto.toPokemonDaoDto(): PokemonDaoDto {
-        return PokemonDaoDto(name = name, url = url)
+        return PokemonDaoDto(id = url.extractPokemonIdFromUrl(), name = name.treatName(), url = url)
     }
 }
 

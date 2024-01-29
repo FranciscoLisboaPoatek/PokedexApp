@@ -1,6 +1,5 @@
 package com.example.pokedexapp.ui.pokemon_detail_screen
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -50,7 +49,6 @@ class PokemonDetailViewModel @Inject constructor(
         _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
             try {
-                Log.w("detail", "view model")
 
                 _state.updateState {
                     copy(
@@ -67,7 +65,6 @@ class PokemonDetailViewModel @Inject constructor(
                     )
                 }
             } catch (ex: Exception) {
-                Log.w("detail", ex.toString())
                 _state.updateState { copy(isError = true, isLoading = false) }
             }
 

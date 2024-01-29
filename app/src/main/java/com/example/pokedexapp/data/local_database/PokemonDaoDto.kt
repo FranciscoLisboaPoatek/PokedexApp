@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Pokemon")
 data class PokemonDaoDto(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = false) val id: Int,
     @ColumnInfo val name: String,
     @ColumnInfo val url: String
 )
