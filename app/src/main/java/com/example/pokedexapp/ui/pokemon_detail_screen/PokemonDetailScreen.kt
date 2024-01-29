@@ -154,7 +154,7 @@ private fun PokemonDetailScreenContent(
 
 
 @Composable
-private fun PokemonImage(image: Any?, imageSize: Dp, modifier: Modifier = Modifier) {
+private fun PokemonImage(image: String?, imageSize: Dp, modifier: Modifier = Modifier) {
     Surface(
         color = Color.Transparent,
         modifier = modifier
@@ -294,7 +294,7 @@ private fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifi
                     append("#$pokemonId ")
                 }
                 withStyle(style = SpanStyle(color = Color.Black)) {
-                    append(pokemonName.replaceFirst(pokemonName.first(),pokemonName.first().uppercaseChar()))
+                    append(pokemonName)
                 }
             },
             style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp)
@@ -453,6 +453,7 @@ private fun BaseStatProgressBar(
 @Composable
 private fun PokemonBaseStatsGraph(pokemon: PokemonModel, modifier: Modifier = Modifier) {
     BaseStatsGraph(
+        modifier = modifier,
         spaceBetweenHorizontally = 8.dp,
         spaceBetweenVertically = 12.dp,
         baseStatsIndex = pokemon.baseStats.size,
@@ -471,7 +472,6 @@ private fun PokemonBaseStatsGraph(pokemon: PokemonModel, modifier: Modifier = Mo
         baseStatValue = {
             BaseStatValue(pokemonBaseStats = pokemon.baseStats[it])
         },
-        modifier = modifier
     )
 }
 

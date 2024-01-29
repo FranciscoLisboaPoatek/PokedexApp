@@ -7,12 +7,12 @@ interface PokemonApi {
     @GET("pokemon/{id}")
     suspend fun getPokemonById(
         @Path("id") id: Int
-    ): PokemonApiDto
+    ): PokemonApiDto?
 
     @GET("pokemon/{name}")
     suspend fun getPokemonByName(
         @Path("name") name: String
-    ): PokemonApiDto
+    ): PokemonApiDto?
 
     @GET("pokemon?limit=100000")
     suspend fun getPokemonEntireList(): PokemonListResponse

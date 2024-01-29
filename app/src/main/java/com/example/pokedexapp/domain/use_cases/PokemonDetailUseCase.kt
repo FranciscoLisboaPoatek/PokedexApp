@@ -8,7 +8,6 @@ class PokemonDetailUseCase @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) {
     suspend fun getPokemonById(pokemonId: String):PokemonModel?{
-
         return pokemonRepository.getPokemonById(pokemonId = pokemonId)
     }
 }

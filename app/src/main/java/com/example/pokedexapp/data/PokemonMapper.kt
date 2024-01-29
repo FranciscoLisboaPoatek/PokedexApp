@@ -9,6 +9,7 @@ import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.models.PokemonSprite
+import com.example.pokedexapp.domain.models.PokemonTypes.Companion.getPokemonTypeByString
 import com.example.pokedexapp.ui.utils.extractPokemonIdFromUrl
 import com.example.pokedexapp.ui.utils.treatName
 
@@ -18,7 +19,7 @@ object PokemonMapper {
         val secondaryType = if (types.size > 1) types[1].toPokemonType() else null
         return PokemonModel(
             id = id.toString(),
-            name = name,
+            name = name.treatName(),
             height = height.decimeterToMeter(),
             weight = weight.hectogramsToKg(),
             baseStats = stats.toPokemonBaseStatList(),
@@ -37,40 +38,14 @@ object PokemonMapper {
 }
 
 private fun TypeListItem.toPokemonType(): PokemonTypes? {
-    return when (type.name) {
-        "normal" -> PokemonTypes.NORMAL
-        "fighting" -> PokemonTypes.FIGHTING
-        "flying" -> PokemonTypes.FLYING
-        "poison" -> PokemonTypes.POISON
-        "ground" -> PokemonTypes.GROUND
-        "rock" -> PokemonTypes.ROCK
-        "bug" -> PokemonTypes.BUG
-        "ghost" -> PokemonTypes.GHOST
-        "steel" -> PokemonTypes.STEEL
-        "fire" -> PokemonTypes.FIRE
-        "water" -> PokemonTypes.WATER
-        "grass" -> PokemonTypes.GRASS
-        "electric" -> PokemonTypes.ELECTRIC
-        "psychic" -> PokemonTypes.PSYCHIC
-        "ice" -> PokemonTypes.ICE
-        "dragon" -> PokemonTypes.DRAGON
-        "dark" -> PokemonTypes.DARK
-        "fairy" -> PokemonTypes.FAIRY
-        else -> null
-    }
+    return getPokemonTypeByString(this.type.name)
 }
 
 private fun List<StatListItem>.toPokemonBaseStatList(): MutableList<PokemonBaseStats> {
     val pokemonBaseStatsList = mutableListOf<PokemonBaseStats>()
-    forEach {
-        when (it.stat.name) {
-            "hp" -> pokemonBaseStatsList.add(PokemonBaseStats.Hp(it.base_stat))
-            "attack" -> pokemonBaseStatsList.add(PokemonBaseStats.Attack(it.base_stat))
-            "defense" -> pokemonBaseStatsList.add(PokemonBaseStats.Defense(it.base_stat))
-            "special-attack" -> pokemonBaseStatsList.add(PokemonBaseStats.SpecialAttack(it.base_stat))
-            "special-defense" -> pokemonBaseStatsList.add(PokemonBaseStats.SpecialDefense(it.base_stat))
-            "speed" -> pokemonBaseStatsList.add(PokemonBaseStats.Speed(it.base_stat))
-        }
+    this.forEach{
+        PokemonBaseStats.getPokemonBaseStatByString(it.stat.name, it.base_stat)
+            ?.let { pokemonBaseState -> pokemonBaseStatsList.add(pokemonBaseState) }
     }
     return pokemonBaseStatsList
 }

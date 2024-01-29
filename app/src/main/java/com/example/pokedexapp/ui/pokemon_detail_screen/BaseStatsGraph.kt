@@ -9,21 +9,21 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BaseStatsGraph(
+    modifier: Modifier = Modifier,
     spaceBetweenVertically: Dp = 0.dp,
     spaceBetweenHorizontally: Dp = 0.dp,
     baseStatsIndex: Int,
     baseStatLabel: @Composable (index: Int) -> Unit,
     baseStatBar: @Composable (index: Int) -> Unit,
     baseStatValue: @Composable (index: Int) -> Unit,
-    modifier: Modifier = Modifier
 
 ) {
-    val baseStatLabel = @Composable { repeat(baseStatsIndex) { baseStatLabel(it) } }
-    val baseStatBar = @Composable { repeat(baseStatsIndex) { baseStatBar(it) } }
-    val baseStatValue = @Composable { repeat(baseStatsIndex) { baseStatValue(it) } }
+    val baseStatLabelRep = @Composable { repeat(baseStatsIndex) { baseStatLabel(it) } }
+    val baseStatBarRep = @Composable { repeat(baseStatsIndex) { baseStatBar(it) } }
+    val baseStatValueRep = @Composable { repeat(baseStatsIndex) { baseStatValue(it) } }
 
     Layout(
-        contents = listOf(baseStatLabel, baseStatBar, baseStatValue),
+        contents = listOf(baseStatLabelRep, baseStatBarRep, baseStatValueRep),
         modifier = modifier
 
     ) { (baseStatLabelMeasurable, baseStatBarMeasurable, baseStatValueMeasurable), constraints ->
