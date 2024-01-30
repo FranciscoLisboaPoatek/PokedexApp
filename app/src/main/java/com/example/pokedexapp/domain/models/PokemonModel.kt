@@ -1,5 +1,8 @@
 package com.example.pokedexapp.domain.models
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class PokemonModel(
     val id: String,
     val name: String,

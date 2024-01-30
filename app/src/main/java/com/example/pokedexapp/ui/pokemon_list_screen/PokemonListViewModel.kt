@@ -1,5 +1,7 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonModel
@@ -22,14 +24,14 @@ class PokemonListViewModel @Inject constructor(
 
     private val _searchText = MutableStateFlow("")
 
-    private var defaultPokemonList = listOf<PokemonModel>()
-    private var searchPokemonList = listOf<PokemonModel>()
+    private var defaultPokemonList =  SnapshotStateList<PokemonModel>()
+    private var searchPokemonList =  SnapshotStateList<PokemonModel>()
 
     init {
         _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
             pokemonListUseCase.insertAllPokemon()
-            defaultPokemonList = pokemonListUseCase.getPokemonList(0)
+            defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(0))
 
             _state.updateState {
                 copy(
@@ -72,7 +74,7 @@ class PokemonListViewModel @Inject constructor(
                     _state.updateState { copy(defaultListEnded = true, isLoadingAppend = false) }
                 } else {
                     _state.updateState {
-                        defaultPokemonList = defaultPokemonList.plus(appendList)
+                        defaultPokemonList.addAll(appendList)
                         copy(
                             pokemonList = defaultPokemonList,
                             isLoadingAppend = false,
@@ -95,8 +97,11 @@ class PokemonListViewModel @Inject constructor(
 
             _state.updateState { copy(isLoading = true, searchListEnded = false) }
             viewModelScope.launch {
-                searchPokemonList =
-                    pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
+                val tempList = pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
+                val newList = mutableStateListOf<PokemonModel>()
+                newList.addAll(tempList)
+                searchPokemonList = newList
+
                 _state.updateState {
                     copy(
                         isLoading = false,
@@ -126,7 +131,7 @@ class PokemonListViewModel @Inject constructor(
                 if (appendList.isEmpty()) {
                     _state.updateState { copy(searchListEnded = true, isLoadingAppend = false) }
                 } else {
-                    searchPokemonList = searchPokemonList.plus(appendList)
+                    searchPokemonList.addAll(appendList)
                     _state.updateState {
                         copy(
                             isLoadingAppend = false,
