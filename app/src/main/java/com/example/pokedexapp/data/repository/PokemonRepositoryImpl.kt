@@ -1,6 +1,8 @@
 package com.example.pokedexapp.data.repository
 
-import com.example.pokedexapp.data.PokemonMapper
+import com.example.pokedexapp.data.PokemonMapper.toPokemonDaoDto
+import com.example.pokedexapp.data.PokemonMapper.toPokemonModel
+import com.example.pokedexapp.data.local_database.PokemonDao
 import com.example.pokedexapp.data.network.PokemonApi
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.repository.PokemonRepository
@@ -9,19 +11,43 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
-   private val pokemonApi: PokemonApi,
-): PokemonRepository {
-    override suspend fun getPokemonById(pokemonId: String): PokemonModel =
-          withContext(Dispatchers.IO){
-              val pokemonApiDto = pokemonApi.getPokemonById(pokemonId.toInt())
-              return@withContext PokemonMapper.pokemonApiDtoToPokemonModel(pokemonApiDto)
-          }
+    private val pokemonApi: PokemonApi,
+    private val pokemonDao: PokemonDao
+) : PokemonRepository {
+    override suspend fun getPokemonById(pokemonId: String): PokemonModel? =
+        withContext(Dispatchers.IO) {
+            val pokemonApiDto = pokemonApi.getPokemonById(pokemonId.toInt())
+            return@withContext pokemonApiDto?.toPokemonModel()
+        }
+
+    override suspend fun getPokemonByName(name: String): PokemonModel? =
+        withContext(Dispatchers.IO) {
+            return@withContext pokemonApi.getPokemonByName(name)?.toPokemonModel()
+
+        }
 
     override suspend fun savePokemonList() {
-        withContext(Dispatchers.IO){
-            pokemonApi.getPokemonEntireList()
-            //TODO SAVE IN LOCAL DATABASE
+        withContext(Dispatchers.IO) {
+            pokemonDao.deleteAllPokemon()
+            val pokemonApiList = pokemonApi.getPokemonEntireList().results
+            val pokemonDaoList =
+                pokemonApiList.map { it.toPokemonDaoDto() }
+
+            pokemonDao.insertAllPokemon(pokemonDaoList)
         }
     }
 
+    override suspend fun getPokemonList(offset: Int, limit: Int): List<PokemonModel> =
+        withContext(Dispatchers.IO) {
+            val pokemonModelList = mutableListOf<PokemonModel>()
+            val pokemonDaoDtoList = pokemonDao.pokemonPagination(offset, limit)
+            pokemonDaoDtoList.forEach {
+                getPokemonById(it.id.toString())?.let { pokemonModel ->
+                    pokemonModelList.add(
+                        pokemonModel
+                    )
+                }
+            }
+            return@withContext pokemonModelList
+        }
 }

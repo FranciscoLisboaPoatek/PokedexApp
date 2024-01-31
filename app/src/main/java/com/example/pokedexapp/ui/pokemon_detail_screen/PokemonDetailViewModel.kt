@@ -3,6 +3,7 @@ package com.example.pokedexapp.ui.pokemon_detail_screen
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pokedexapp.domain.models.SpriteType
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
 import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
 import com.example.pokedexapp.ui.utils.updateState
@@ -34,8 +35,8 @@ class PokemonDetailViewModel @Inject constructor(
         _state.updateState { copy(pokemonSprite = sprite) }
     }
 
-    fun rotatePokemonSprite(actualPokemonSprite: SpriteType){
-        val sprite = when(actualPokemonSprite){
+    fun rotatePokemonSprite(actualPokemonSprite: SpriteType) {
+        val sprite = when (actualPokemonSprite) {
             SpriteType.FRONT_DEFAULT -> state.value.pokemonModel?.backDefaultSprite
             SpriteType.FRONT_SHINY_DEFAULT -> state.value.pokemonModel?.backShinySprite
             SpriteType.BACK_DEFAULT -> state.value.pokemonModel?.frontDefaultSprite
@@ -44,7 +45,7 @@ class PokemonDetailViewModel @Inject constructor(
         _state.updateState { copy(pokemonSprite = sprite) }
     }
 
-    fun updatePokemon(pokemonId: String){
+    fun updatePokemon(pokemonId: String) {
         _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
             try {

@@ -3,7 +3,7 @@ package com.example.pokedexapp.domain.sample_data
 import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.models.PokemonTypes
-import com.example.pokedexapp.ui.pokemon_detail_screen.PokemonSprite
+import com.example.pokedexapp.domain.models.PokemonSprite
 
 class PokemonSampleData {
 

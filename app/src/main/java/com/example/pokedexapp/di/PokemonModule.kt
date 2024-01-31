@@ -1,14 +1,19 @@
 package com.example.pokedexapp.di
 
+import android.content.Context
+import androidx.room.Room
 import com.example.pokedexapp.BuildConfig
+import com.example.pokedexapp.data.local_database.PokemonDatabase
 import com.example.pokedexapp.data.network.PokemonApi
 import com.example.pokedexapp.domain.repository.PokemonRepository
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
+import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -30,9 +35,31 @@ object PokemonModule {
             .build()
             .create(PokemonApi::class.java)
     }
+
     @Provides
     @Singleton
-    fun providePokemonDetailUseCase(repository: PokemonRepository): PokemonDetailUseCase{
+    fun providePokemonDatabase(@ApplicationContext application: Context): PokemonDatabase {
+        return Room.databaseBuilder(
+            application,
+            PokemonDatabase::class.java,
+            "PokemonDatabase"
+        ).fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providePokemonDao(pokemonDatabase: PokemonDatabase) = pokemonDatabase.pokemonDao()
+
+    @Provides
+    @Singleton
+    fun providePokemonDetailUseCase(repository: PokemonRepository): PokemonDetailUseCase {
         return PokemonDetailUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun providePokemonListUseCase(repository: PokemonRepository): PokemonListUseCase {
+        return PokemonListUseCase(repository)
     }
 }

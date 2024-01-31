@@ -1,7 +1,5 @@
 package com.example.pokedexapp.domain.models
 
-import com.example.pokedexapp.ui.pokemon_detail_screen.PokemonSprite
-
 data class PokemonModel(
     val id: String,
     val name: String,

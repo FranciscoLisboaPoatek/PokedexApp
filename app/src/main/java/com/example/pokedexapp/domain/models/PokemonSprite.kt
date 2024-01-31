@@ -1,4 +1,4 @@
-package com.example.pokedexapp.ui.pokemon_detail_screen
+package com.example.pokedexapp.domain.models
 
 enum class SpriteType(val isShiny: Boolean) {
     FRONT_DEFAULT(false),
