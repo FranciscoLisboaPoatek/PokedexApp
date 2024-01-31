@@ -24,21 +24,20 @@ class PokemonListViewModel @Inject constructor(
 
     private val _searchText = MutableStateFlow("")
 
-    private var defaultPokemonList =  SnapshotStateList<PokemonModel>()
-    private var searchPokemonList =  SnapshotStateList<PokemonModel>()
-
+    private var defaultPokemonList = SnapshotStateList<PokemonModel>()
+    private var searchPokemonList = SnapshotStateList<PokemonModel>()
     init {
         _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
             pokemonListUseCase.insertAllPokemon()
             defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(0))
 
-            _state.updateState {
-                copy(
+            updateList(
+                _state.value.copy(
                     pokemonList = defaultPokemonList,
                     isLoading = false,
                 )
-            }
+            )
         }
         observerSearchText()
     }
@@ -73,14 +72,13 @@ class PokemonListViewModel @Inject constructor(
                 if (appendList.isEmpty()) {
                     _state.updateState { copy(defaultListEnded = true, isLoadingAppend = false) }
                 } else {
-                    _state.updateState {
-                        defaultPokemonList.addAll(appendList)
-                        copy(
-                            pokemonList = defaultPokemonList,
+                    defaultPokemonList.addAll(appendList)
+                    updateList(
+                        _state.value.copy(
                             isLoadingAppend = false,
                             isDefaultList = true
                         )
-                    }
+                    )
                 }
             }
         } catch (ex: Exception) {
@@ -91,24 +89,24 @@ class PokemonListViewModel @Inject constructor(
     fun searchPokemonListByName(pokemonName: String) {
         try {
             if (pokemonName.isBlank()) {
-                _state.updateState { copy(pokemonList = defaultPokemonList, isDefaultList = true) }
+                updateList(_state.value.copy(isDefaultList = true))
                 return
             }
 
             _state.updateState { copy(isLoading = true, searchListEnded = false) }
             viewModelScope.launch {
-                val tempList = pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
+                val tempList =
+                    pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
                 val newList = mutableStateListOf<PokemonModel>()
                 newList.addAll(tempList)
                 searchPokemonList = newList
 
-                _state.updateState {
-                    copy(
+                updateList(
+                    _state.value.copy(
                         isLoading = false,
-                        pokemonList = searchPokemonList,
                         isDefaultList = false
                     )
-                }
+                )
             }
         } catch (ex: Exception) {
             _state.updateState { copy(isLoading = false, isError = true) }
@@ -132,17 +130,24 @@ class PokemonListViewModel @Inject constructor(
                     _state.updateState { copy(searchListEnded = true, isLoadingAppend = false) }
                 } else {
                     searchPokemonList.addAll(appendList)
-                    _state.updateState {
-                        copy(
+                    updateList(
+                        _state.value.copy(
                             isLoadingAppend = false,
                             isDefaultList = false,
-                            pokemonList = searchPokemonList
                         )
-                    }
+                    )
                 }
             }
         } catch (ex: Exception) {
             _state.updateState { copy(isLoading = false, isError = true) }
+        }
+    }
+
+    private fun updateList(state: PokemonListScreenUiState) {
+        _state.updateState {
+            if (state.isDefaultList) state.copy(pokemonList = defaultPokemonList) else state.copy(
+                pokemonList = searchPokemonList
+            )
         }
     }
 }
