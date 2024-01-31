@@ -26,18 +26,23 @@ class PokemonListViewModel @Inject constructor(
 
     private var defaultPokemonList = SnapshotStateList<PokemonModel>()
     private var searchPokemonList = SnapshotStateList<PokemonModel>()
+
     init {
         _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
-            pokemonListUseCase.insertAllPokemon()
-            defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(0))
+            try {
+                pokemonListUseCase.insertAllPokemon()
+                defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(0))
 
-            updateList(
-                _state.value.copy(
-                    pokemonList = defaultPokemonList,
-                    isLoading = false,
+                updateList(
+                    _state.value.copy(
+                        pokemonList = defaultPokemonList,
+                        isLoading = false,
+                    )
                 )
-            )
+            } catch (ex: Exception) {
+                _state.updateState { copy(isError = true, isLoading = false) }
+            }
         }
         observerSearchText()
     }
@@ -64,9 +69,9 @@ class PokemonListViewModel @Inject constructor(
 
     fun getPokemonList() {
         _state.updateState { copy(isLoadingAppend = true) }
-        try {
 
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 val appendList = pokemonListUseCase.getPokemonList(offset = defaultPokemonList.size)
 
                 if (appendList.isEmpty()) {
@@ -80,21 +85,21 @@ class PokemonListViewModel @Inject constructor(
                         )
                     )
                 }
+            } catch (ex: Exception) {
+                _state.updateState { copy(isLoadingAppend = false, isError = true) }
             }
-        } catch (ex: Exception) {
-            _state.updateState { copy(isLoadingAppend = false, isError = true) }
         }
     }
 
     fun searchPokemonListByName(pokemonName: String) {
-        try {
-            if (pokemonName.isBlank()) {
-                updateList(_state.value.copy(isDefaultList = true))
-                return
-            }
+        if (pokemonName.isBlank()) {
+            updateList(_state.value.copy(isDefaultList = true))
+            return
+        }
 
-            _state.updateState { copy(isLoading = true, searchListEnded = false) }
-            viewModelScope.launch {
+        _state.updateState { copy(isLoading = true, searchListEnded = false) }
+        viewModelScope.launch {
+            try {
                 val tempList =
                     pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
                 val newList = mutableStateListOf<PokemonModel>()
@@ -107,21 +112,21 @@ class PokemonListViewModel @Inject constructor(
                         isDefaultList = false
                     )
                 )
+            } catch (ex: Exception) {
+                _state.updateState { copy(isLoading = false, isError = true) }
             }
-        } catch (ex: Exception) {
-            _state.updateState { copy(isLoading = false, isError = true) }
         }
     }
 
     fun appendSearchList() {
-        try {
-            if (_searchText.value.isBlank()) {
-                getPokemonList()
-                return
-            }
-            _state.updateState { copy(isLoadingAppend = true) }
+        if (_searchText.value.isBlank()) {
+            getPokemonList()
+            return
+        }
+        _state.updateState { copy(isLoadingAppend = true) }
 
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 val appendList = pokemonListUseCase.getPokemonSearchList(
                     name = _searchText.value,
                     offset = searchPokemonList.size
@@ -137,9 +142,9 @@ class PokemonListViewModel @Inject constructor(
                         )
                     )
                 }
+            } catch (ex: Exception) {
+                _state.updateState { copy(isLoading = false, isError = true) }
             }
-        } catch (ex: Exception) {
-            _state.updateState { copy(isLoading = false, isError = true) }
         }
     }
 

@@ -56,6 +56,31 @@ enum class PokemonTypes(val color: Color, val backgroundColor: Color) {
     ICE(IceTypeColor, IceTypeBackgroundColor),
     DRAGON(DragonTypeColor, DragonTypeBackgroundColor),
     DARK(DarkTypeColor, DarkTypeBackgroundColor),
-    FAIRY(FairyTypeColor, FairyTypeBackgroundColor)
+    FAIRY(FairyTypeColor, FairyTypeBackgroundColor);
 
+    companion object {
+        fun getPokemonTypeByString(pokemonTypeString: String): PokemonTypes? {
+            return when (pokemonTypeString) {
+                "normal" -> NORMAL
+                "fighting" -> FIGHTING
+                "flying" -> FLYING
+                "poison" -> POISON
+                "ground" -> GROUND
+                "rock" -> ROCK
+                "bug" -> BUG
+                "ghost" -> GHOST
+                "steel" -> STEEL
+                "fire" -> FIRE
+                "water" -> WATER
+                "grass" -> GRASS
+                "electric" -> ELECTRIC
+                "psychic" -> PSYCHIC
+                "ice" -> ICE
+                "dragon" -> DRAGON
+                "dark" -> DARK
+                "fairy" -> FAIRY
+                else -> null
+            }
+        }
+    }
 }

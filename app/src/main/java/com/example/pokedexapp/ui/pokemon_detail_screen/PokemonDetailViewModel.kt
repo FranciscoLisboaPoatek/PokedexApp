@@ -1,11 +1,11 @@
 package com.example.pokedexapp.ui.pokemon_detail_screen
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.SpriteType
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
+import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
 import com.example.pokedexapp.ui.utils.updateState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,16 +18,15 @@ class PokemonDetailViewModel @Inject constructor(
     private val pokemonDetailUseCase: PokemonDetailUseCase
 ) : ViewModel() {
 
-    private val pokemonId: String = checkNotNull(savedStateHandle["pokemon_id"])
-    private val _state = MutableStateFlow(PokemonDetailScreenUiState())
+    private val pokemonId: String = checkNotNull(savedStateHandle[POKEMON_ID_KEY])
+    private val _state = MutableStateFlow( PokemonDetailScreenUiState() )
+    val state get() = _state
 
     init {
-        updatePokemon(pokemonId = pokemonId)
+       updatePokemon(pokemonId = pokemonId)
     }
-
-    val state get() = _state
-    fun changeShinyPokemonSprite(actualPokemonSprite: SpriteType) {
-        val sprite = when (actualPokemonSprite) {
+    fun changeShinyPokemonSprite(actualPokemonSprite: SpriteType){
+        val sprite = when(actualPokemonSprite){
             SpriteType.FRONT_DEFAULT -> state.value.pokemonModel?.frontShinySprite
             SpriteType.FRONT_SHINY_DEFAULT -> state.value.pokemonModel?.frontDefaultSprite
             SpriteType.BACK_DEFAULT -> state.value.pokemonModel?.backShinySprite
@@ -50,24 +49,9 @@ class PokemonDetailViewModel @Inject constructor(
         _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
             try {
-                Log.w("detail", "view model")
-
-                _state.updateState {
-                    copy(
-                        pokemonModel = pokemonDetailUseCase.getPokemonById(
-                            pokemonId = pokemonId
-                        )
-                    )
-                }
-                _state.updateState {
-                    copy(
-                        isLoading = false,
-                        isError = false,
-                        pokemonSprite = pokemonModel?.frontDefaultSprite
-                    )
-                }
-            } catch (ex: Exception) {
-                Log.w("detail", ex.toString())
+                _state.updateState { copy(pokemonModel = pokemonDetailUseCase.getPokemonById(pokemonId = pokemonId)) }
+                _state.updateState { copy(isLoading = false, isError = false, pokemonSprite = pokemonModel?.frontDefaultSprite) }
+            }catch (ex: Exception){
                 _state.updateState { copy(isError = true, isLoading = false) }
             }
 
