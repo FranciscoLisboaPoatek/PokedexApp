@@ -12,6 +12,7 @@ data class PokemonListScreenUiState(
     val isDefaultList: Boolean = true,
     val defaultListEnded: Boolean = false,
     val searchListEnded: Boolean = false,
+    val showNoSearchResultsFound: Boolean = false,
     val searchText: String = "",
     val pokemonList: SnapshotStateList<PokemonModel> = SnapshotStateList()
 

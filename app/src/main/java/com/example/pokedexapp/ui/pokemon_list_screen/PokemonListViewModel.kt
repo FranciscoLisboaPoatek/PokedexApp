@@ -48,6 +48,7 @@ class PokemonListViewModel @Inject constructor(
     }
 
     fun changeIsSearchMode() {
+        if(!_state.value.isSearchMode && _state.value.isLoading) return
         _state.updateState { copy(isSearchMode = !_state.value.isSearchMode) }
     }
 
@@ -68,6 +69,8 @@ class PokemonListViewModel @Inject constructor(
     }
 
     fun getPokemonList() {
+        if(_state.value.defaultListEnded || _state.value.isLoadingAppend) return
+
         _state.updateState { copy(isLoadingAppend = true) }
 
         viewModelScope.launch {
@@ -93,7 +96,7 @@ class PokemonListViewModel @Inject constructor(
 
     fun searchPokemonListByName(pokemonName: String) {
         if (pokemonName.isBlank()) {
-            updateList(_state.value.copy(isDefaultList = true))
+            updateList(_state.value.copy(isDefaultList = true, showNoSearchResultsFound = false))
             return
         }
 
@@ -102,16 +105,24 @@ class PokemonListViewModel @Inject constructor(
             try {
                 val tempList =
                     pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
-                val newList = mutableStateListOf<PokemonModel>()
-                newList.addAll(tempList)
-                searchPokemonList = newList
 
-                updateList(
-                    _state.value.copy(
-                        isLoading = false,
-                        isDefaultList = false
+                if (tempList.isEmpty()) {
+                    _state.updateState {
+                        copy(isLoading = false, showNoSearchResultsFound = true)
+                    }
+                } else {
+                    val newList = mutableStateListOf<PokemonModel>()
+                    newList.addAll(tempList)
+                    searchPokemonList = newList
+
+                    updateList(
+                        _state.value.copy(
+                            isLoading = false,
+                            isDefaultList = false,
+                            showNoSearchResultsFound = false
+                        )
                     )
-                )
+                }
             } catch (ex: Exception) {
                 _state.updateState { copy(isLoading = false, isError = true) }
             }
@@ -119,10 +130,9 @@ class PokemonListViewModel @Inject constructor(
     }
 
     fun appendSearchList() {
-        if (_searchText.value.isBlank()) {
-            getPokemonList()
-            return
-        }
+
+        if (_state.value.searchListEnded || _state.value.isLoadingAppend) return
+
         _state.updateState { copy(isLoadingAppend = true) }
 
         viewModelScope.launch {
