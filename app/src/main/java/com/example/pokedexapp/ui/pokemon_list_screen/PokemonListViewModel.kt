@@ -69,7 +69,7 @@ class PokemonListViewModel @Inject constructor(
     }
 
     fun getPokemonList() {
-        if(_state.value.defaultListEnded || _state.value.isLoadingAppend) return
+        if (_state.value.defaultListEnded || _state.value.isLoadingAppend) return
 
         _state.updateState { copy(isLoadingAppend = true) }
 
@@ -84,6 +84,7 @@ class PokemonListViewModel @Inject constructor(
                     updateList(
                         _state.value.copy(
                             isLoadingAppend = false,
+                            isError = false,
                             isDefaultList = true
                         )
                     )
@@ -118,6 +119,7 @@ class PokemonListViewModel @Inject constructor(
                     updateList(
                         _state.value.copy(
                             isLoading = false,
+                            isError = false,
                             isDefaultList = false,
                             showNoSearchResultsFound = false
                         )
@@ -148,6 +150,7 @@ class PokemonListViewModel @Inject constructor(
                     updateList(
                         _state.value.copy(
                             isLoadingAppend = false,
+                            isError = false,
                             isDefaultList = false,
                         )
                     )

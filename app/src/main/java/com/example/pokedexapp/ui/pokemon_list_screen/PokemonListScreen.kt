@@ -16,6 +16,11 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -70,6 +76,7 @@ fun PokemonListScreen(
     PokemonListScreenContent(
         isLoading = state.isLoading,
         isLoadingAppend = state.isLoadingAppend,
+        isError = state.isError,
         isSearchMode = state.isSearchMode,
         isDefaultList = state.isDefaultList,
         showNoSearchResultsFound = state.showNoSearchResultsFound,
@@ -83,6 +90,7 @@ fun PokemonListScreen(
 private fun PokemonListScreenContent(
     isLoading: Boolean,
     isLoadingAppend: Boolean,
+    isError: Boolean,
     isSearchMode: Boolean,
     isDefaultList: Boolean,
     showNoSearchResultsFound: Boolean,
@@ -91,6 +99,8 @@ private fun PokemonListScreenContent(
     onEvent: (PokemonListScreenOnEvent) -> Unit
 ) {
     val defaultListState = rememberLazyGridState()
+    val snackBarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         topBar = {
             PokemonTopAppBar(
@@ -99,8 +109,15 @@ private fun PokemonListScreenContent(
                 onSearchTextChange = { onEvent(PokemonListScreenOnEvent.OnSearchTextValueChange(it)) },
                 handleSearchClick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState, snackbar = { ErrorSnackbar(it) }) },
+        
     ) {
+        LaunchedEffect(key1 = isError) {
+            if (isError) {
+                snackBarHostState.showSnackbar("Error", null, true, SnackbarDuration.Indefinite)
+            }
+        }
         if (isLoading) {
             LoadingScreen(
                 modifier = Modifier
@@ -207,12 +224,21 @@ private fun NoSearchResultsFound(modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+private fun ErrorSnackbar(data: SnackbarData) {
+    Snackbar(
+        snackbarData = data,
+        contentColor = Color.Red
+    )
+}
+
 @Preview
 @Composable
 fun PokemonListScreenPreview() {
     PokemonListScreenContent(
         isLoading = false,
         isLoadingAppend = false,
+        isError = false,
         isSearchMode = false,
         isDefaultList = true,
         showNoSearchResultsFound = false,
@@ -228,6 +254,7 @@ fun PokemonListScreenSearchPreview() {
     PokemonListScreenContent(
         isLoading = false,
         isLoadingAppend = false,
+        isError = false,
         isSearchMode = true,
         isDefaultList = false,
         showNoSearchResultsFound = false,
@@ -243,6 +270,7 @@ fun PokemonListScreenLoadingPreview() {
     PokemonListScreenContent(
         isLoading = true,
         isLoadingAppend = false,
+        isError = false,
         isSearchMode = false,
         isDefaultList = true,
         showNoSearchResultsFound = false,
@@ -258,6 +286,7 @@ fun PokemonListScreenLoadingAppendPreview() {
     PokemonListScreenContent(
         isLoading = false,
         isLoadingAppend = true,
+        isError = false,
         isSearchMode = false,
         isDefaultList = true,
         showNoSearchResultsFound = false,
