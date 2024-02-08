@@ -1,6 +1,7 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,14 +14,13 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarData
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,12 +28,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,6 +44,7 @@ import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.ui.components.PokemonListItem
 import com.example.pokedexapp.ui.components.PokemonTopAppBar
+import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
 @Composable
 fun PokemonListScreen(
@@ -70,76 +71,71 @@ fun PokemonListScreen(
                 if (state.isDefaultList) viewModel.getPokemonList()
                 else viewModel.appendSearchList()
             }
+
+            PokemonListScreenOnEvent.RetryLoadingData -> {
+                viewModel.loadInitialData()
+            }
         }
     }
-
     PokemonListScreenContent(
-        isLoading = state.isLoading,
-        isLoadingAppend = state.isLoadingAppend,
-        isError = state.isError,
-        isSearchMode = state.isSearchMode,
-        isDefaultList = state.isDefaultList,
-        showNoSearchResultsFound = state.showNoSearchResultsFound,
-        searchText = state.searchText,
-        pokemonList = state.pokemonList,
+        state = state,
         onEvent = ::onEvent
     )
 }
 
 @Composable
 private fun PokemonListScreenContent(
-    isLoading: Boolean,
-    isLoadingAppend: Boolean,
-    isError: Boolean,
-    isSearchMode: Boolean,
-    isDefaultList: Boolean,
-    showNoSearchResultsFound: Boolean,
-    searchText: String,
-    pokemonList: SnapshotStateList<PokemonModel>,
+    state: PokemonListScreenUiState,
     onEvent: (PokemonListScreenOnEvent) -> Unit
 ) {
     val defaultListState = rememberLazyGridState()
-    val snackBarHostState = remember { SnackbarHostState() }
-
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             PokemonTopAppBar(
-                searchText = searchText,
-                searchMode = isSearchMode,
+                searchText = state.searchText,
+                searchMode = state.isSearchMode,
+                enableSearch = state.couldLoadInitialData,
                 onSearchTextChange = { onEvent(PokemonListScreenOnEvent.OnSearchTextValueChange(it)) },
                 handleSearchClick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) }
             )
         },
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState, snackbar = { ErrorSnackbar(it) }) },
-        
     ) {
-        LaunchedEffect(key1 = isError) {
-            if (isError) {
-                snackBarHostState.showSnackbar("Error", null, true, SnackbarDuration.Indefinite)
+        LaunchedEffect(key1 = state.isError) {
+            if (state.isError) {
+                Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
             }
         }
-        if (isLoading) {
+        if (state.isLoading) {
             LoadingScreen(
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
             )
         } else {
-            if (isSearchMode && showNoSearchResultsFound) {
-                NoSearchResultsFound(
+            if (!state.couldLoadInitialData) {
+                RetryLoadingData(
+                    reloadData = { onEvent(PokemonListScreenOnEvent.RetryLoadingData) },
                     modifier = Modifier
                         .padding(it)
                         .fillMaxSize()
                 )
-            } else {
-                PokemonList(
-                    pokemonList = pokemonList,
-                    state = if (isDefaultList) defaultListState else rememberLazyGridState(),
-                    onEvent = onEvent,
-                    isLoadingAppend = isLoadingAppend,
-                    modifier = Modifier.padding(it)
-                )
-            }
+            } else
+                if (state.isSearchMode && state.showNoSearchResultsFound) {
+                    NoSearchResultsFound(
+                        modifier = Modifier
+                            .padding(it)
+                            .fillMaxSize()
+                    )
+                } else {
+                    PokemonList(
+                        pokemonList = state.pokemonList,
+                        state = if (state.isDefaultList) defaultListState else rememberLazyGridState(),
+                        onEvent = onEvent,
+                        isLoadingAppend = state.isLoadingAppend,
+                        modifier = Modifier.padding(it)
+                    )
+                }
         }
     }
 }
@@ -225,25 +221,36 @@ private fun NoSearchResultsFound(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ErrorSnackbar(data: SnackbarData) {
-    Snackbar(
-        snackbarData = data,
-        contentColor = Color.Red
-    )
+private fun RetryLoadingData(reloadData: () -> Unit, modifier: Modifier = Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+    ) {
+        IconButton(onClick = { reloadData() }) {
+            Icon(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = stringResource(R.string.retry_loading),
+                tint = TopBarBlueColor,
+                modifier = Modifier.size(50.dp)
+            )
+        }
+    }
 }
 
 @Preview
 @Composable
 fun PokemonListScreenPreview() {
     PokemonListScreenContent(
-        isLoading = false,
-        isLoadingAppend = false,
-        isError = false,
-        isSearchMode = false,
-        isDefaultList = true,
-        showNoSearchResultsFound = false,
-        searchText = "",
-        pokemonList = PokemonSampleData.pokemonListSampleData() as SnapshotStateList<PokemonModel>,
+        PokemonListScreenUiState(
+            isLoading = false,
+            isLoadingAppend = false,
+            isError = false,
+            isSearchMode = false,
+            isDefaultList = true,
+            showNoSearchResultsFound = false,
+            searchText = "",
+            pokemonList = PokemonSampleData.pokemonListSampleData() as SnapshotStateList<PokemonModel>
+        ),
         onEvent = {}
     )
 }
@@ -252,14 +259,16 @@ fun PokemonListScreenPreview() {
 @Composable
 fun PokemonListScreenSearchPreview() {
     PokemonListScreenContent(
-        isLoading = false,
-        isLoadingAppend = false,
-        isError = false,
-        isSearchMode = true,
-        isDefaultList = false,
-        showNoSearchResultsFound = false,
-        searchText = "",
-        pokemonList = PokemonSampleData.pokemonListSampleData() as SnapshotStateList<PokemonModel>,
+        PokemonListScreenUiState(
+            isLoading = false,
+            isLoadingAppend = false,
+            isError = false,
+            isSearchMode = true,
+            isDefaultList = false,
+            showNoSearchResultsFound = false,
+            searchText = "",
+            pokemonList = PokemonSampleData.pokemonListSampleData() as SnapshotStateList<PokemonModel>,
+        ),
         onEvent = {}
     )
 }
@@ -268,14 +277,16 @@ fun PokemonListScreenSearchPreview() {
 @Composable
 fun PokemonListScreenLoadingPreview() {
     PokemonListScreenContent(
-        isLoading = true,
-        isLoadingAppend = false,
-        isError = false,
-        isSearchMode = false,
-        isDefaultList = true,
-        showNoSearchResultsFound = false,
-        searchText = "",
-        pokemonList = PokemonSampleData.pokemonListSampleData() as SnapshotStateList<PokemonModel>,
+        PokemonListScreenUiState(
+            isLoading = true,
+            isLoadingAppend = false,
+            isError = false,
+            isSearchMode = false,
+            isDefaultList = true,
+            showNoSearchResultsFound = false,
+            searchText = "",
+            pokemonList = PokemonSampleData.pokemonListSampleData() as SnapshotStateList<PokemonModel>,
+        ),
         onEvent = {}
     )
 }
@@ -284,14 +295,17 @@ fun PokemonListScreenLoadingPreview() {
 @Composable
 fun PokemonListScreenLoadingAppendPreview() {
     PokemonListScreenContent(
-        isLoading = false,
-        isLoadingAppend = true,
-        isError = false,
-        isSearchMode = false,
-        isDefaultList = true,
-        showNoSearchResultsFound = false,
-        searchText = "",
-        pokemonList = PokemonSampleData.pokemonSearchListSampleData() as SnapshotStateList<PokemonModel>,
+        PokemonListScreenUiState(
+
+            isLoading = false,
+            isLoadingAppend = true,
+            isError = false,
+            isSearchMode = false,
+            isDefaultList = true,
+            showNoSearchResultsFound = false,
+            searchText = "",
+            pokemonList = PokemonSampleData.pokemonSearchListSampleData() as SnapshotStateList<PokemonModel>,
+        ),
         onEvent = {}
     )
 }
