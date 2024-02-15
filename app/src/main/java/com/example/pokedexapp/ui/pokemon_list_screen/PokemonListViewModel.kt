@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pokedexapp.domain.models.PokemonModel
+import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.ui.utils.updateState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,8 +26,8 @@ class PokemonListViewModel @Inject constructor(
 
     private val _searchText = MutableStateFlow("")
 
-    private var defaultPokemonList = SnapshotStateList<PokemonModel>()
-    private var searchPokemonList = SnapshotStateList<PokemonModel>()
+    private var defaultPokemonList = SnapshotStateList<PokemonListItemModel>()
+    private var searchPokemonList = SnapshotStateList<PokemonListItemModel>()
 
     init {
         loadInitialData()
@@ -123,7 +123,7 @@ class PokemonListViewModel @Inject constructor(
                         copy(isLoading = false, showNoSearchResultsFound = true)
                     }
                 } else {
-                    val newList = mutableStateListOf<PokemonModel>()
+                    val newList = mutableStateListOf<PokemonListItemModel>()
                     newList.addAll(tempList)
                     searchPokemonList = newList
 

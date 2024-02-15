@@ -1,15 +1,15 @@
 package com.example.pokedexapp.domain.sample_data
 
 import com.example.pokedexapp.domain.models.PokemonBaseStats
-import com.example.pokedexapp.domain.models.PokemonModel
+import com.example.pokedexapp.domain.models.PokemonDetailModel
 import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.models.PokemonSprite
 
 class PokemonSampleData {
 
     companion object {
-        fun pokemonListSampleData(): List<PokemonModel> = listOf(
-            PokemonModel(
+        fun pokemonListSampleData(): List<PokemonDetailModel> = listOf(
+            PokemonDetailModel(
                 "132",
                 "Ditto",
                 10.0f,
@@ -30,7 +30,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/132.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "448",
                 "Lucario",
                 10.0f,
@@ -51,7 +51,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/448.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/448.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "715",
                 "Noivern",
                 10.0f,
@@ -72,7 +72,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/715.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/715.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "169",
                 "Crobat",
                 10.0f,
@@ -93,7 +93,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/169.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/169.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "553",
                 "Krookodile",
                 10.0f,
@@ -114,7 +114,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/553.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/553.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "138",
                 "Omanyte",
                 10.0f,
@@ -135,7 +135,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/138.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/138.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "637",
                 "Volcarona",
                 10.0f,
@@ -156,7 +156,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/637.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/637.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "94",
                 "Gengar",
                 1.5f,
@@ -177,7 +177,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/94.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/94.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "385",
                 "Jirachi",
                 10.0f,
@@ -198,7 +198,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/385.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/385.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "250",
                 "Ho-oh",
                 10.0f,
@@ -219,7 +219,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/250.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/250.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "9",
                 "Blastoise",
                 10.0f,
@@ -240,7 +240,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/9.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/9.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "407",
                 "Roserade",
                 10.0f,
@@ -261,7 +261,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/407.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/407.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "479",
                 "Rotom",
                 10.0f,
@@ -282,7 +282,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/479.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/479.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "858",
                 "Hatterene",
                 10.0f,
@@ -303,7 +303,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/858.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/858.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "363",
                 "Spheal",
                 10.0f,
@@ -324,7 +324,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/363.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/363.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "887",
                 "Dragapult",
                 3.0f,
@@ -345,7 +345,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/887.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/887.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "491",
                 "Darkrai",
                 10.0f,
@@ -366,7 +366,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/491.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/491.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "670",
                 "Floette",
                 10.0f,
@@ -390,8 +390,8 @@ class PokemonSampleData {
         )
 
 
-        fun pokemonSearchListSampleData(): List<PokemonModel> = listOf(
-            PokemonModel(
+        fun pokemonSearchListSampleData(): List<PokemonDetailModel> = listOf(
+            PokemonDetailModel(
                 "365",
                 "???",
                 10.0f,
@@ -411,7 +411,7 @@ class PokemonSampleData {
                 PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"),
                 PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/132.png")
             ),
-            PokemonModel(
+            PokemonDetailModel(
                 "578",
                 "???",
                 10.0f,
@@ -434,7 +434,7 @@ class PokemonSampleData {
             ),
         )
 
-        fun singlePokemonSampleData(): PokemonModel = PokemonModel(
+        fun singlePokemonSampleData(): PokemonDetailModel = PokemonDetailModel(
             "1",
             "Bulbasaur",
             0.7f,

@@ -3,7 +3,7 @@ package com.example.pokedexapp.domain.models
 import androidx.compose.runtime.Immutable
 
 @Immutable
-data class PokemonModel(
+data class PokemonDetailModel(
     val id: String,
     val name: String,
     val height: Float,

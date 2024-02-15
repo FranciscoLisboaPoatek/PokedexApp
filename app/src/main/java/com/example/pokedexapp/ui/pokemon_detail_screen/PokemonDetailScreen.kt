@@ -56,7 +56,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.pokedexapp.R
 import com.example.pokedexapp.domain.models.PokemonBaseStats
-import com.example.pokedexapp.domain.models.PokemonModel
+import com.example.pokedexapp.domain.models.PokemonDetailModel
+import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.models.SpriteType
@@ -75,8 +76,9 @@ fun PokemonDetailScreen(
     PokemonDetailScreenContent(
         isLoading = pokemonDetailState.isLoading,
         isError = pokemonDetailState.isError,
-        pokemon = pokemonDetailState.pokemonModel,
+        pokemon = pokemonDetailState.pokemonDetailModel,
         currentSprite = pokemonDetailState.pokemonSprite,
+        evolutionChain = pokemonDetailState.evolutionChain,
         changeShinySprite = { pokemonDetailViewModel.changeShinyPokemonSprite(it) },
         rotateSprite = { pokemonDetailViewModel.rotatePokemonSprite(it) },
         navigateUp = { navigateUp() }
@@ -87,8 +89,9 @@ fun PokemonDetailScreen(
 private fun PokemonDetailScreenContent(
     isLoading: Boolean,
     isError: Boolean,
-    pokemon: PokemonModel?,
+    pokemon: PokemonDetailModel?,
     currentSprite: PokemonSprite?,
+    evolutionChain: PokemonEvolutionChainModel,
     changeShinySprite: (SpriteType) -> Unit,
     rotateSprite: (SpriteType) -> Unit,
     navigateUp: () -> Unit,
@@ -132,6 +135,7 @@ private fun PokemonDetailScreenContent(
                 isLoading = isLoading,
                 isError = isError,
                 pokemon = pokemon,
+                evolutionChain = evolutionChain,
                 contentTopSpace = pokemonImageSize / 2 - 20.dp,
                 modifier = Modifier
                     .animateContentSize()
@@ -177,7 +181,8 @@ private fun PokemonImage(image: String?, imageSize: Dp, modifier: Modifier = Mod
 private fun PokemonInformationSheetWrapper(
     isLoading: Boolean,
     isError: Boolean,
-    pokemon: PokemonModel?,
+    pokemon: PokemonDetailModel?,
+    evolutionChain: PokemonEvolutionChainModel,
     contentTopSpace: Dp,
     modifier: Modifier = Modifier
 ) {
@@ -200,6 +205,7 @@ private fun PokemonInformationSheetWrapper(
             if (pokemon != null) {
                 PokemonInformationSheet(
                     pokemon = pokemon,
+                    evolutionChain = evolutionChain,
                     modifier = informationSheetModifier
                 )
             }
@@ -241,7 +247,8 @@ private fun ErrorPokemonInformationSheet(modifier: Modifier = Modifier) {
 
 @Composable
 private fun PokemonInformationSheet(
-    pokemon: PokemonModel,
+    pokemon: PokemonDetailModel,
+    evolutionChain: PokemonEvolutionChainModel,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -279,6 +286,16 @@ private fun PokemonInformationSheet(
             modifier = Modifier.padding(horizontal = 12.dp)
         )
 
+
+        if (evolutionChain.evolvesFromPokemonName != null) {
+            Spacer(modifier = Modifier.height(48.dp))
+
+            EvolvesFromPokemon(
+                pokemonName = evolutionChain.evolvesFromPokemonName,
+                pokemonSpriteUrl = evolutionChain.evolvesFromPokemonSpriteUrl,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 
@@ -451,7 +468,7 @@ private fun BaseStatProgressBar(
 }
 
 @Composable
-private fun PokemonBaseStatsGraph(pokemon: PokemonModel, modifier: Modifier = Modifier) {
+private fun PokemonBaseStatsGraph(pokemon: PokemonDetailModel, modifier: Modifier = Modifier) {
     BaseStatsGraph(
         modifier = modifier,
         spaceBetweenHorizontally = 8.dp,
@@ -473,6 +490,26 @@ private fun PokemonBaseStatsGraph(pokemon: PokemonModel, modifier: Modifier = Mo
             BaseStatValue(pokemonBaseStats = pokemon.baseStats[it])
         },
     )
+}
+
+@Composable
+private fun EvolvesFromPokemon(
+    pokemonName: String,
+    pokemonSpriteUrl: String?,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Text(text = stringResource(R.string.evolves_from), style = MaterialTheme.typography.titleLarge)
+        AsyncImage(
+            model = pokemonSpriteUrl,
+            contentDescription = null,
+            modifier = Modifier.size(150.dp)
+        )
+        Text(text = pokemonName, style = MaterialTheme.typography.titleMedium)
+    }
 }
 
 @Preview
@@ -505,6 +542,7 @@ private fun PokemonDetailScreenLoadingPreview() {
         isLoading = true,
         isError = false,
         pokemon = null,
+        evolutionChain = PokemonEvolutionChainModel(),
         currentSprite = null,
         changeShinySprite = { },
         rotateSprite = { },
@@ -519,6 +557,7 @@ private fun PokemonDetailScreenErrorPreview() {
         isLoading = false,
         isError = true,
         pokemon = null,
+        evolutionChain = PokemonEvolutionChainModel(),
         currentSprite = null,
         changeShinySprite = { },
         rotateSprite = { },

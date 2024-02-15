@@ -14,6 +14,12 @@ interface PokemonApi {
         @Path("name") name: String
     ): PokemonApiDto?
 
+    @GET("pokemon-species/{id}")
+    suspend fun getPokemonSpeciesById(
+        @Path("id") id: Int
+    ): PokemonSpeciesApiDto?
+
+
     @GET("pokemon?limit=100000")
     suspend fun getPokemonEntireList(): PokemonListResponse
 }
