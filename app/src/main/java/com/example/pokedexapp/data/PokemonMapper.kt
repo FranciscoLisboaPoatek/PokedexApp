@@ -20,6 +20,7 @@ object PokemonMapper {
         val secondaryType = if (types.size > 1) types[1].toPokemonType() else null
         return PokemonDetailModel(
             id = id.toString(),
+            speciesId = species.url.extractPokemonIdFromUrl().toString(),
             name = name.treatName(),
             height = height.decimeterToMeter(),
             weight = weight.hectogramsToKg(),

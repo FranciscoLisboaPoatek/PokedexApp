@@ -54,14 +54,14 @@ class PokemonDetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val responsePokemonDetailModel = pokemonDetailUseCase.getPokemonById(pokemonId = pokemonId)
-                val responseEvolutionChain = getEvolutionChain(pokemonId = pokemonId)
+                val responseEvolutionChain = responsePokemonDetailModel?.let { getEvolutionChain(speciesId = it.speciesId) }
                 _state.updateState {
                     copy(
                         isLoading = false,
                         isError = false,
                         pokemonDetailModel = responsePokemonDetailModel,
                         pokemonSprite = responsePokemonDetailModel?.frontDefaultSprite,
-                        evolutionChain = responseEvolutionChain
+                        evolutionChain = responseEvolutionChain ?: PokemonEvolutionChainModel()
                     )
                 }
             } catch (ex: Exception) {
@@ -71,7 +71,7 @@ class PokemonDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getEvolutionChain(pokemonId: String): PokemonEvolutionChainModel {
-       return pokemonEvolutionChainUseCase.getPokemonChain(pokemonId = pokemonId)
+    private suspend fun getEvolutionChain(speciesId: String): PokemonEvolutionChainModel {
+       return pokemonEvolutionChainUseCase.getPokemonChain(speciesId = speciesId)
     }
 }

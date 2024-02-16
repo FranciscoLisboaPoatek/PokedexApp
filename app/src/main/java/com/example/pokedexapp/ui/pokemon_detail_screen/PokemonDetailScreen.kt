@@ -506,7 +506,7 @@ private fun EvolvesFromPokemon(
         AsyncImage(
             model = pokemonSpriteUrl,
             contentDescription = null,
-            modifier = Modifier.size(150.dp)
+            modifier = Modifier.size(120.dp)
         )
         Text(text = pokemonName, style = MaterialTheme.typography.titleMedium)
     }
@@ -515,7 +515,7 @@ private fun EvolvesFromPokemon(
 @Preview
 @Composable
 private fun PokemonBaseStatPreview() {
-    Surface(color = Color.White) { PokemonBaseStatsGraph(pokemon = PokemonSampleData.singlePokemonSampleData()) }
+    Surface(color = Color.White) { PokemonBaseStatsGraph(pokemon = PokemonSampleData.singlePokemonDetailSampleData()) }
 }
 
 @Preview

@@ -29,6 +29,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -245,11 +246,12 @@ fun PokemonListScreenPreview() {
             isLoading = false,
             isLoadingAppend = false,
             isError = false,
+            couldLoadInitialData = true,
             isSearchMode = false,
             isDefaultList = true,
             showNoSearchResultsFound = false,
             searchText = "",
-            pokemonList = PokemonSampleData.pokemonListSampleData() as SnapshotStateList<PokemonListItemModel>
+            pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList()
         ),
         onEvent = {}
     )
@@ -263,11 +265,12 @@ fun PokemonListScreenSearchPreview() {
             isLoading = false,
             isLoadingAppend = false,
             isError = false,
+            couldLoadInitialData = true,
             isSearchMode = true,
             isDefaultList = false,
             showNoSearchResultsFound = false,
             searchText = "",
-            pokemonList = PokemonSampleData.pokemonListSampleData() as SnapshotStateList<PokemonListItemModel>,
+            pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList() ,
         ),
         onEvent = {}
     )
@@ -281,11 +284,12 @@ fun PokemonListScreenLoadingPreview() {
             isLoading = true,
             isLoadingAppend = false,
             isError = false,
+            couldLoadInitialData = true,
             isSearchMode = false,
             isDefaultList = true,
             showNoSearchResultsFound = false,
             searchText = "",
-            pokemonList = PokemonSampleData.pokemonListSampleData() as SnapshotStateList<PokemonListItemModel>,
+            pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList() ,
         ),
         onEvent = {}
     )
@@ -296,15 +300,15 @@ fun PokemonListScreenLoadingPreview() {
 fun PokemonListScreenLoadingAppendPreview() {
     PokemonListScreenContent(
         PokemonListScreenUiState(
-
             isLoading = false,
             isLoadingAppend = true,
             isError = false,
+            couldLoadInitialData = true,
             isSearchMode = false,
             isDefaultList = true,
             showNoSearchResultsFound = false,
             searchText = "",
-            pokemonList = PokemonSampleData.pokemonSearchListSampleData() as SnapshotStateList<PokemonListItemModel>,
+            pokemonList = PokemonSampleData.pokemonSearchListSampleData().toMutableStateList() ,
         ),
         onEvent = {}
     )

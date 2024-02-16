@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,10 +17,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.pokedexapp.domain.models.PokemonListItemModel
+import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 
 
 @Composable
@@ -115,16 +118,16 @@ fun TwoColorStrokeBox(
     }
 }
 
-//@Preview
-//@Composable
-//fun PokemonListItemPreview() {
-//    PokemonListItem(
-//        pokemon = PokemonSampleData.singlePokemonSampleData(),
-//        strokeWidthDp = 10.dp,
-//        onClick = { },
-//        modifier = Modifier.size(186.dp, 210.dp)
-//    )
-//}
+@Preview
+@Composable
+fun PokemonListItemPreview() {
+    PokemonListItem(
+        pokemon = PokemonSampleData.singlePokemonListItemSampleData(),
+        strokeWidthDp = 10.dp,
+        onClick = { },
+        modifier = Modifier.size(186.dp, 210.dp)
+    )
+}
 
 @Composable
 fun PokemonListItem(

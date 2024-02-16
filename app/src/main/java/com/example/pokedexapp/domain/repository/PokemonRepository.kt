@@ -7,7 +7,7 @@ import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 interface PokemonRepository {
     suspend fun getPokemonDetailById(pokemonId: String): PokemonDetailModel?
     suspend fun getPokemonDetailByName(name: String): PokemonDetailModel?
-    suspend fun getPokemonEvolutionChain(pokemonId:String): PokemonEvolutionChainModel
+    suspend fun getPokemonEvolutionChain(speciesId: String): PokemonEvolutionChainModel
     suspend fun savePokemonList()
     suspend fun getPokemonList(offset: Int, limit: Int = 20): List<PokemonListItemModel>
     suspend fun getPokemonSearchList(name:String, offset: Int, limit: Int = 20): List<PokemonListItemModel>

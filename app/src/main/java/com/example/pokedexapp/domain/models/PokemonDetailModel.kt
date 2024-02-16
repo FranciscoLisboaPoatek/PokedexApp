@@ -5,6 +5,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class PokemonDetailModel(
     val id: String,
+    val speciesId: String,
     val name: String,
     val height: Float,
     val weight: Float,

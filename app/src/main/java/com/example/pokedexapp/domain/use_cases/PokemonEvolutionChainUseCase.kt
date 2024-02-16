@@ -7,7 +7,7 @@ import javax.inject.Inject
 class PokemonEvolutionChainUseCase @Inject constructor(
     private val pokemonRepository: PokemonRepository
 ) {
-    suspend fun getPokemonChain(pokemonId: String): PokemonEvolutionChainModel{
-        return pokemonRepository.getPokemonEvolutionChain(pokemonId = pokemonId)
+    suspend fun getPokemonChain(speciesId: String): PokemonEvolutionChainModel{
+        return pokemonRepository.getPokemonEvolutionChain(speciesId = speciesId)
     }
 }

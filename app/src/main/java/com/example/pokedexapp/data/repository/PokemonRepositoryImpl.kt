@@ -32,10 +32,10 @@ class PokemonRepositoryImpl @Inject constructor(
 
         }
 
-    override suspend fun getPokemonEvolutionChain(pokemonId: String): PokemonEvolutionChainModel =
+    override suspend fun getPokemonEvolutionChain(speciesId: String): PokemonEvolutionChainModel =
         withContext(Dispatchers.IO) {
             val evolvesFrom =
-                pokemonApi.getPokemonSpeciesById(pokemonId.toInt())?.evolves_from_species
+                pokemonApi.getPokemonSpeciesById(speciesId.toInt())?.evolves_from_species
 
             if (evolvesFrom != null) {
                 val evolvesFromPokemonId = evolvesFrom.url.extractPokemonIdFromUrl()
