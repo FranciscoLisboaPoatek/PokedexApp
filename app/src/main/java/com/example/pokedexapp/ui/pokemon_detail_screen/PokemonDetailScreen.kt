@@ -26,6 +26,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -60,8 +61,8 @@ import com.example.pokedexapp.domain.models.PokemonDetailModel
 import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.models.PokemonTypes
-import com.example.pokedexapp.domain.models.SpriteType
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
+import com.example.pokedexapp.ui.components.NoPokemonImageIcon
 import com.example.pokedexapp.ui.components.PokemonDetailTopAppBar
 import com.example.pokedexapp.ui.components.PokemonTypeIcon
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
@@ -73,15 +74,31 @@ fun PokemonDetailScreen(
 ) {
     val pokemonDetailState by pokemonDetailViewModel.state.collectAsState()
 
+    fun onEvent(event: PokemonDetailScreenOnEvent) {
+        when (event) {
+            is PokemonDetailScreenOnEvent.ChangeShinySprite -> {
+                pokemonDetailViewModel.changeShinyPokemonSprite(event.sprite)
+            }
+
+            is PokemonDetailScreenOnEvent.NavigateUp -> {
+                navigateUp()
+            }
+
+            is PokemonDetailScreenOnEvent.RotateSprite -> {
+                pokemonDetailViewModel.rotatePokemonSprite(event.sprite)
+            }
+        }
+    }
+
     PokemonDetailScreenContent(
         isLoading = pokemonDetailState.isLoading,
         isError = pokemonDetailState.isError,
         pokemon = pokemonDetailState.pokemonDetailModel,
         currentSprite = pokemonDetailState.pokemonSprite,
         evolutionChain = pokemonDetailState.evolutionChain,
-        changeShinySprite = { pokemonDetailViewModel.changeShinyPokemonSprite(it) },
-        rotateSprite = { pokemonDetailViewModel.rotatePokemonSprite(it) },
-        navigateUp = { navigateUp() }
+        onEvent = ::onEvent,
+        modifier = Modifier.fillMaxSize()
+
     )
 }
 
@@ -91,87 +108,115 @@ private fun PokemonDetailScreenContent(
     isError: Boolean,
     pokemon: PokemonDetailModel?,
     currentSprite: PokemonSprite?,
+    onEvent: (PokemonDetailScreenOnEvent) -> Unit,
     evolutionChain: PokemonEvolutionChainModel,
-    changeShinySprite: (SpriteType) -> Unit,
-    rotateSprite: (SpriteType) -> Unit,
-    navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val pokemonImageSize = 200.dp
-    val pokemonImageTopPadding = 80.dp
 
-    Surface(
-        modifier = modifier.fillMaxSize()
-    ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    Brush.linearGradient(
-                        colorStops = arrayOf(
-                            0f to (pokemon?.primaryType?.color ?: TopBarBlueColor),
-                            1f to (pokemon?.secondaryType?.color ?: Color.White)
-                        )
-                    )
-                )
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 32.dp)
-        )
-        {
-            if (currentSprite != null) {
-                PokemonDetailTopAppBar(
-                    isShinySprite = currentSprite.spriteType.isShiny,
-                    rotateSprite = { rotateSprite(currentSprite.spriteType) },
-                    changeShinySprite = { changeShinySprite(currentSprite.spriteType) },
-                    navigateUp = { navigateUp() })
-            } else {
-                PokemonDetailTopAppBar(
-                    isShinySprite = false,
-                    rotateSprite = { },
-                    changeShinySprite = { },
-                    navigateUp = { navigateUp() })
+    PokemonTypesColorBackground(pokemon = pokemon, modifier = modifier) {
+        Scaffold(
+            containerColor = Color.Transparent,
+            topBar = {
+                PokemonDetailTopAppBarWrapper(currentSprite = currentSprite, onEvent = onEvent)
             }
-
-            PokemonInformationSheetWrapper(
-                isLoading = isLoading,
-                isError = isError,
-                pokemon = pokemon,
-                evolutionChain = evolutionChain,
-                contentTopSpace = pokemonImageSize / 2 - 20.dp,
+        ) {
+            Box(
                 modifier = Modifier
-                    .animateContentSize()
-                    .padding(
-                        top = pokemonImageTopPadding + pokemonImageSize / 2 + 20.dp,
-                        start = 30.dp,
-                        end = 30.dp
-                    )
-                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(it)
             )
+            {
+                PokemonInformationSheetWrapper(
+                    isLoading = isLoading,
+                    isError = isError,
+                    pokemon = pokemon,
+                    evolutionChain = evolutionChain,
+                    contentTopSpace = pokemonImageSize / 2 - 20.dp,
+                    modifier = Modifier
+                        .animateContentSize()
+                        .padding(
+                            top = pokemonImageSize / 2 + 20.dp,
+                            start = 30.dp,
+                            end = 30.dp
+                        )
+                        .padding(bottom = 32.dp)
+                        .fillMaxWidth()
+                )
 
-            PokemonImage(
-                currentSprite?.spriteUrl,
-                pokemonImageSize,
-                modifier = Modifier.padding(top = pokemonImageTopPadding)
-            )
+                if (!isLoading && !isError) {
+                    PokemonImageWrapper(
+                        image = currentSprite?.spriteUrl,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    )
+                }
+            }
         }
     }
 }
 
 
 @Composable
-private fun PokemonImage(image: String?, imageSize: Dp, modifier: Modifier = Modifier) {
-    Surface(
-        color = Color.Transparent,
+private fun PokemonTypesColorBackground(
+    pokemon: PokemonDetailModel?,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Box(
         modifier = modifier
-            .fillMaxWidth()
+            .background(
+                Brush.linearGradient(
+                    colorStops = arrayOf(
+                        0f to (pokemon?.primaryType?.color ?: TopBarBlueColor),
+                        1f to (pokemon?.secondaryType?.color
+                            ?: MaterialTheme.colorScheme.background)
+                    )
+                )
+            )
     ) {
-        Row(
-            horizontalArrangement = Arrangement.Center
-        ) {
+        content()
+    }
+}
+
+@Composable
+private fun PokemonDetailTopAppBarWrapper(
+    currentSprite: PokemonSprite?,
+    onEvent: (PokemonDetailScreenOnEvent) -> Unit
+) {
+    if (currentSprite != null) {
+        PokemonDetailTopAppBar(
+            isShinySprite = currentSprite.spriteType.isShiny,
+            rotateSprite = { onEvent(PokemonDetailScreenOnEvent.RotateSprite(currentSprite.spriteType)) },
+            changeShinySprite = { onEvent(PokemonDetailScreenOnEvent.ChangeShinySprite(currentSprite.spriteType)) },
+            navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) })
+    } else {
+        PokemonDetailTopAppBar(
+            isShinySprite = false,
+            rotateSprite = { },
+            changeShinySprite = { },
+            navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) })
+    }
+}
+
+@Composable
+private fun PokemonImageWrapper(image: String?, modifier: Modifier = Modifier) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        if (image != null) {
             AsyncImage(
                 model = image,
                 contentDescription = null,
-                modifier = Modifier
-                    .size(imageSize)
+                modifier = Modifier.fillMaxSize()
+            )
+        } else {
+            NoPokemonImageIcon(
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(100.dp)
             )
         }
     }
@@ -188,7 +233,7 @@ private fun PokemonInformationSheetWrapper(
 ) {
     val informationSheetModifier = Modifier.padding(vertical = contentTopSpace)
     Surface(
-        color = Color.White,
+        color = MaterialTheme.colorScheme.background,
         shape = RoundedCornerShape(10.dp),
         shadowElevation = 10.dp,
         modifier = modifier
@@ -252,13 +297,13 @@ private fun PokemonInformationSheet(
     modifier: Modifier = Modifier
 ) {
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
 
         PokemonName(
             pokemonId = pokemon.id,
             pokemonName = pokemon.name,
-            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -266,7 +311,6 @@ private fun PokemonInformationSheet(
         PokemonTypesIcons(
             primaryType = pokemon.primaryType,
             secondaryType = pokemon.secondaryType,
-            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -276,14 +320,15 @@ private fun PokemonInformationSheet(
             pokemonWeight = pokemon.weight,
             modifier = Modifier
                 .padding(horizontal = 8.dp)
-                .fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
         PokemonBaseStatsGraph(
             pokemon = pokemon,
-            modifier = Modifier.padding(horizontal = 12.dp)
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .fillMaxWidth()
         )
 
 
@@ -293,7 +338,6 @@ private fun PokemonInformationSheet(
             EvolvesFromPokemon(
                 pokemonName = evolutionChain.evolvesFromPokemonName,
                 pokemonSpriteUrl = evolutionChain.evolvesFromPokemonSpriteUrl,
-                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -301,22 +345,18 @@ private fun PokemonInformationSheet(
 
 @Composable
 private fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Text(
-            buildAnnotatedString {
-                withStyle(style = SpanStyle(color = Color.Gray)) {
-                    append("#$pokemonId ")
-                }
-                withStyle(style = SpanStyle(color = Color.Black)) {
-                    append(pokemonName)
-                }
-            },
-            style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp)
-        )
-    }
+    Text(
+        buildAnnotatedString {
+            withStyle(style = SpanStyle(color = Color.Gray)) {
+                append("#$pokemonId ")
+            }
+            withStyle(style = SpanStyle()) {
+                append(pokemonName)
+            }
+        },
+        modifier = modifier,
+        style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp)
+    )
 }
 
 @Composable
@@ -325,29 +365,25 @@ private fun PokemonTypesIcons(
     secondaryType: PokemonTypes?,
     modifier: Modifier = Modifier
 ) {
-    Surface(
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
         modifier = modifier
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
-        ) {
+        PokemonTypeIcon(
+            primaryType,
+            PaddingValues(vertical = 5.dp),
+            MaterialTheme.typography.titleMedium,
+            Modifier.width(100.dp)
+        )
+        if (secondaryType != null) {
             PokemonTypeIcon(
-                primaryType,
+                secondaryType,
                 PaddingValues(vertical = 5.dp),
                 MaterialTheme.typography.titleMedium,
                 Modifier.width(100.dp)
             )
-            if (secondaryType != null) {
-                PokemonTypeIcon(
-                    secondaryType,
-                    PaddingValues(vertical = 5.dp),
-                    MaterialTheme.typography.titleMedium,
-                    Modifier.width(100.dp)
-                )
-            }
         }
     }
-
 }
 
 @Composable
@@ -530,8 +566,14 @@ private fun PokemonHeightWeightPrev() {
 @Preview
 @Composable
 private fun PokemonDetailScreenPreview() {
-    PokemonDetailScreen(
-        navigateUp = { }
+    val pokemon = PokemonSampleData.singlePokemonDetailSampleData()
+    PokemonDetailScreenContent(
+        isLoading = false,
+        isError = false,
+        pokemon = pokemon,
+        currentSprite = pokemon.frontDefaultSprite,
+        evolutionChain = PokemonEvolutionChainModel(),
+        onEvent = { },
     )
 }
 
@@ -544,9 +586,7 @@ private fun PokemonDetailScreenLoadingPreview() {
         pokemon = null,
         evolutionChain = PokemonEvolutionChainModel(),
         currentSprite = null,
-        changeShinySprite = { },
-        rotateSprite = { },
-        navigateUp = { }
+        onEvent = { },
     )
 }
 
@@ -559,8 +599,6 @@ private fun PokemonDetailScreenErrorPreview() {
         pokemon = null,
         evolutionChain = PokemonEvolutionChainModel(),
         currentSprite = null,
-        changeShinySprite = { },
-        rotateSprite = { },
-        navigateUp = { }
+        onEvent = { },
     )
 }

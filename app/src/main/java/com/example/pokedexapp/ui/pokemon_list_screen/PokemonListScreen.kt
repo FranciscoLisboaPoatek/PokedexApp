@@ -157,7 +157,7 @@ private fun PokemonList(
     val GRID_SPAN = 2
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color.White
+        color = MaterialTheme.colorScheme.background
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(GRID_SPAN),

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -148,18 +149,25 @@ fun PokemonListItem(
                 Brush.verticalGradient(
                     colorStops = arrayOf(
                         0f to pokemon.primaryType.color,
-                        1f to Color.White
+                        1f to MaterialTheme.colorScheme.background
                     )
                 )
             )
         ) {
-            PokemonImage(
-                image = pokemon.spriteUrl,
-                modifier = Modifier
-                    .padding(top = 5.dp, start = 5.dp, end = 5.dp)
+            if (pokemon.spriteUrl != null) {
+                PokemonImage(
+                    image = pokemon.spriteUrl,
+                    modifier = Modifier
+                        .padding(top = 5.dp, start = 5.dp, end = 5.dp)
+                        .weight(3f)
+                        .fillMaxWidth()
+                )
+            }else {
+                NoPokemonImageIcon(tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier
+                    .padding(top = 40.dp, bottom = 20.dp, start = 40.dp, end = 40.dp)
                     .weight(3f)
-                    .fillMaxWidth()
-            )
+                    .fillMaxWidth())
+            }
 
             PokemonName(
                 name = pokemon.name,
