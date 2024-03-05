@@ -41,6 +41,7 @@ class PokemonRepositoryImpl @Inject constructor(
                 val evolvesFromPokemonId = evolvesFrom.url.extractPokemonIdFromUrl()
                 val spriteUrl = POKEMON_SPRITE_BASE_URL.plus("$evolvesFromPokemonId.png")
                 return@withContext PokemonEvolutionChainModel(
+                    evolvesFromPokemonId = evolvesFromPokemonId.toString(),
                     evolvesFromPokemonName = evolvesFrom.name.treatName(),
                     evolvesFromPokemonSpriteUrl = spriteUrl
                 )
