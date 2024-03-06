@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -36,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pokedexapp.R
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
+import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.PokemonListItem
 import com.example.pokedexapp.ui.components.PokemonTopAppBar
 
@@ -102,7 +101,7 @@ private fun PokemonListScreenContent(
         }
     ) {
         if (isLoading) {
-            LoadingScreen(
+            PokeballLoadingAnimation(
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
@@ -171,25 +170,10 @@ private fun PokemonList(
 
             if (isLoadingAppend) {
                 item(span = { GridItemSpan(GRID_SPAN) }) {
-                    Box(Modifier.height(100.dp), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
+                    PokeballLoadingAnimation(Modifier.height(100.dp))
                 }
             }
         }
-    }
-}
-
-@Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier
-                .size(50.dp)
-        )
     }
 }
 
