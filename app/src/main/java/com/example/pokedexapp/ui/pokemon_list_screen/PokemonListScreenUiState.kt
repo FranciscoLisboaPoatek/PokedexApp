@@ -7,7 +7,9 @@ import com.example.pokedexapp.domain.models.PokemonModel
 data class PokemonListScreenUiState(
     val isLoading: Boolean = false,
     val isLoadingAppend: Boolean = false,
-    val isError: Boolean = false,
+    val errorAppendingDefaultList: Boolean = false,
+    val errorAppendingSearchList: Boolean = false,
+    val errorSearching: Boolean = false,
     val couldLoadInitialData: Boolean = false,
     val isSearchMode: Boolean = false,
     val isDefaultList: Boolean = true,

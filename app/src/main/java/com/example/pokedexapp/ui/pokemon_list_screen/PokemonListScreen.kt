@@ -1,14 +1,16 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -16,6 +18,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -89,7 +91,6 @@ private fun PokemonListScreenContent(
     onEvent: (PokemonListScreenOnEvent) -> Unit
 ) {
     val defaultListState = rememberLazyGridState()
-    val context = LocalContext.current
     Scaffold(
         topBar = {
             PokemonTopAppBar(
@@ -101,11 +102,6 @@ private fun PokemonListScreenContent(
             )
         },
     ) {
-        LaunchedEffect(key1 = state.isError) {
-            if (state.isError) {
-                Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
-            }
-        }
         if (state.isLoading) {
             LoadingScreen(
                 modifier = Modifier
@@ -125,14 +121,23 @@ private fun PokemonListScreenContent(
                     NoSearchResultsFound(
                         modifier = Modifier
                             .padding(it)
-                            .fillMaxSize()
+                            .padding(top = 250.dp)
+                            .fillMaxWidth()
                     )
-                } else {
+                }
+                else if(state.isSearchMode && state.errorSearching){
+                    ErrorSearching(modifier = Modifier
+                        .padding(it)
+                        .padding(top = 250.dp)
+                        .fillMaxWidth()
+                    )
+                }else {
                     PokemonList(
                         pokemonList = state.pokemonList,
                         state = if (state.isDefaultList) defaultListState else rememberLazyGridState(),
                         onEvent = onEvent,
                         isLoadingAppend = state.isLoadingAppend,
+                        errorAppending = if(state.isDefaultList) state.errorAppendingDefaultList else state.errorAppendingSearchList,
                         modifier = Modifier.padding(it)
                     )
                 }
@@ -147,6 +152,7 @@ private fun PokemonList(
     state: LazyGridState,
     onEvent: (PokemonListScreenOnEvent) -> Unit,
     isLoadingAppend: Boolean,
+    errorAppending: Boolean,
     modifier: Modifier
 ) {
     val controller = LocalSoftwareKeyboardController.current
@@ -182,10 +188,22 @@ private fun PokemonList(
                 )
             }
 
-            if (isLoadingAppend) {
+            if (errorAppending) {
                 item(span = { GridItemSpan(GRID_SPAN) }) {
-                    Box(Modifier.height(100.dp), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+
+                    RetryLoadingData(
+                        reloadData = {
+                            onEvent(PokemonListScreenOnEvent.AppendToList)
+                        },
+                        modifier = Modifier.wrapContentSize()
+                    )
+                }
+            } else {
+                if (isLoadingAppend) {
+                    item(span = { GridItemSpan(GRID_SPAN) }) {
+                        Box(Modifier.height(100.dp), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
                     }
                 }
             }
@@ -221,9 +239,31 @@ private fun NoSearchResultsFound(modifier: Modifier = Modifier) {
 }
 
 @Composable
+private fun ErrorSearching(modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = Icons.Default.Warning,
+            contentDescription = null,
+            modifier = Modifier.size(80.dp),
+            tint = MaterialTheme.colorScheme.error
+        )
+        Text(
+            text = stringResource(R.string.error_searching_content),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.error
+        )
+    }
+}
+
+@Composable
 private fun RetryLoadingData(reloadData: () -> Unit, modifier: Modifier = Modifier) {
-    Box(
-        contentAlignment = Alignment.Center,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
         IconButton(onClick = { reloadData() }) {
@@ -234,6 +274,12 @@ private fun RetryLoadingData(reloadData: () -> Unit, modifier: Modifier = Modifi
                 modifier = Modifier.size(50.dp)
             )
         }
+        Text(
+            text = stringResource(R.string.something_went_wrong),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.error,
+            modifier = Modifier.padding(top = 10.dp)
+        )
     }
 }
 
@@ -244,7 +290,6 @@ fun PokemonListScreenPreview() {
         PokemonListScreenUiState(
             isLoading = false,
             isLoadingAppend = false,
-            isError = false,
             isSearchMode = false,
             isDefaultList = true,
             showNoSearchResultsFound = false,
@@ -262,7 +307,6 @@ fun PokemonListScreenSearchPreview() {
         PokemonListScreenUiState(
             isLoading = false,
             isLoadingAppend = false,
-            isError = false,
             isSearchMode = true,
             isDefaultList = false,
             showNoSearchResultsFound = false,
@@ -280,7 +324,6 @@ fun PokemonListScreenLoadingPreview() {
         PokemonListScreenUiState(
             isLoading = true,
             isLoadingAppend = false,
-            isError = false,
             isSearchMode = false,
             isDefaultList = true,
             showNoSearchResultsFound = false,
@@ -299,7 +342,6 @@ fun PokemonListScreenLoadingAppendPreview() {
 
             isLoading = false,
             isLoadingAppend = true,
-            isError = false,
             isSearchMode = false,
             isDefaultList = true,
             showNoSearchResultsFound = false,
