@@ -139,13 +139,13 @@ private fun PokemonList(
     SideEffect {
         if (state.isScrollInProgress) controller?.hide()
     }
-    val GRID_SPAN = 2
+    val gridSpan = 2
     Surface(
         modifier = modifier.fillMaxSize(),
         color = Color.White
     ) {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(GRID_SPAN),
+            columns = GridCells.Fixed(gridSpan),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(16.dp),
@@ -169,7 +169,7 @@ private fun PokemonList(
             }
 
             if (isLoadingAppend) {
-                item(span = { GridItemSpan(GRID_SPAN) }) {
+                item(span = { GridItemSpan(gridSpan) }) {
                     PokeballLoadingAnimation(Modifier.height(100.dp))
                 }
             }
