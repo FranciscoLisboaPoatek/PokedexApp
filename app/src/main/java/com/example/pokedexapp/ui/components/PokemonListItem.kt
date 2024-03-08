@@ -126,11 +126,17 @@ fun PokemonListItemPreview() {
         pokemon = PokemonSampleData.singlePokemonSampleData(),
         strokeWidthDp = 10.dp,
         onClick = { },
-        modifier = Modifier.size(186.dp, 210.dp))
+        modifier = Modifier.size(186.dp, 210.dp)
+    )
 }
 
 @Composable
-fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Dp, onClick: () -> Unit,modifier: Modifier = Modifier) {
+fun PokemonListItem(
+    pokemon: PokemonModel,
+    strokeWidthDp: Dp,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     TwoColorStrokeBox(
         pokemon.primaryType.color,
         pokemon.secondaryType?.color ?: pokemon.primaryType.color,
@@ -176,7 +182,7 @@ fun PokemonListItem(pokemon: PokemonModel, strokeWidthDp: Dp, onClick: () -> Uni
 
 @Composable
 private fun PokemonImage(
-    image: Any?,
+    image: String?,
     modifier: Modifier = Modifier
 ) {
     AsyncImage(

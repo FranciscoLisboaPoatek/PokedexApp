@@ -1,6 +1,7 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
-import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonModel
@@ -23,25 +24,32 @@ class PokemonListViewModel @Inject constructor(
 
     private val _searchText = MutableStateFlow("")
 
-    private val defaultPokemonList = mutableListOf<PokemonModel>()
-    private var searchPokemonList = mutableListOf<PokemonModel>()
+    private var defaultPokemonList = SnapshotStateList<PokemonModel>()
+    private var searchPokemonList = SnapshotStateList<PokemonModel>()
 
     init {
         _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
-            pokemonListUseCase.insertAllPokemon()
-            defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(0))
+            try {
+                pokemonListUseCase.insertAllPokemon()
+                defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(0))
 
-            _state.updateState {
-                copy(
-                    pokemonList = defaultPokemonList,
-                    isLoading = false,
-                    isDefaultList = true
+                updateList(
+                    _state.value.copy(
+                        pokemonList = defaultPokemonList,
+                        isLoading = false,
+                    )
                 )
+            } catch (ex: Exception) {
+                _state.updateState { copy(isError = true, isLoading = false) }
             }
         }
-
         observerSearchText()
+    }
+
+    fun changeIsSearchMode() {
+        if(!_state.value.isSearchMode && _state.value.isLoading) return
+        _state.updateState { copy(isSearchMode = !_state.value.isSearchMode) }
     }
 
     @OptIn(FlowPreview::class)
@@ -55,17 +63,29 @@ class PokemonListViewModel @Inject constructor(
         }
     }
 
+    fun changeSearchText(pokemonName: String) {
+        _searchText.value = pokemonName
+        _state.updateState { copy(searchText = _searchText.value) }
+    }
+
     fun getPokemonList() {
-        if (_state.value.isLoadingAppend) return
+        if(_state.value.defaultListEnded || _state.value.isLoadingAppend) return
+
         _state.updateState { copy(isLoadingAppend = true) }
+
         viewModelScope.launch {
             try {
-                defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(offset = defaultPokemonList.size))
-                _state.updateState {
-                    copy(
-                        pokemonList = defaultPokemonList,
-                        isLoadingAppend = false,
-                        isDefaultList = true
+                val appendList = pokemonListUseCase.getPokemonList(offset = defaultPokemonList.size)
+
+                if (appendList.isEmpty()) {
+                    _state.updateState { copy(defaultListEnded = true, isLoadingAppend = false) }
+                } else {
+                    defaultPokemonList.addAll(appendList)
+                    updateList(
+                        _state.value.copy(
+                            isLoadingAppend = false,
+                            isDefaultList = true
+                        )
                     )
                 }
             } catch (ex: Exception) {
@@ -74,71 +94,75 @@ class PokemonListViewModel @Inject constructor(
         }
     }
 
-    fun changeIsSearchMode() {
-        _state.updateState { copy(isSearchMode = !_state.value.isSearchMode) }
-    }
-
     fun searchPokemonListByName(pokemonName: String) {
         if (pokemonName.isBlank()) {
-            _state.updateState { copy(pokemonList = defaultPokemonList, isDefaultList = true) }
+            updateList(_state.value.copy(isDefaultList = true, showNoSearchResultsFound = false))
             return
         }
 
-        try {
-            Log.w("searchList", "search pokemon list, name: $pokemonName")
-
-            _state.updateState { copy(isLoading = true) }
-            viewModelScope.launch {
-                searchPokemonList =
+        _state.updateState { copy(isLoading = true, searchListEnded = false) }
+        viewModelScope.launch {
+            try {
+                val tempList =
                     pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
-                        .toMutableList()
-                _state.updateState {
-                    copy(
-                        isLoading = false,
-                        pokemonList = searchPokemonList,
-                        isDefaultList = false
+
+                if (tempList.isEmpty()) {
+                    _state.updateState {
+                        copy(isLoading = false, showNoSearchResultsFound = true)
+                    }
+                } else {
+                    val newList = mutableStateListOf<PokemonModel>()
+                    newList.addAll(tempList)
+                    searchPokemonList = newList
+
+                    updateList(
+                        _state.value.copy(
+                            isLoading = false,
+                            isDefaultList = false,
+                            showNoSearchResultsFound = false
+                        )
                     )
                 }
+            } catch (ex: Exception) {
+                _state.updateState { copy(isLoading = false, isError = true) }
             }
-        } catch (ex: Exception) {
-            _state.updateState { copy(isLoading = false, isError = true) }
         }
-    }
-
-    fun changeSearchText(pokemonName: String) {
-        _searchText.value = pokemonName
-        _state.updateState { copy(searchText = _searchText.value) }
     }
 
     fun appendSearchList() {
-        if (_searchText.value.isBlank()) {
-            getPokemonList()
-            return
-        }
-        try {
-            Log.w(
-                "searchList",
-                "appendSearchList, size: ${searchPokemonList.size} name: ${_state.value.searchText}"
-            )
-            _state.updateState { copy(isLoadingAppend = true) }
-            viewModelScope.launch {
-                searchPokemonList =
-                    searchPokemonList.plus(
-                        pokemonListUseCase.getPokemonSearchList(
-                            name = _searchText.value,
-                            offset = searchPokemonList.size
+
+        if (_state.value.searchListEnded || _state.value.isLoadingAppend) return
+
+        _state.updateState { copy(isLoadingAppend = true) }
+
+        viewModelScope.launch {
+            try {
+                val appendList = pokemonListUseCase.getPokemonSearchList(
+                    name = _searchText.value,
+                    offset = searchPokemonList.size
+                )
+                if (appendList.isEmpty()) {
+                    _state.updateState { copy(searchListEnded = true, isLoadingAppend = false) }
+                } else {
+                    searchPokemonList.addAll(appendList)
+                    updateList(
+                        _state.value.copy(
+                            isLoadingAppend = false,
+                            isDefaultList = false,
                         )
-                    ).toMutableList()
-                _state.updateState {
-                    copy(
-                        isLoadingAppend = false,
-                        isDefaultList = false,
-                        pokemonList = searchPokemonList
                     )
                 }
+            } catch (ex: Exception) {
+                _state.updateState { copy(isLoading = false, isError = true) }
             }
-        } catch (ex: Exception) {
-            _state.updateState { copy(isLoading = false, isError = true) }
+        }
+    }
+
+    private fun updateList(state: PokemonListScreenUiState) {
+        _state.updateState {
+            if (state.isDefaultList) state.copy(pokemonList = defaultPokemonList) else state.copy(
+                pokemonList = searchPokemonList
+            )
         }
     }
 }

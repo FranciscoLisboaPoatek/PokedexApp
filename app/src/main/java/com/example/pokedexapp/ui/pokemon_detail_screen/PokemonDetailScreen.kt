@@ -22,7 +22,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -61,6 +60,7 @@ import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
+import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.NoPokemonImageIcon
 import com.example.pokedexapp.ui.components.PokemonDetailTopAppBar
 import com.example.pokedexapp.ui.components.PokemonTypeIcon
@@ -252,14 +252,7 @@ private fun PokemonInformationSheetWrapper(
 
 @Composable
 private fun LoadingPokemonInformationSheet(modifier: Modifier = Modifier) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(100.dp)
-        )
-    }
+    PokeballLoadingAnimation(modifier = modifier)
 }
 
 @Composable
@@ -327,23 +320,22 @@ private fun PokemonInformationSheet(
 
 @Composable
 private fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifier = Modifier) {
-    Text(
-        buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color.Gray)) {
-                append("#$pokemonId ")
-            }
-            withStyle(style = SpanStyle()) {
-                append(
-                    pokemonName.replaceFirst(
-                        pokemonName.first(),
-                        pokemonName.first().uppercaseChar()
-                    )
-                )
-            }
-        },
-        modifier = modifier,
-        style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp)
-    )
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Text(
+            buildAnnotatedString {
+                withStyle(style = SpanStyle(color = Color.Gray)) {
+                    append("#$pokemonId ")
+                }
+                withStyle(style = SpanStyle(color = Color.Black)) {
+                    append(pokemonName)
+                }
+            },
+            style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp)
+        )
+    }
 }
 
 @Composable
@@ -478,7 +470,7 @@ private fun BaseStatProgressBar(
         modifier = modifier
     ) {
         LinearProgressIndicator(
-            progress = progressAnimation / maxStat,
+            progress =  progressAnimation / maxStat ,
             color = color,
             trackColor = Color.LightGray,
             strokeCap = StrokeCap.Round,

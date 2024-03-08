@@ -14,15 +14,15 @@ class PokemonRepositoryImpl @Inject constructor(
     private val pokemonApi: PokemonApi,
     private val pokemonDao: PokemonDao
 ) : PokemonRepository {
-    override suspend fun getPokemonById(pokemonId: String): PokemonModel =
+    override suspend fun getPokemonById(pokemonId: String): PokemonModel? =
         withContext(Dispatchers.IO) {
             val pokemonApiDto = pokemonApi.getPokemonById(pokemonId.toInt())
-            return@withContext pokemonApiDto.toPokemonModel()
+            return@withContext pokemonApiDto?.toPokemonModel()
         }
 
-    override suspend fun getPokemonByName(name: String): PokemonModel =
+    override suspend fun getPokemonByName(name: String): PokemonModel? =
         withContext(Dispatchers.IO) {
-            return@withContext pokemonApi.getPokemonByName(name).toPokemonModel()
+            return@withContext pokemonApi.getPokemonByName(name)?.toPokemonModel()
 
         }
 
@@ -41,16 +41,32 @@ class PokemonRepositoryImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             val pokemonModelList = mutableListOf<PokemonModel>()
             val pokemonDaoDtoList = pokemonDao.pokemonPagination(offset, limit)
-            pokemonDaoDtoList.forEach { pokemonModelList.add(getPokemonByName(it.name)) }
+            pokemonDaoDtoList.forEach {
+                getPokemonById(it.id.toString())?.let { pokemonModel ->
+                    pokemonModelList.add(
+                        pokemonModel
+                    )
+                }
+            }
             return@withContext pokemonModelList
         }
 
-    override suspend fun getPokemonSearchList(name: String, offset: Int, limit: Int): List<PokemonModel> =
-        withContext(Dispatchers.IO){
+    override suspend fun getPokemonSearchList(
+        name: String,
+        offset: Int,
+        limit: Int
+    ): List<PokemonModel> =
+        withContext(Dispatchers.IO) {
             val searchName = "%$name%"
             val pokemonModelList = mutableListOf<PokemonModel>()
             val pokemonDaoDtoList = pokemonDao.searchPokemonByName(searchName, offset, limit)
-            pokemonDaoDtoList.forEach { pokemonModelList.add(getPokemonByName(it.name)) }
+            pokemonDaoDtoList.forEach {
+                getPokemonById(it.id.toString())?.let { pokemonModel ->
+                    pokemonModelList.add(
+                        pokemonModel
+                    )
+                }
+            }
             return@withContext pokemonModelList
         }
 

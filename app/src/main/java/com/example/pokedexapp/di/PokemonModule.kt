@@ -43,7 +43,8 @@ object PokemonModule {
             application,
             PokemonDatabase::class.java,
             "PokemonDatabase"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
