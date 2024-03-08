@@ -60,8 +60,8 @@ import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
-import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.NoPokemonImageIcon
+import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.PokemonDetailTopAppBar
 import com.example.pokedexapp.ui.components.PokemonTypeIcon
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
@@ -265,12 +265,12 @@ private fun ErrorPokemonInformationSheet(modifier: Modifier = Modifier) {
             imageVector = Icons.Default.Warning,
             contentDescription = null,
             modifier = Modifier.size(100.dp),
-            tint = Color.Red
+            tint = MaterialTheme.colorScheme.error
         )
         Text(
             text = stringResource(R.string.pokemon_information_sheet_error),
             style = MaterialTheme.typography.titleLarge,
-            color = Color.Red
+            color = MaterialTheme.colorScheme.error
         )
     }
 }
@@ -288,6 +288,7 @@ private fun PokemonInformationSheet(
         PokemonName(
             pokemonId = pokemon.id,
             pokemonName = pokemon.name,
+            modifier = Modifier.padding(horizontal = 8.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -320,10 +321,6 @@ private fun PokemonInformationSheet(
 
 @Composable
 private fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifier = Modifier) {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = modifier.fillMaxWidth()
-    ) {
         Text(
             buildAnnotatedString {
                 withStyle(style = SpanStyle(color = Color.Gray)) {
@@ -333,9 +330,12 @@ private fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifi
                     append(pokemonName)
                 }
             },
-            style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp)
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 2,
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp),
+            modifier = modifier
         )
-    }
 }
 
 @Composable
@@ -470,7 +470,7 @@ private fun BaseStatProgressBar(
         modifier = modifier
     ) {
         LinearProgressIndicator(
-            progress =  progressAnimation / maxStat ,
+            progress = { progressAnimation / maxStat } ,
             color = color,
             trackColor = Color.LightGray,
             strokeCap = StrokeCap.Round,
