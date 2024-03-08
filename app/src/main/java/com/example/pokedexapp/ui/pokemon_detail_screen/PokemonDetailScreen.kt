@@ -331,7 +331,6 @@ private fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifi
                 }
             },
             overflow = TextOverflow.Ellipsis,
-            maxLines = 2,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp),
             modifier = modifier
@@ -349,17 +348,17 @@ private fun PokemonTypesIcons(
         modifier = modifier
     ) {
         PokemonTypeIcon(
-            primaryType,
-            PaddingValues(vertical = 5.dp),
-            MaterialTheme.typography.titleMedium,
-            Modifier.width(100.dp)
+            pokemonType = primaryType,
+            textPaddingValues = PaddingValues(vertical = 5.dp),
+            textStyle = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.width(100.dp)
         )
         if (secondaryType != null) {
             PokemonTypeIcon(
-                secondaryType,
-                PaddingValues(vertical = 5.dp),
-                MaterialTheme.typography.titleMedium,
-                Modifier.width(100.dp)
+                pokemonType = secondaryType,
+                textPaddingValues = PaddingValues(vertical = 5.dp),
+                textStyle = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.width(100.dp)
             )
         }
     }
@@ -407,17 +406,17 @@ private fun PokemonHeightWeight(
         modifier = modifier
     ) {
         PokemonMeasurement(
-            stringResource(id = R.string.weight_in_kg, pokemonWeight.toString()),
-            painterResource(id = R.drawable.weight_icon),
-            Color.Gray,
-            Modifier.weight(1f),
-            Arrangement.End
+            content = stringResource(id = R.string.weight_in_kg, pokemonWeight.toString()),
+            icon = painterResource(id = R.drawable.weight_icon),
+            color = Color.Gray,
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.End
         )
         PokemonMeasurement(
-            stringResource(id = R.string.height_in_m, pokemonHeight.toString()),
-            painterResource(id = R.drawable.height_icon),
-            Color.Gray,
-            Modifier.weight(1f)
+            content = stringResource(id = R.string.height_in_m, pokemonHeight.toString()),
+            icon = painterResource(id = R.drawable.height_icon),
+            color = Color.Gray,
+            modifier = Modifier.weight(1f)
         )
     }
 }
