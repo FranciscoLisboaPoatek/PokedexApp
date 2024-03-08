@@ -15,4 +15,5 @@
     <string name="shiny_icon_button">shiny icon button</string>
     <string name="rotate_sprite_icon_button">rotate pokemon</string>
     <string name="navigate_up">navigate up</string>
+    <string name="no_search_results_found">No search results found</string>
 </resources>

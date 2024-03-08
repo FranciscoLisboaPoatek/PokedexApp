@@ -41,15 +41,19 @@ import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
 @Composable
 fun PokemonTopAppBar(
+    searchText: String,
     searchMode: Boolean,
     onSearchTextChange: (String) -> Unit,
     handleSearchClick: () -> Unit
 ) {
+    var wasSearchClicked by remember { mutableStateOf(false) }
 
     if (searchMode) SearchPokemonTopAppBar(
-        onSearchTextChange = { onSearchTextChange(it) },
+        searchText = searchText,
+        wasSearchClicked = wasSearchClicked,
+        onSearchTextChange = { wasSearchClicked = false; onSearchTextChange(it) },
         onCloseSearchCLick = { handleSearchClick() })
-    else LogoPokemonTopAppBar(onSearchClick = { handleSearchClick() })
+    else LogoPokemonTopAppBar(onSearchClick = { wasSearchClicked = true; handleSearchClick()})
 
 }
 
@@ -80,15 +84,17 @@ private fun LogoPokemonTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchPokemonTopAppBar(
+    searchText: String,
+    wasSearchClicked: Boolean,
     onSearchTextChange: (String) -> Unit,
     onCloseSearchCLick: () -> Unit
 ) {
-    var searchText by remember { mutableStateOf("") }
-
     val focusRequester = remember { FocusRequester() }
 
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
+    if (wasSearchClicked) {
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
     }
 
     TopAppBar(
@@ -103,7 +109,6 @@ private fun SearchPokemonTopAppBar(
                 SearchTextField(
                     text = searchText,
                     onSearchTextChange = {
-                        searchText = it
                         onSearchTextChange(it)
                     },
                     focusRequester = focusRequester,
@@ -115,8 +120,7 @@ private fun SearchPokemonTopAppBar(
             TopAppBarIconButton(
                 icon = Icons.Default.Close,
                 onClick = {
-                    searchText = ""
-                    onSearchTextChange(searchText)
+                    onSearchTextChange("")
                     onCloseSearchCLick()
                 },
                 contentDescription = stringResource(R.string.close_search)
@@ -189,7 +193,7 @@ private fun TopAppBarIconButton(
 @Preview
 @Composable
 fun PokemonTopAppBarPreview() {
-    PokemonTopAppBar(false,{}) {
+    PokemonTopAppBar("",false,{}) {
 
     }
 }
@@ -197,7 +201,7 @@ fun PokemonTopAppBarPreview() {
 @Preview
 @Composable
 fun PokemonTopAppBarSearchModePreview() {
-    PokemonTopAppBar(true,{}) {
+    PokemonTopAppBar("",true,{}) {
 
     }
 }

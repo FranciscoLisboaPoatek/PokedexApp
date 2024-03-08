@@ -22,7 +22,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -61,6 +60,7 @@ import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.models.SpriteType
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
+import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.PokemonDetailTopAppBar
 import com.example.pokedexapp.ui.components.PokemonTypeIcon
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
@@ -209,14 +209,7 @@ private fun PokemonInformationSheetWrapper(
 
 @Composable
 private fun LoadingPokemonInformationSheet(modifier: Modifier = Modifier) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(100.dp)
-        )
-    }
+    PokeballLoadingAnimation(modifier = modifier)
 }
 
 @Composable
@@ -438,7 +431,7 @@ private fun BaseStatProgressBar(
         modifier = modifier
     ) {
         LinearProgressIndicator(
-            progress = progressAnimation / maxStat,
+            progress = { progressAnimation / maxStat },
             color = color,
             trackColor = Color.LightGray,
             strokeCap = StrokeCap.Round,

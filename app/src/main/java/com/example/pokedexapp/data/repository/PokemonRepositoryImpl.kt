@@ -50,4 +50,24 @@ class PokemonRepositoryImpl @Inject constructor(
             }
             return@withContext pokemonModelList
         }
+
+    override suspend fun getPokemonSearchList(
+        name: String,
+        offset: Int,
+        limit: Int
+    ): List<PokemonModel> =
+        withContext(Dispatchers.IO) {
+            val searchName = "%$name%"
+            val pokemonModelList = mutableListOf<PokemonModel>()
+            val pokemonDaoDtoList = pokemonDao.searchPokemonByName(searchName, offset, limit)
+            pokemonDaoDtoList.forEach {
+                getPokemonById(it.id.toString())?.let { pokemonModel ->
+                    pokemonModelList.add(
+                        pokemonModel
+                    )
+                }
+            }
+            return@withContext pokemonModelList
+        }
+
 }

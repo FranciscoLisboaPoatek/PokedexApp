@@ -9,4 +9,7 @@ interface PokemonRepository {
     suspend fun savePokemonList()
 
     suspend fun getPokemonList(offset: Int, limit: Int = 20): List<PokemonModel>
+    suspend fun getPokemonSearchList(name:String, offset: Int, limit: Int = 20): List<PokemonModel>
+
+
 }
