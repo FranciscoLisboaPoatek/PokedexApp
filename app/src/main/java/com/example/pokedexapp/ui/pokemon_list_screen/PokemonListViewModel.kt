@@ -8,9 +8,9 @@ import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.ui.utils.updateState
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.logEvent
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -103,7 +103,7 @@ class PokemonListViewModel @Inject constructor(
             updateList(_state.value.copy(isDefaultList = true, showNoSearchResultsFound = false))
             return
         }
-        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM){
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SEARCH){
             param(FirebaseAnalytics.Param.SEARCH_TERM,pokemonName)
         }
 

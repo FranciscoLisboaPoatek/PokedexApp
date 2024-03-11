@@ -37,6 +37,10 @@ import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.PokemonListItem
 import com.example.pokedexapp.ui.components.PokemonTopAppBar
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
+import com.google.firebase.analytics.analytics
 
 @Composable
 fun PokemonListScreen(
@@ -56,6 +60,9 @@ fun PokemonListScreen(
             }
 
             is PokemonListScreenOnEvent.OnPokemonCLick -> {
+                Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM){
+                    param(FirebaseAnalytics.Param.ITEM_ID, event.pokemonId)
+                }
                 navigateToDetails(event.pokemonId)
             }
 
