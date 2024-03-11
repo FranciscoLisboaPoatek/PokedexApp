@@ -7,6 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.ui.utils.updateState
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.logEvent
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,7 +52,7 @@ class PokemonListViewModel @Inject constructor(
     }
 
     fun changeIsSearchMode() {
-        if(!_state.value.isSearchMode && _state.value.isLoading) return
+        if (!_state.value.isSearchMode && _state.value.isLoading) return
         _state.updateState { copy(isSearchMode = !_state.value.isSearchMode) }
     }
 
@@ -69,7 +73,7 @@ class PokemonListViewModel @Inject constructor(
     }
 
     fun getPokemonList() {
-        if(_state.value.defaultListEnded || _state.value.isLoadingAppend) return
+        if (_state.value.defaultListEnded || _state.value.isLoadingAppend) return
 
         _state.updateState { copy(isLoadingAppend = true) }
 
@@ -99,6 +103,10 @@ class PokemonListViewModel @Inject constructor(
             updateList(_state.value.copy(isDefaultList = true, showNoSearchResultsFound = false))
             return
         }
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM){
+            param(FirebaseAnalytics.Param.SEARCH_TERM,pokemonName)
+        }
+
 
         _state.updateState { copy(isLoading = true, searchListEnded = false) }
         viewModelScope.launch {
