@@ -18,12 +18,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -126,7 +124,6 @@ private fun PokemonListScreenContent(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun PokemonList(
     pokemonList: SnapshotStateList<PokemonModel>,
@@ -136,13 +133,13 @@ private fun PokemonList(
     modifier: Modifier
 ) {
     val controller = LocalSoftwareKeyboardController.current
-    SideEffect {
+    LaunchedEffect(key1 = state.isScrollInProgress) {
         if (state.isScrollInProgress) controller?.hide()
     }
     val gridSpan = 2
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color.White
+        color = MaterialTheme.colorScheme.background
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(gridSpan),
