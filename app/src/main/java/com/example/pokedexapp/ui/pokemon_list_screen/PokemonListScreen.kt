@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +27,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -44,6 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pokedexapp.R
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
+import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.PokemonListItem
 import com.example.pokedexapp.ui.components.PokemonTopAppBar
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
@@ -103,7 +102,7 @@ private fun PokemonListScreenContent(
         },
     ) {
         if (state.isLoading) {
-            LoadingScreen(
+            PokeballLoadingAnimation(
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
@@ -156,16 +155,16 @@ private fun PokemonList(
     modifier: Modifier
 ) {
     val controller = LocalSoftwareKeyboardController.current
-    SideEffect {
+    LaunchedEffect(key1 = state.isScrollInProgress) {
         if (state.isScrollInProgress) controller?.hide()
     }
-    val GRID_SPAN = 2
+    val gridSpan = 2
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color.White
+        color = MaterialTheme.colorScheme.background
     ) {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(GRID_SPAN),
+            columns = GridCells.Fixed(gridSpan),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(16.dp),
@@ -189,7 +188,7 @@ private fun PokemonList(
             }
 
             if (errorAppending) {
-                item(span = { GridItemSpan(GRID_SPAN) }) {
+                item(span = { GridItemSpan(gridSpan) }) {
 
                     RetryLoadingData(
                         reloadData = {
@@ -200,27 +199,12 @@ private fun PokemonList(
                 }
             } else {
                 if (isLoadingAppend) {
-                    item(span = { GridItemSpan(GRID_SPAN) }) {
-                        Box(Modifier.height(100.dp), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator()
-                        }
+                    item(span = { GridItemSpan(gridSpan) }) {
+                        PokeballLoadingAnimation(Modifier.height(100.dp))
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier
-                .size(50.dp)
-        )
     }
 }
 

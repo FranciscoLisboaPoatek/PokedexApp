@@ -8,7 +8,9 @@ import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.ui.utils.updateState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
@@ -26,6 +28,8 @@ class PokemonListViewModel @Inject constructor(
 
     private var defaultPokemonList = SnapshotStateList<PokemonModel>()
     private var searchPokemonList = SnapshotStateList<PokemonModel>()
+
+    private var searchJob: Job? = null
 
     init {
         loadInitialData()
@@ -108,7 +112,8 @@ class PokemonListViewModel @Inject constructor(
         }
 
         _state.updateState { copy(isLoading = true, errorSearching = false, searchListEnded = false, showNoSearchResultsFound = false) }
-        viewModelScope.launch {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
             try {
                 val tempList =
                     pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
@@ -130,6 +135,8 @@ class PokemonListViewModel @Inject constructor(
                         )
                     )
                 }
+            }  catch (_: CancellationException){
+
             } catch (ex: Exception) {
                 _state.updateState { copy(isLoading = false, errorSearching = true) }
             }
