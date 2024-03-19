@@ -228,13 +228,13 @@ private fun ErrorPokemonInformationSheet(modifier: Modifier = Modifier) {
         Icon(
             imageVector = Icons.Default.Warning,
             contentDescription = null,
-            modifier = Modifier.size(100.dp),
-            tint = Color.Red
+            modifier = Modifier.size(80.dp),
+            tint = MaterialTheme.colorScheme.error
         )
         Text(
             text = stringResource(R.string.pokemon_information_sheet_error),
             style = MaterialTheme.typography.titleLarge,
-            color = Color.Red
+            color = MaterialTheme.colorScheme.error
         )
     }
 }
