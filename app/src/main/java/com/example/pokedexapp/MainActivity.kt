@@ -1,26 +1,28 @@
 package com.example.pokedexapp
 
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.core.app.NotificationCompat
-import androidx.core.net.toUri
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -41,22 +43,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+
             PokedexAppTheme {
+                val context = LocalContext.current
+
                 Box(modifier = Modifier.fillMaxSize()) {
                     PokedexApp()
-
-                    //Button to test the notification
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Button(onClick = { showNotification("${(1..1000).random()}") }) {
-                            Text(text = "Show Notification")
-                        }
-                    }
+                    RequestNotificationPermission(context = context)
                 }
             }
         }
 
 
     }
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
@@ -70,34 +70,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun showNotification(pokemonId: String) {
-        val intent = Intent(
-            Intent.ACTION_VIEW,
-            "$DEEPLINK_URI_SCHEME${Screen.PokemonDetailScreen.route}/$pokemonId".toUri(),
-            applicationContext,
-            this::class.java
-        )
-        val pendingIntent = PendingIntent.getActivity(
-            applicationContext,
-            1,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
-        val notification = NotificationCompat.Builder(this, NotificationChannels.DAILY.channelId)
-            .setSmallIcon(R.drawable.baseline_catching_pokemon_24)
-            .setContentTitle(getString(R.string.daily_pokemon_notification_title))
-            .setContentText(getString(R.string.daily_pokemon_notification_text, pokemonId))
-            .setContentIntent(pendingIntent)
-            .build()
-
-        val notificationManager =
-            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        notificationManager.notify(
-            1,
-            notification
-        )
-    }
 }
 
 @Composable
@@ -132,6 +104,36 @@ fun PokedexApp() {
             PokemonDetailScreen(navigateUp = { navController.navigateUp() })
         }
 
+    }
+
+}
+
+@Composable
+private fun RequestNotificationPermission(context: Context) {
+    var hasNotificationPermission by remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            mutableStateOf(
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            )
+        } else mutableStateOf(true)
+    }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            hasNotificationPermission = isGranted
+        }
+    )
+
+    LaunchedEffect(key1 = launcher) {
+        if (!hasNotificationPermission) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 
 }

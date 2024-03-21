@@ -18,4 +18,10 @@ interface PokemonDao {
 
     @Query("DELETE FROM Pokemon")
     fun deleteAllPokemon()
+
+    @Query("SELECT COUNT() FROM Pokemon")
+    fun getPokemonTableCount(): Int
+
+    @Query("SELECT * FROM Pokemon LIMIT 1 OFFSET :offset")
+    fun getRandomPokemon(offset: Int): PokemonDaoDto
 }

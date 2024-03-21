@@ -1,11 +1,14 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pokedexapp.DailyPokemonNotification
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
+import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.ui.utils.updateState
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent
@@ -20,7 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PokemonListViewModel @Inject constructor(
-    private val pokemonListUseCase: PokemonListUseCase
+    private val pokemonListUseCase: PokemonListUseCase,
+    private val randomPokemonUseCase: RandomPokemonUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PokemonListScreenUiState())
@@ -163,6 +167,16 @@ class PokemonListViewModel @Inject constructor(
             } catch (ex: Exception) {
                 _state.updateState { copy(isLoading = false, isError = true) }
             }
+        }
+    }
+
+    fun sendNotification(context: Context) {
+        viewModelScope.launch {
+            val randomPokemon = randomPokemonUseCase.getRandomPokemonMinimalInfo()
+            DailyPokemonNotification(context = context).showNotification(
+                pokemonId = randomPokemon.id,
+                pokemonName = randomPokemon.name
+            )
         }
     }
 

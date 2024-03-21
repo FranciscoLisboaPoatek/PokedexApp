@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,7 +61,7 @@ fun PokemonListScreen(
             }
 
             is PokemonListScreenOnEvent.OnPokemonCLick -> {
-                Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM){
+                Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
                     param(FirebaseAnalytics.Param.ITEM_ID, event.pokemonId)
                 }
                 navigateToDetails(event.pokemonId)
@@ -69,6 +70,10 @@ fun PokemonListScreen(
             PokemonListScreenOnEvent.AppendToList -> {
                 if (state.isDefaultList) viewModel.getPokemonList()
                 else viewModel.appendSearchList()
+            }
+
+            is PokemonListScreenOnEvent.OnSendNotificationClick -> {
+                viewModel.sendNotification(event.context)
             }
         }
     }
@@ -97,13 +102,21 @@ private fun PokemonListScreenContent(
     onEvent: (PokemonListScreenOnEvent) -> Unit
 ) {
     val defaultListState = rememberLazyGridState()
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             PokemonTopAppBar(
                 searchText = searchText,
                 searchMode = isSearchMode,
                 onSearchTextChange = { onEvent(PokemonListScreenOnEvent.OnSearchTextValueChange(it)) },
-                handleSearchClick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) }
+                onSendNotificationClick = {
+                    onEvent(
+                        PokemonListScreenOnEvent.OnSendNotificationClick(
+                            context
+                        )
+                    )
+                },
+                onSearchClick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) }
             )
         }
     ) {

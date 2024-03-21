@@ -6,6 +6,7 @@ import com.example.pokedexapp.data.network.PokemonListItemApiDto
 import com.example.pokedexapp.data.network.StatListItem
 import com.example.pokedexapp.data.network.TypeListItem
 import com.example.pokedexapp.domain.models.PokemonBaseStats
+import com.example.pokedexapp.domain.models.PokemonMinimalInfo
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.models.PokemonSprite
@@ -34,6 +35,10 @@ object PokemonMapper {
 
     fun PokemonListItemApiDto.toPokemonDaoDto(): PokemonDaoDto {
         return PokemonDaoDto(id = url.extractPokemonIdFromUrl(), name = name.treatName(), url = url)
+    }
+
+    fun PokemonDaoDto.toPokemonMinimalInfo(): PokemonMinimalInfo{
+        return PokemonMinimalInfo(id = id.toString(), name = name)
     }
 }
 

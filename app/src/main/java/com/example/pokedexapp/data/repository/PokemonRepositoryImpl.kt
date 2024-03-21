@@ -1,9 +1,11 @@
 package com.example.pokedexapp.data.repository
 
 import com.example.pokedexapp.data.PokemonMapper.toPokemonDaoDto
+import com.example.pokedexapp.data.PokemonMapper.toPokemonMinimalInfo
 import com.example.pokedexapp.data.PokemonMapper.toPokemonModel
 import com.example.pokedexapp.data.local_database.PokemonDao
 import com.example.pokedexapp.data.network.PokemonApi
+import com.example.pokedexapp.domain.models.PokemonMinimalInfo
 import com.example.pokedexapp.domain.models.PokemonModel
 import com.example.pokedexapp.domain.repository.PokemonRepository
 import kotlinx.coroutines.Dispatchers
@@ -68,6 +70,13 @@ class PokemonRepositoryImpl @Inject constructor(
                 }
             }
             return@withContext pokemonModelList
+        }
+
+    override suspend fun getRandomPokemonMinimalInfo(): PokemonMinimalInfo =
+        withContext(Dispatchers.IO) {
+            val pokemonTableCount = pokemonDao.getPokemonTableCount()
+            val randomPokemonDaoDto = pokemonDao.getRandomPokemon((0..pokemonTableCount).random())
+            return@withContext randomPokemonDaoDto.toPokemonMinimalInfo()
         }
 
 }
