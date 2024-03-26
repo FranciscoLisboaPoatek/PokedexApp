@@ -3,10 +3,13 @@ package com.example.pokedexapp.data.repository
 import com.example.pokedexapp.data.PokemonMapper.toPokemonDaoDto
 import com.example.pokedexapp.data.PokemonMapper.toPokemonMinimalInfo
 import com.example.pokedexapp.data.PokemonMapper.toPokemonModel
+import com.example.pokedexapp.data.PokemonMapper.toSharePokemonNotificationDto
 import com.example.pokedexapp.data.local_database.PokemonDao
 import com.example.pokedexapp.data.network.PokemonApi
+import com.example.pokedexapp.data.pokedex_server.PokedexServerApi
 import com.example.pokedexapp.domain.models.PokemonMinimalInfo
 import com.example.pokedexapp.domain.models.PokemonModel
+import com.example.pokedexapp.domain.models.SharePokemonModel
 import com.example.pokedexapp.domain.repository.PokemonRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,7 +17,8 @@ import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
     private val pokemonApi: PokemonApi,
-    private val pokemonDao: PokemonDao
+    private val pokemonDao: PokemonDao,
+    private val pokedexServerApi: PokedexServerApi
 ) : PokemonRepository {
     override suspend fun getPokemonById(pokemonId: String): PokemonModel? =
         withContext(Dispatchers.IO) {
@@ -79,4 +83,9 @@ class PokemonRepositoryImpl @Inject constructor(
             return@withContext randomPokemonDaoDto.toPokemonMinimalInfo()
         }
 
+    override suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel) {
+        withContext(Dispatchers.IO) {
+            pokedexServerApi.sharePokemon(body = sharePokemonModel.toSharePokemonNotificationDto()).execute()
+        }
+    }
 }

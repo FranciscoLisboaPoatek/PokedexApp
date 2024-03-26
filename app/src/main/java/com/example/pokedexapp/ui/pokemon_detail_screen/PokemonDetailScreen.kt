@@ -63,6 +63,7 @@ import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.PokemonDetailTopAppBar
 import com.example.pokedexapp.ui.components.PokemonTypeIcon
+import com.example.pokedexapp.ui.pokemon_detail_screen.components.SharePokemonToReceiverDialog
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
 @Composable
@@ -75,8 +76,13 @@ fun PokemonDetailScreen(
     PokemonDetailScreenContent(
         isLoading = pokemonDetailState.isLoading,
         isError = pokemonDetailState.isError,
+        text = pokemonDetailState.receiverToken,
+        onReceiverTokenChange = { pokemonDetailViewModel.updateReceiverToken(it) },
+        isSharingPokemonToReceiver = pokemonDetailState.isSharingPokemonToReceiver,
         pokemon = pokemonDetailState.pokemonModel,
         currentSprite = pokemonDetailState.pokemonSprite,
+        switchIsSharingPokemonToReceiver = { pokemonDetailViewModel.switchSharePokemonToReceiverDialog() },
+        sharePokemonToReceiver = { pokemonDetailViewModel.sharePokemonToReceiver() },
         changeShinySprite = { pokemonDetailViewModel.changeShinyPokemonSprite(it) },
         rotateSprite = { pokemonDetailViewModel.rotatePokemonSprite(it) },
         navigateUp = { navigateUp() }
@@ -87,8 +93,13 @@ fun PokemonDetailScreen(
 private fun PokemonDetailScreenContent(
     isLoading: Boolean,
     isError: Boolean,
+    text: String,
+    onReceiverTokenChange: (String) -> Unit,
+    isSharingPokemonToReceiver: Boolean,
     pokemon: PokemonModel?,
     currentSprite: PokemonSprite?,
+    switchIsSharingPokemonToReceiver: () -> Unit,
+    sharePokemonToReceiver: () -> Unit,
     changeShinySprite: (SpriteType) -> Unit,
     rotateSprite: (SpriteType) -> Unit,
     navigateUp: () -> Unit,
@@ -119,12 +130,14 @@ private fun PokemonDetailScreenContent(
                     isShinySprite = currentSprite.spriteType.isShiny,
                     rotateSprite = { rotateSprite(currentSprite.spriteType) },
                     changeShinySprite = { changeShinySprite(currentSprite.spriteType) },
+                    openSharePokemonToReceiverDialog = { switchIsSharingPokemonToReceiver() },
                     navigateUp = { navigateUp() })
             } else {
                 PokemonDetailTopAppBar(
                     isShinySprite = false,
                     rotateSprite = { },
                     changeShinySprite = { },
+                    openSharePokemonToReceiverDialog = { switchIsSharingPokemonToReceiver() },
                     navigateUp = { navigateUp() })
             }
 
@@ -148,6 +161,15 @@ private fun PokemonDetailScreenContent(
                 pokemonImageSize,
                 modifier = Modifier.padding(top = pokemonImageTopPadding)
             )
+
+            if (isSharingPokemonToReceiver) {
+                SharePokemonToReceiverDialog(
+                    text = text,
+                    onDismiss = switchIsSharingPokemonToReceiver,
+                    onConfirm = sharePokemonToReceiver,
+                    onTokenChange = onReceiverTokenChange
+                )
+            }
         }
     }
 }
@@ -497,8 +519,13 @@ private fun PokemonDetailScreenLoadingPreview() {
     PokemonDetailScreenContent(
         isLoading = true,
         isError = false,
+        text = "",
+        onReceiverTokenChange = { },
+        isSharingPokemonToReceiver = false,
         pokemon = null,
         currentSprite = null,
+        switchIsSharingPokemonToReceiver = { },
+        sharePokemonToReceiver = { },
         changeShinySprite = { },
         rotateSprite = { },
         navigateUp = { }
@@ -511,8 +538,13 @@ private fun PokemonDetailScreenErrorPreview() {
     PokemonDetailScreenContent(
         isLoading = false,
         isError = true,
+        text = "",
+        onReceiverTokenChange = { },
+        isSharingPokemonToReceiver = false,
         pokemon = null,
         currentSprite = null,
+        switchIsSharingPokemonToReceiver = { },
+        sharePokemonToReceiver = { },
         changeShinySprite = { },
         rotateSprite = { },
         navigateUp = { }
