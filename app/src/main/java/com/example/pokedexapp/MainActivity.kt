@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             LaunchedEffect(key1 = Unit){
-                onNewIntent(intent)
+                handleIntent(intent)
             }
         }
 
