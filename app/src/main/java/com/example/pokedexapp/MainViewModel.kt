@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(): ViewModel() {
+class MainViewModel @Inject constructor() : ViewModel() {
     val uiState: MutableStateFlow<MainActivityUiState> = MutableStateFlow(MainActivityUiState())
     fun handleDeepLink(uri: Uri){
         uiState.updateState { copy(event = Event.NavigateWithDeeplink(uri)) }

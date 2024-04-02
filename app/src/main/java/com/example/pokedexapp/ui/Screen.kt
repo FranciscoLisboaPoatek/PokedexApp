@@ -2,6 +2,7 @@ package com.example.pokedexapp.ui
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.pokedexapp.ui.utils.DEEPLINK_URI_SCHEME
 import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
 
 
@@ -14,6 +15,7 @@ sealed class Screen(val route: String) {
                 type = NavType.StringType
             }
         )
+        fun makeDeeplink(pokemonId:String): String = "$DEEPLINK_URI_SCHEME${this.route}/$pokemonId"
     }
 }
 

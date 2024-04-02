@@ -46,7 +46,7 @@ object PokemonMapper {
     fun SharePokemonModel.toSharePokemonNotificationDto(): SharePokemonDto {
         return SharePokemonDto(
             receiver = receiver,
-            pokemonId = pokemonId,
+            deeplink = deeplink,
             pokemonName = pokemonName
         )
     }

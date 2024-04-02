@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -34,6 +35,7 @@ import com.example.pokedexapp.ui.pokemon_detail_screen.PokemonDetailScreen
 import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreen
 import com.example.pokedexapp.ui.theme.PokedexAppTheme
 import com.example.pokedexapp.ui.utils.DEEPLINK_URI_SCHEME
+import com.example.pokedexapp.ui.utils.INTENT_EXTRA_DEEPLINK_KEY
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,7 +45,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-
             PokedexAppTheme {
                 val context = LocalContext.current
 
@@ -52,8 +53,10 @@ class MainActivity : ComponentActivity() {
                     RequestNotificationPermission(context = context)
                 }
             }
+            LaunchedEffect(key1 = Unit){
+                onNewIntent(intent)
+            }
         }
-
 
     }
 
@@ -64,9 +67,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleIntent(intent: Intent?) {
-        val uri = intent?.data
-        if (uri != null) {
-            viewModel.handleDeepLink(uri)
+
+        val deeplink = intent?.extras?.getString(INTENT_EXTRA_DEEPLINK_KEY)
+        if (deeplink != null) {
+            viewModel.handleDeepLink(deeplink.toUri())
         }
     }
 

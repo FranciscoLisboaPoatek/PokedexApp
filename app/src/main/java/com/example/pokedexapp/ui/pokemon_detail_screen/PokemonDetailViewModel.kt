@@ -7,6 +7,7 @@ import com.example.pokedexapp.domain.models.SharePokemonModel
 import com.example.pokedexapp.domain.models.SpriteType
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
+import com.example.pokedexapp.ui.Screen
 import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
 import com.example.pokedexapp.ui.utils.updateState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -66,7 +67,7 @@ class PokemonDetailViewModel @Inject constructor(
                     sharePokemonUseCase.sharePokemonTo(
                         SharePokemonModel(
                             receiver = _state.value.receiverToken,
-                            pokemonId = it.id,
+                            deeplink = Screen.PokemonDetailScreen.makeDeeplink(it.id),
                             pokemonName = it.name
                         )
                     )

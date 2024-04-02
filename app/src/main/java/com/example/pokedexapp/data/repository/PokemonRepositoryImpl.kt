@@ -79,7 +79,7 @@ class PokemonRepositoryImpl @Inject constructor(
     override suspend fun getRandomPokemonMinimalInfo(): PokemonMinimalInfo =
         withContext(Dispatchers.IO) {
             val pokemonTableCount = pokemonDao.getPokemonTableCount()
-            val randomPokemonDaoDto = pokemonDao.getRandomPokemon((0..pokemonTableCount).random())
+            val randomPokemonDaoDto = pokemonDao.getRandomPokemon((0..< pokemonTableCount).random())
             return@withContext randomPokemonDaoDto.toPokemonMinimalInfo()
         }
 
