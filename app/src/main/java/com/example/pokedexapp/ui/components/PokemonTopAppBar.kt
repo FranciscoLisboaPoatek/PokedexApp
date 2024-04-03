@@ -43,6 +43,7 @@ import com.example.pokedexapp.ui.theme.TopBarBlueColor
 fun PokemonTopAppBar(
     searchText: String,
     searchMode: Boolean,
+    enableSearch:Boolean,
     onSearchTextChange: (String) -> Unit,
     handleSearchClick: () -> Unit
 ) {
@@ -53,13 +54,14 @@ fun PokemonTopAppBar(
         wasSearchClicked = wasSearchClicked,
         onSearchTextChange = { wasSearchClicked = false; onSearchTextChange(it) },
         onCloseSearchCLick = { handleSearchClick() })
-    else LogoPokemonTopAppBar(onSearchClick = { wasSearchClicked = true; handleSearchClick()})
+    else LogoPokemonTopAppBar(enableSearch = enableSearch, onSearchClick = { wasSearchClicked = true; handleSearchClick()})
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LogoPokemonTopAppBar(
+    enableSearch:Boolean,
     onSearchClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
@@ -69,6 +71,7 @@ private fun LogoPokemonTopAppBar(
         actions = {
             TopAppBarIconButton(
                 icon = Icons.Default.Search,
+                enabled = enableSearch,
                 onClick = {
                     onSearchClick()
                 },
@@ -119,6 +122,7 @@ private fun SearchPokemonTopAppBar(
         actions = {
             TopAppBarIconButton(
                 icon = Icons.Default.Close,
+                enabled = true,
                 onClick = {
                     onSearchTextChange("")
                     onCloseSearchCLick()
@@ -178,14 +182,15 @@ private fun PokemonLogo(
 @Composable
 private fun TopAppBarIconButton(
     icon: ImageVector,
+    enabled: Boolean,
     onClick: () -> Unit,
     contentDescription: String? = null
 ) {
-    IconButton(onClick = onClick) {
+    IconButton(onClick = onClick, enabled = enabled) {
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = Color.White
+            tint = if (enabled) Color.White else Color.LightGray
         )
     }
 }
@@ -193,7 +198,7 @@ private fun TopAppBarIconButton(
 @Preview
 @Composable
 fun PokemonTopAppBarPreview() {
-    PokemonTopAppBar("",false,{}) {
+    PokemonTopAppBar(searchText = "", searchMode = false, enableSearch = true, onSearchTextChange = {}) {
 
     }
 }
@@ -201,7 +206,7 @@ fun PokemonTopAppBarPreview() {
 @Preview
 @Composable
 fun PokemonTopAppBarSearchModePreview() {
-    PokemonTopAppBar("",true,{}) {
+    PokemonTopAppBar(searchText = "", searchMode = true, enableSearch = true, onSearchTextChange = {}) {
 
     }
 }

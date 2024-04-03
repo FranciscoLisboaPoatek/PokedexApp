@@ -264,7 +264,7 @@ private fun ErrorPokemonInformationSheet(modifier: Modifier = Modifier) {
         Icon(
             imageVector = Icons.Default.Warning,
             contentDescription = null,
-            modifier = Modifier.size(100.dp),
+            modifier = Modifier.size(80.dp),
             tint = MaterialTheme.colorScheme.error
         )
         Text(
