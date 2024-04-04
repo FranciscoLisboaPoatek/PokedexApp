@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.domain.models.PokemonTypes
@@ -29,6 +30,8 @@ fun PokemonTypeIcon(pokemonType: PokemonTypes,textPaddingValues: PaddingValues, 
             color = Color.White,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(textPaddingValues),
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
             style = textStyle,
         )
     }

@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -172,6 +173,7 @@ fun PokemonListItem(
             PokemonName(
                 name = pokemon.name,
                 modifier = Modifier
+                    .padding(horizontal = 8.dp)
                     .weight(1f)
                     .fillMaxWidth()
             )
@@ -201,6 +203,8 @@ private fun PokemonName(
     Text(
         text = name,
         textAlign = TextAlign.Center,
+        maxLines = 2,
+        overflow = TextOverflow.Ellipsis,
         modifier = modifier
     )
 }

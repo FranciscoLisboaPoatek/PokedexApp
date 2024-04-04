@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -65,6 +64,7 @@ import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.ui.components.NoPokemonImageIcon
+import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.PokemonDetailTopAppBar
 import com.example.pokedexapp.ui.components.PokemonTypeIcon
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
@@ -271,14 +271,7 @@ private fun PokemonInformationSheetWrapper(
 
 @Composable
 private fun LoadingPokemonInformationSheet(modifier: Modifier = Modifier) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(100.dp)
-        )
-    }
+    PokeballLoadingAnimation(modifier = modifier)
 }
 
 @Composable
@@ -290,13 +283,13 @@ private fun ErrorPokemonInformationSheet(modifier: Modifier = Modifier) {
         Icon(
             imageVector = Icons.Default.Warning,
             contentDescription = null,
-            modifier = Modifier.size(100.dp),
-            tint = Color.Red
+            modifier = Modifier.size(80.dp),
+            tint = MaterialTheme.colorScheme.error
         )
         Text(
             text = stringResource(R.string.pokemon_information_sheet_error),
             style = MaterialTheme.typography.titleLarge,
-            color = Color.Red
+            color = MaterialTheme.colorScheme.error
         )
     }
 }
@@ -316,6 +309,7 @@ private fun PokemonInformationSheet(
         PokemonName(
             pokemonId = pokemon.id,
             pokemonName = pokemon.name,
+            modifier = Modifier.padding(horizontal = 8.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -368,8 +362,10 @@ private fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifi
                 append(pokemonName)
             }
         },
+        overflow = TextOverflow.Ellipsis,
+        textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp),
         modifier = modifier,
-        style = MaterialTheme.typography.titleLarge.copy(fontSize = 28.sp)
     )
 }
 
@@ -384,17 +380,17 @@ private fun PokemonTypesIcons(
         modifier = modifier
     ) {
         PokemonTypeIcon(
-            primaryType,
-            PaddingValues(vertical = 5.dp),
-            MaterialTheme.typography.titleMedium,
-            Modifier.width(100.dp)
+            pokemonType = primaryType,
+            textPaddingValues = PaddingValues(vertical = 5.dp),
+            textStyle = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.width(100.dp)
         )
         if (secondaryType != null) {
             PokemonTypeIcon(
-                secondaryType,
-                PaddingValues(vertical = 5.dp),
-                MaterialTheme.typography.titleMedium,
-                Modifier.width(100.dp)
+                pokemonType = secondaryType,
+                textPaddingValues = PaddingValues(vertical = 5.dp),
+                textStyle = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.width(100.dp)
             )
         }
     }
@@ -442,17 +438,17 @@ private fun PokemonHeightWeight(
         modifier = modifier
     ) {
         PokemonMeasurement(
-            stringResource(id = R.string.weight_in_kg, pokemonWeight.toString()),
-            painterResource(id = R.drawable.weight_icon),
-            Color.Gray,
-            Modifier.weight(1f),
-            Arrangement.End
+            content = stringResource(id = R.string.weight_in_kg, pokemonWeight.toString()),
+            icon = painterResource(id = R.drawable.weight_icon),
+            color = Color.Gray,
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.End
         )
         PokemonMeasurement(
-            stringResource(id = R.string.height_in_m, pokemonHeight.toString()),
-            painterResource(id = R.drawable.height_icon),
-            Color.Gray,
-            Modifier.weight(1f)
+            content = stringResource(id = R.string.height_in_m, pokemonHeight.toString()),
+            icon = painterResource(id = R.drawable.height_icon),
+            color = Color.Gray,
+            modifier = Modifier.weight(1f)
         )
     }
 }
@@ -505,7 +501,7 @@ private fun BaseStatProgressBar(
         modifier = modifier
     ) {
         LinearProgressIndicator(
-            progress = progressAnimation / maxStat,
+            progress = { progressAnimation / maxStat } ,
             color = color,
             trackColor = Color.LightGray,
             strokeCap = StrokeCap.Round,
@@ -520,7 +516,6 @@ private fun BaseStatProgressBar(
 @Composable
 private fun PokemonBaseStatsGraph(pokemon: PokemonDetailModel, modifier: Modifier = Modifier) {
     BaseStatsGraph(
-        modifier = modifier,
         spaceBetweenHorizontally = 8.dp,
         spaceBetweenVertically = 12.dp,
         baseStatsIndex = pokemon.baseStats.size,
@@ -539,6 +534,7 @@ private fun PokemonBaseStatsGraph(pokemon: PokemonDetailModel, modifier: Modifie
         baseStatValue = {
             BaseStatValue(pokemonBaseStats = pokemon.baseStats[it])
         },
+        modifier = modifier
     )
 }
 

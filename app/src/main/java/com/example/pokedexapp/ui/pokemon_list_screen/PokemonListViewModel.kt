@@ -1,6 +1,5 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
@@ -9,8 +8,9 @@ import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.ui.utils.updateState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
@@ -29,15 +29,16 @@ class PokemonListViewModel @Inject constructor(
     private var defaultPokemonList = SnapshotStateList<PokemonListItemModel>()
     private var searchPokemonList = SnapshotStateList<PokemonListItemModel>()
 
+    private var searchJob: Job? = null
+
     init {
         loadInitialData()
         observerSearchText()
     }
 
     fun loadInitialData(){
-        _state.updateState { copy(isLoading = true, isError = false) }
+        _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
-            delay(100)//Gives time to recomposition know that isError is false, then LaunchedEffect(isError) can be triggered again when catching the exception
             try {
                 pokemonListUseCase.insertAllPokemon()
                 defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(0))
@@ -51,8 +52,7 @@ class PokemonListViewModel @Inject constructor(
                 )
             }
             catch (ex: Exception) {
-                Log.w("ex",ex.toString())
-                _state.updateState { copy(isError = true, isLoading = false) }
+                _state.updateState { copy(isLoading = false) }
             }
         }
     }
@@ -81,7 +81,7 @@ class PokemonListViewModel @Inject constructor(
     fun getPokemonList() {
         if (_state.value.defaultListEnded || _state.value.isLoadingAppend) return
 
-        _state.updateState { copy(isLoadingAppend = true, isError = false) }
+        _state.updateState { copy(isLoadingAppend = true, errorAppendingDefaultList = false) }
 
         viewModelScope.launch {
             try {
@@ -94,26 +94,26 @@ class PokemonListViewModel @Inject constructor(
                     updateList(
                         _state.value.copy(
                             isLoadingAppend = false,
-                            isError = false,
+                            errorAppendingDefaultList = false,
                             isDefaultList = true
                         )
                     )
                 }
             } catch (ex: Exception) {
-                _state.updateState { copy(isLoadingAppend = false, isError = true) }
+                _state.updateState { copy(isLoadingAppend = false, errorAppendingDefaultList = true) }
             }
         }
     }
 
     fun searchPokemonListByName(pokemonName: String) {
         if (pokemonName.isBlank()) {
-            updateList(_state.value.copy(isDefaultList = true, showNoSearchResultsFound = false, isError = false))
+            updateList(_state.value.copy(isDefaultList = true, showNoSearchResultsFound = false, errorSearching = false))
             return
         }
 
-        _state.updateState { copy(isLoading = true, isError = false, searchListEnded = false, showNoSearchResultsFound = false) }
-        viewModelScope.launch {
-            delay(100)
+        _state.updateState { copy(isLoading = true, errorSearching = false, searchListEnded = false, showNoSearchResultsFound = false) }
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
             try {
                 val tempList =
                     pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
@@ -130,13 +130,15 @@ class PokemonListViewModel @Inject constructor(
                     updateList(
                         _state.value.copy(
                             isLoading = false,
-                            isError = false,
+                            errorSearching = false,
                             isDefaultList = false,
                         )
                     )
                 }
+            }  catch (_: CancellationException){
+
             } catch (ex: Exception) {
-                _state.updateState { copy(isLoading = false, isError = true) }
+                _state.updateState { copy(isLoading = false, errorSearching = true) }
             }
         }
     }
@@ -145,7 +147,7 @@ class PokemonListViewModel @Inject constructor(
 
         if (_state.value.searchListEnded || _state.value.isLoadingAppend) return
 
-        _state.updateState { copy(isLoadingAppend = true, isError = false) }
+        _state.updateState { copy(isLoadingAppend = true, errorAppendingSearchList = false) }
 
         viewModelScope.launch {
             try {
@@ -160,13 +162,13 @@ class PokemonListViewModel @Inject constructor(
                     updateList(
                         _state.value.copy(
                             isLoadingAppend = false,
-                            isError = false,
+                            errorAppendingSearchList = false,
                             isDefaultList = false,
                         )
                     )
                 }
             } catch (ex: Exception) {
-                _state.updateState { copy(isLoading = false, isError = true) }
+                _state.updateState { copy(isLoadingAppend = false, errorAppendingSearchList = true) }
             }
         }
     }
