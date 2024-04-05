@@ -1,5 +1,8 @@
 package com.example.pokedexapp.data.network
 
+import com.squareup.moshi.Json
+
 data class PokemonSpeciesApiDto(
-    val evolves_from_species: PokemonListItemApiDto?
+    @Json(name = "evolves_from_species")
+    val evolvesFromSpecies: PokemonListItemApiDto?
 )
