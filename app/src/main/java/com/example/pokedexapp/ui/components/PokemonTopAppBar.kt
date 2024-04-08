@@ -31,10 +31,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.R
@@ -44,7 +44,7 @@ import com.example.pokedexapp.ui.theme.TopBarBlueColor
 fun PokemonTopAppBar(
     searchText: String,
     searchMode: Boolean,
-    enableSearch: Boolean,
+    areActionsEnabled: Boolean,
     onSearchTextChange: (String) -> Unit,
     onSendNotificationClick: () -> Unit,
     onSearchClick: () -> Unit
@@ -57,7 +57,7 @@ fun PokemonTopAppBar(
         onSearchTextChange = { wasSearchClicked = false; onSearchTextChange(it) },
         onCloseSearchCLick = { onSearchClick() })
     else LogoPokemonTopAppBar(
-        enableSearch = enableSearch,
+        areActionsEnabled = areActionsEnabled,
         onSendNotificationClick = onSendNotificationClick,
         onSearchClick = { wasSearchClicked = true; onSearchClick() })
 
@@ -66,7 +66,7 @@ fun PokemonTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LogoPokemonTopAppBar(
-    enableSearch: Boolean,
+    areActionsEnabled: Boolean,
     onSendNotificationClick: () -> Unit,
     onSearchClick: () -> Unit,
 ) {
@@ -76,7 +76,8 @@ private fun LogoPokemonTopAppBar(
         },
         actions = {
             TopAppBarIconButton(
-                icon = painterResource(id = R.drawable.baseline_notifications_active_24),
+                icon = ImageVector.vectorResource(id = R.drawable.baseline_notifications_active_24),
+                enabled = areActionsEnabled,
                 onClick = {
                     onSendNotificationClick()
                 },
@@ -84,7 +85,7 @@ private fun LogoPokemonTopAppBar(
             )
             TopAppBarIconButton(
                 icon = Icons.Default.Search,
-                enabled = enableSearch,
+                enabled = areActionsEnabled,
                 onClick = {
                     onSearchClick()
                 },
@@ -208,28 +209,13 @@ private fun TopAppBarIconButton(
     }
 }
 
-@Composable
-private fun TopAppBarIconButton(
-    icon: Painter,
-    onClick: () -> Unit,
-    contentDescription: String? = null
-) {
-    IconButton(onClick = onClick) {
-        Icon(
-            painter = icon,
-            contentDescription = contentDescription,
-            tint = Color.White
-        )
-    }
-}
-
 @Preview
 @Composable
 fun PokemonTopAppBarPreview() {
     PokemonTopAppBar(
         searchText = "",
         searchMode = false,
-        enableSearch = true,
+        areActionsEnabled = true,
         onSearchTextChange = { },
         onSendNotificationClick = { },
         onSearchClick = { }
@@ -242,7 +228,7 @@ fun PokemonTopAppBarSearchModePreview() {
     PokemonTopAppBar(
         searchText = "",
         searchMode = true,
-        enableSearch = true,
+        areActionsEnabled = true,
         onSearchTextChange = { },
         onSendNotificationClick = { },
         onSearchClick = { }

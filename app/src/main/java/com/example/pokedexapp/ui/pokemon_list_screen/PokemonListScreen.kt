@@ -109,7 +109,7 @@ private fun PokemonListScreenContent(
             PokemonTopAppBar(
                 searchText = state.searchText,
                 searchMode = state.isSearchMode,
-                enableSearch = state.couldLoadInitialData,
+                areActionsEnabled = state.couldLoadInitialData,
                 onSearchTextChange = { onEvent(PokemonListScreenOnEvent.OnSearchTextValueChange(it)) },
                 onSendNotificationClick = {
                     onEvent(
