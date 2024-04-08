@@ -44,6 +44,7 @@ import com.example.pokedexapp.ui.theme.TopBarBlueColor
 fun PokemonTopAppBar(
     searchText: String,
     searchMode: Boolean,
+    enableSearch: Boolean,
     onSearchTextChange: (String) -> Unit,
     onSendNotificationClick: () -> Unit,
     onSearchClick: () -> Unit
@@ -56,6 +57,7 @@ fun PokemonTopAppBar(
         onSearchTextChange = { wasSearchClicked = false; onSearchTextChange(it) },
         onCloseSearchCLick = { onSearchClick() })
     else LogoPokemonTopAppBar(
+        enableSearch = enableSearch,
         onSendNotificationClick = onSendNotificationClick,
         onSearchClick = { wasSearchClicked = true; onSearchClick() })
 
@@ -64,6 +66,7 @@ fun PokemonTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LogoPokemonTopAppBar(
+    enableSearch: Boolean,
     onSendNotificationClick: () -> Unit,
     onSearchClick: () -> Unit,
 ) {
@@ -81,6 +84,7 @@ private fun LogoPokemonTopAppBar(
             )
             TopAppBarIconButton(
                 icon = Icons.Default.Search,
+                enabled = enableSearch,
                 onClick = {
                     onSearchClick()
                 },
@@ -131,6 +135,7 @@ private fun SearchPokemonTopAppBar(
         actions = {
             TopAppBarIconButton(
                 icon = Icons.Default.Close,
+                enabled = true,
                 onClick = {
                     onSearchTextChange("")
                     onCloseSearchCLick()
@@ -190,14 +195,15 @@ private fun PokemonLogo(
 @Composable
 private fun TopAppBarIconButton(
     icon: ImageVector,
+    enabled: Boolean,
     onClick: () -> Unit,
     contentDescription: String? = null
 ) {
-    IconButton(onClick = onClick) {
+    IconButton(onClick = onClick, enabled = enabled) {
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = Color.White
+            tint = if (enabled) Color.White else Color.LightGray
         )
     }
 }
@@ -223,6 +229,7 @@ fun PokemonTopAppBarPreview() {
     PokemonTopAppBar(
         searchText = "",
         searchMode = false,
+        enableSearch = true,
         onSearchTextChange = { },
         onSendNotificationClick = { },
         onSearchClick = { }
@@ -235,6 +242,7 @@ fun PokemonTopAppBarSearchModePreview() {
     PokemonTopAppBar(
         searchText = "",
         searchMode = true,
+        enableSearch = true,
         onSearchTextChange = { },
         onSendNotificationClick = { },
         onSearchClick = { }

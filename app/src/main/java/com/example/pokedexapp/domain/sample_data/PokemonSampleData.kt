@@ -1,444 +1,175 @@
 package com.example.pokedexapp.domain.sample_data
 
 import com.example.pokedexapp.domain.models.PokemonBaseStats
-import com.example.pokedexapp.domain.models.PokemonModel
+import com.example.pokedexapp.domain.models.PokemonDetailModel
+import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.models.PokemonSprite
 
 class PokemonSampleData {
 
     companion object {
-        fun pokemonListSampleData(): List<PokemonModel> = listOf(
-            PokemonModel(
-                "132",
-                "Ditto",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.NORMAL,
-                null,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/132.png")
+        fun pokemonListSampleData(): List<PokemonListItemModel> = listOf(
+            PokemonListItemModel(
+                id = "132",
+                name = "Ditto",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png",
+                primaryType = PokemonTypes.NORMAL,
+                secondaryType = null,
             ),
-            PokemonModel(
-                "448",
-                "Lucario",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.FIGHTING,
-                PokemonTypes.STEEL,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/448.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/448.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/448.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/448.png")
+            PokemonListItemModel(
+                id = "448",
+                name = "Lucario",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/448.png",
+                primaryType = PokemonTypes.FIGHTING,
+                secondaryType = PokemonTypes.STEEL,
             ),
-            PokemonModel(
-                "715",
-                "Noivern",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.FLYING,
-                PokemonTypes.DRAGON,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/715.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/715.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/715.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/715.png")
+            PokemonListItemModel(
+                id = "715",
+                name = "Noivern",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/715.png",
+                primaryType = PokemonTypes.FLYING,
+                secondaryType = PokemonTypes.DRAGON,
             ),
-            PokemonModel(
-                "169",
-                "Crobat",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.POISON,
-                PokemonTypes.FLYING,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/169.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/169.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/169.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/169.png")
+            PokemonListItemModel(
+                id = "169",
+                name = "Crobat",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/169.png",
+                primaryType = PokemonTypes.POISON,
+                secondaryType = PokemonTypes.FLYING,
             ),
-            PokemonModel(
-                "553",
-                "Krookodile",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.GROUND,
-                PokemonTypes.DARK,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/553.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/553.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/553.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/553.png")
+            PokemonListItemModel(
+                id = "553",
+                name = "Krookodile",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/553.png",
+                primaryType = PokemonTypes.GROUND,
+                secondaryType = PokemonTypes.DARK,
             ),
-            PokemonModel(
-                "138",
-                "Omanyte",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.ROCK,
-                PokemonTypes.WATER,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/138.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/138.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/138.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/138.png")
+            PokemonListItemModel(
+                id = "138",
+                name = "Omanyte",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/138.png",
+                primaryType = PokemonTypes.ROCK,
+                secondaryType = PokemonTypes.WATER,
             ),
-            PokemonModel(
-                "637",
-                "Volcarona",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.BUG,
-                PokemonTypes.FIRE,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/637.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/637.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/637.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/637.png")
+            PokemonListItemModel(
+                id = "637",
+                name = "Volcarona",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/637.png",
+                primaryType = PokemonTypes.BUG,
+                secondaryType = PokemonTypes.FIRE,
             ),
-            PokemonModel(
-                "94",
-                "Gengar",
-                1.5f,
-                40.5f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(60),
-                    PokemonBaseStats.Attack(65),
-                    PokemonBaseStats.Defense(60),
-                    PokemonBaseStats.SpecialAttack(130),
-                    PokemonBaseStats.SpecialDefense(75),
-                    PokemonBaseStats.Speed(110)
-                ),
-
-                PokemonTypes.GHOST,
-                PokemonTypes.POISON,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/94.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/94.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/94.png")
+            PokemonListItemModel(
+                id = "94",
+                name = "Gengar",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png",
+                primaryType = PokemonTypes.GHOST,
+                secondaryType = PokemonTypes.POISON,
             ),
-            PokemonModel(
-                "385",
-                "Jirachi",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.STEEL,
-                PokemonTypes.PSYCHIC,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/385.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/385.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/385.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/385.png")
+            PokemonListItemModel(
+                id = "385",
+                name = "Jirachi",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/385.png",
+                primaryType = PokemonTypes.STEEL,
+                secondaryType = PokemonTypes.PSYCHIC,
             ),
-            PokemonModel(
-                "250",
-                "Ho-oh",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.FIRE,
-                PokemonTypes.FLYING,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/250.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/250.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/250.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/250.png")
+            PokemonListItemModel(
+                id = "250",
+                name = "Ho-oh",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/250.png",
+                primaryType = PokemonTypes.FIRE,
+                secondaryType = PokemonTypes.FLYING,
             ),
-            PokemonModel(
-                "9",
-                "Blastoise",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.WATER,
-                null,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/9.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/9.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/9.png")
+            PokemonListItemModel(
+                id = "9",
+                name = "Blastoise",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png",
+                primaryType = PokemonTypes.WATER,
+                secondaryType = null,
             ),
-            PokemonModel(
-                "407",
-                "Roserade",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.GRASS,
-                PokemonTypes.POISON,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/407.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/407.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/407.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/407.png")
+            PokemonListItemModel(
+                id = "407",
+                name = "Roserade",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/407.png",
+                primaryType = PokemonTypes.GRASS,
+                secondaryType = PokemonTypes.POISON,
             ),
-            PokemonModel(
-                "479",
-                "Rotom",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.ELECTRIC,
-                PokemonTypes.GHOST,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/479.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/479.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/479.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/479.png")
+            PokemonListItemModel(
+                id = "479",
+                name = "Rotom",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/479.png",
+                primaryType = PokemonTypes.ELECTRIC,
+                secondaryType = PokemonTypes.GHOST,
             ),
-            PokemonModel(
-                "858",
-                "Hatterene",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.PSYCHIC,
-                PokemonTypes.FAIRY,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/858.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/858.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/858.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/858.png")
+            PokemonListItemModel(
+                id = "858",
+                name = "Hatterene",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/858.png",
+                primaryType = PokemonTypes.PSYCHIC,
+                secondaryType = PokemonTypes.FAIRY,
             ),
-            PokemonModel(
-                "363",
-                "Spheal",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.ICE,
-                PokemonTypes.WATER,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/363.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/363.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/363.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/363.png")
+            PokemonListItemModel(
+                id = "363",
+                name = "Spheal",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/363.png",
+                primaryType = PokemonTypes.ICE,
+                secondaryType = PokemonTypes.WATER,
             ),
-            PokemonModel(
-                "887",
-                "Dragapult",
-                3.0f,
-                50.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(88),
-                    PokemonBaseStats.Attack(120),
-                    PokemonBaseStats.Defense(75),
-                    PokemonBaseStats.SpecialAttack(100),
-                    PokemonBaseStats.SpecialDefense(75),
-                    PokemonBaseStats.Speed(142)
-                ),
-
-                PokemonTypes.DRAGON,
-                PokemonTypes.GHOST,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/887.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/887.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/887.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/887.png")
+            PokemonListItemModel(
+                id = "887",
+                name = "Dragapult",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/887.png",
+                primaryType = PokemonTypes.DRAGON,
+                secondaryType = PokemonTypes.GHOST,
             ),
-            PokemonModel(
-                "491",
-                "Darkrai",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.DARK,
-                null,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/491.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/491.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/491.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/491.png")
+            PokemonListItemModel(
+                id = "491",
+                name = "Darkrai",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/491.png",
+                primaryType = PokemonTypes.DARK,
+                secondaryType = null,
             ),
-            PokemonModel(
-                "670",
-                "Floette",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.FAIRY,
-                null,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/670.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/670.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/670.png")
+            PokemonListItemModel(
+                id = "670",
+                name = "Floette",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/670.png",
+                primaryType = PokemonTypes.FAIRY,
+                secondaryType = null,
             ),
         )
 
 
-        fun pokemonSearchListSampleData(): List<PokemonModel> = listOf(
-            PokemonModel(
-                "365",
-                "???",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-                PokemonTypes.NORMAL,
-                null,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/365.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/365.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/132.png")
+        fun pokemonSearchListSampleData(): List<PokemonListItemModel> = listOf(
+            PokemonListItemModel(
+                id = "365",
+                name = "???",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/365.png",
+                primaryType = PokemonTypes.NORMAL,
+                secondaryType = null,
             ),
-            PokemonModel(
-                "578",
-                "???",
-                10.0f,
-                10.0f,
-                baseStats = listOf(
-                    PokemonBaseStats.Hp(45),
-                    PokemonBaseStats.Attack(49),
-                    PokemonBaseStats.Defense(49),
-                    PokemonBaseStats.SpecialAttack(65),
-                    PokemonBaseStats.SpecialDefense(65),
-                    PokemonBaseStats.Speed(45)
-                ),
-
-                PokemonTypes.NORMAL,
-                null,
-                PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/578.png"),
-                PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/578.png"),
-                PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png"),
-                PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/132.png")
+            PokemonListItemModel(
+                id = "578",
+                name = "???",
+                spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/578.png",
+                primaryType = PokemonTypes.NORMAL,
+                secondaryType = null,
             ),
         )
 
-        fun singlePokemonSampleData(): PokemonModel = PokemonModel(
-            "1",
-            "Bulbasaur",
-            0.7f,
-            6.9f,
+        fun singlePokemonListItemSampleData(): PokemonListItemModel = PokemonListItemModel(
+            id = "1",
+            name = "Bulbasaur",
+            spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+            primaryType = PokemonTypes.GRASS,
+            secondaryType = PokemonTypes.POISON,
+        )
+
+        fun singlePokemonDetailSampleData(): PokemonDetailModel = PokemonDetailModel(
+            id = "1",
+            speciesId = "1",
+            name = "Bulbasaur",
+            height = 0.7f,
+            weight = 6.9f,
             baseStats = listOf(
                 PokemonBaseStats.Hp(45),
                 PokemonBaseStats.Attack(49),
@@ -447,12 +178,12 @@ class PokemonSampleData {
                 PokemonBaseStats.SpecialDefense(65),
                 PokemonBaseStats.Speed(45)
             ),
-            PokemonTypes.GRASS,
-            PokemonTypes.POISON,
-            PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"),
-            PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1.png"),
-            PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png"),
-            PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/1.png")
+            primaryType = PokemonTypes.GRASS,
+            secondaryType = PokemonTypes.POISON,
+            frontDefaultSprite = PokemonSprite.FrontDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"),
+            frontShinySprite = PokemonSprite.FrontShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1.png"),
+            backDefaultSprite = PokemonSprite.BackDefaultSprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png"),
+            backShinySprite = PokemonSprite.BackShinySprite("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/1.png")
         )
     }
 }

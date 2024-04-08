@@ -8,4 +8,5 @@ sealed class PokemonListScreenOnEvent() {
     data class OnSearchTextValueChange(val text:String): PokemonListScreenOnEvent()
     data class OnPokemonCLick(val pokemonId: String): PokemonListScreenOnEvent()
     object AppendToList: PokemonListScreenOnEvent()
+    object RetryLoadingData: PokemonListScreenOnEvent()
 }

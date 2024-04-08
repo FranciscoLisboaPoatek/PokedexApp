@@ -4,10 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.SharePokemonModel
+import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.domain.models.SpriteType
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
 import com.example.pokedexapp.ui.Screen
+import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
 import com.example.pokedexapp.ui.utils.updateState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +21,8 @@ import javax.inject.Inject
 class PokemonDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val pokemonDetailUseCase: PokemonDetailUseCase,
-    private val sharePokemonUseCase: SharePokemonUseCase
+    private val sharePokemonUseCase: SharePokemonUseCase,
+    private val pokemonEvolutionChainUseCase: PokemonEvolutionChainUseCase
 ) : ViewModel() {
 
     private val pokemonId: String = checkNotNull(savedStateHandle[POKEMON_ID_KEY])
@@ -40,20 +43,20 @@ class PokemonDetailViewModel @Inject constructor(
 
     fun changeShinyPokemonSprite(actualPokemonSprite: SpriteType) {
         val sprite = when (actualPokemonSprite) {
-            SpriteType.FRONT_DEFAULT -> state.value.pokemonModel?.frontShinySprite
-            SpriteType.FRONT_SHINY_DEFAULT -> state.value.pokemonModel?.frontDefaultSprite
-            SpriteType.BACK_DEFAULT -> state.value.pokemonModel?.backShinySprite
-            SpriteType.BACK_SHINY_DEFAULT -> state.value.pokemonModel?.backDefaultSprite
+            SpriteType.FRONT_DEFAULT -> state.value.pokemonDetailModel?.frontShinySprite
+            SpriteType.FRONT_SHINY_DEFAULT -> state.value.pokemonDetailModel?.frontDefaultSprite
+            SpriteType.BACK_DEFAULT -> state.value.pokemonDetailModel?.backShinySprite
+            SpriteType.BACK_SHINY_DEFAULT -> state.value.pokemonDetailModel?.backDefaultSprite
         }
         _state.updateState { copy(pokemonSprite = sprite) }
     }
 
     fun rotatePokemonSprite(actualPokemonSprite: SpriteType) {
         val sprite = when (actualPokemonSprite) {
-            SpriteType.FRONT_DEFAULT -> state.value.pokemonModel?.backDefaultSprite
-            SpriteType.FRONT_SHINY_DEFAULT -> state.value.pokemonModel?.backShinySprite
-            SpriteType.BACK_DEFAULT -> state.value.pokemonModel?.frontDefaultSprite
-            SpriteType.BACK_SHINY_DEFAULT -> state.value.pokemonModel?.frontShinySprite
+            SpriteType.FRONT_DEFAULT -> state.value.pokemonDetailModel?.backDefaultSprite
+            SpriteType.FRONT_SHINY_DEFAULT -> state.value.pokemonDetailModel?.backShinySprite
+            SpriteType.BACK_DEFAULT -> state.value.pokemonDetailModel?.frontDefaultSprite
+            SpriteType.BACK_SHINY_DEFAULT -> state.value.pokemonDetailModel?.frontShinySprite
         }
         _state.updateState { copy(pokemonSprite = sprite) }
     }
@@ -63,7 +66,7 @@ class PokemonDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                _state.value.pokemonModel?.let {
+                _state.value.pokemonDetailModel?.let {
                     sharePokemonUseCase.sharePokemonTo(
                         SharePokemonModel(
                             receiver = _state.value.receiverToken,
@@ -82,18 +85,15 @@ class PokemonDetailViewModel @Inject constructor(
         _state.updateState { copy(isLoading = true) }
         viewModelScope.launch {
             try {
-                _state.updateState {
-                    copy(
-                        pokemonModel = pokemonDetailUseCase.getPokemonById(
-                            pokemonId = pokemonId
-                        )
-                    )
-                }
+                val responsePokemonDetailModel = pokemonDetailUseCase.getPokemonById(pokemonId = pokemonId)
+                val responseEvolutionChain = responsePokemonDetailModel?.let { getEvolutionChain(speciesId = it.speciesId) }
                 _state.updateState {
                     copy(
                         isLoading = false,
                         isError = false,
-                        pokemonSprite = pokemonModel?.frontDefaultSprite
+                        pokemonDetailModel = responsePokemonDetailModel,
+                        pokemonSprite = responsePokemonDetailModel?.frontDefaultSprite,
+                        evolutionChain = responseEvolutionChain ?: PokemonEvolutionChainModel()
                     )
                 }
             } catch (ex: Exception) {
@@ -101,5 +101,9 @@ class PokemonDetailViewModel @Inject constructor(
             }
 
         }
+    }
+
+    private suspend fun getEvolutionChain(speciesId: String): PokemonEvolutionChainModel {
+       return pokemonEvolutionChainUseCase.getPokemonChain(speciesId = speciesId)
     }
 }

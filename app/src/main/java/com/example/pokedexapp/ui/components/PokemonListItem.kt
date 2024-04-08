@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,11 +18,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.pokedexapp.domain.models.PokemonModel
+import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 
 
@@ -122,7 +124,7 @@ fun TwoColorStrokeBox(
 @Composable
 fun PokemonListItemPreview() {
     PokemonListItem(
-        pokemon = PokemonSampleData.singlePokemonSampleData(),
+        pokemon = PokemonSampleData.singlePokemonListItemSampleData(),
         strokeWidthDp = 10.dp,
         onClick = { },
         modifier = Modifier.size(186.dp, 210.dp)
@@ -131,7 +133,7 @@ fun PokemonListItemPreview() {
 
 @Composable
 fun PokemonListItem(
-    pokemon: PokemonModel,
+    pokemon: PokemonListItemModel,
     strokeWidthDp: Dp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -148,22 +150,30 @@ fun PokemonListItem(
                 Brush.verticalGradient(
                     colorStops = arrayOf(
                         0f to pokemon.primaryType.color,
-                        1f to Color.White
+                        1f to MaterialTheme.colorScheme.background
                     )
                 )
             )
         ) {
-            PokemonImage(
-                image = pokemon.frontDefaultSprite.spriteUrl,
-                modifier = Modifier
-                    .padding(top = 5.dp, start = 5.dp, end = 5.dp)
+            if (pokemon.spriteUrl != null) {
+                PokemonImage(
+                    image = pokemon.spriteUrl,
+                    modifier = Modifier
+                        .padding(top = 5.dp, start = 5.dp, end = 5.dp)
+                        .weight(3f)
+                        .fillMaxWidth()
+                )
+            }else {
+                NoPokemonImageIcon(tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier
+                    .padding(top = 40.dp, bottom = 20.dp, start = 40.dp, end = 40.dp)
                     .weight(3f)
-                    .fillMaxWidth()
-            )
+                    .fillMaxWidth())
+            }
 
             PokemonName(
                 name = pokemon.name,
                 modifier = Modifier
+                    .padding(horizontal = 8.dp)
                     .weight(1f)
                     .fillMaxWidth()
             )
@@ -193,6 +203,8 @@ private fun PokemonName(
     Text(
         text = name,
         textAlign = TextAlign.Center,
+        maxLines = 2,
+        overflow = TextOverflow.Ellipsis,
         modifier = modifier
     )
 }

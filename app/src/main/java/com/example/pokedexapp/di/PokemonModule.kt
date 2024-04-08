@@ -8,6 +8,7 @@ import com.example.pokedexapp.data.network.PokemonApi
 import com.example.pokedexapp.data.pokedex_server.PokedexServerApi
 import com.example.pokedexapp.domain.repository.PokemonRepository
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
+import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
@@ -82,6 +83,12 @@ object PokemonModule {
     @Singleton
     fun providePokemonListUseCase(repository: PokemonRepository): PokemonListUseCase {
         return PokemonListUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun providePokemonEvolutionChainUseCase(repository: PokemonRepository): PokemonEvolutionChainUseCase{
+        return PokemonEvolutionChainUseCase(repository)
     }
 
     @Provides

@@ -16,6 +16,10 @@
     <string name="rotate_sprite_icon_button">rotate pokemon</string>
     <string name="navigate_up">navigate up</string>
     <string name="no_search_results_found">No search results found</string>
+    <string name="retry_loading">retry loading</string>
+    <string name="evolves_from">Evolves From</string>
+    <string name="something_went_wrong">Ops… Something went wrong</string>
+    <string name="error_searching_content">Error searching content</string>
     <string name="daily_pokemon_notification_title">Daily Pokemon!</string>
     <string name="daily_pokemon_notification_text">Get to know more about %1$s!</string>
     <string name="show_random_pokemon_notification">Show random pokemon notification</string>

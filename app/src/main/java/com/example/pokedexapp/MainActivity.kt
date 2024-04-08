@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            PokedexAppTheme {
+            PokedexAppTheme(dynamicColor = false) {
                 val context = LocalContext.current
 
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -104,8 +104,8 @@ fun PokedexApp() {
                 uriPattern = DEEPLINK_URI_SCHEME.plus(Screen.PokemonDetailScreen.routeWithArgs)
             }),
             arguments = Screen.PokemonDetailScreen.arguments
-        ) { backStackEntry ->
-            PokemonDetailScreen(navigateUp = { navController.navigateUp() })
+        ){
+            PokemonDetailScreen(navigateToDetails = { navController.navigateToPokemonDetail(it) }, navigateUp = { navController.navigateUp() })
         }
 
     }
