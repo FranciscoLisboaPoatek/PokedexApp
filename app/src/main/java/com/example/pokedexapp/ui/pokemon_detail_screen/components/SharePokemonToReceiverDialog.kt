@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -35,6 +38,7 @@ import kotlinx.coroutines.tasks.await
 
 @Composable
 fun SharePokemonToReceiverDialog(
+    isError: Boolean,
     text: String,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
@@ -53,7 +57,7 @@ fun SharePokemonToReceiverDialog(
 
                 Spacer(modifier = Modifier.height(5.dp))
 
-                DialogContent(text = text, onTokenChange = onTokenChange, onConfirm = onConfirm)
+                DialogContent(isError = isError, text = text, onTokenChange = onTokenChange, onConfirm = onConfirm)
             }
         }
     }
@@ -71,6 +75,7 @@ private fun CloseDialogIconButton(close: () -> Unit, modifier: Modifier = Modifi
 
 @Composable
 fun DialogContent(
+    isError: Boolean,
     text: String,
     onTokenChange: (String) -> Unit,
     onConfirm: () -> Unit
@@ -80,7 +85,8 @@ fun DialogContent(
             start = 30.dp,
             end = 30.dp,
             bottom = 30.dp
-        )
+        ),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
             value = text,
@@ -94,6 +100,12 @@ fun DialogContent(
         DialogButtons(
             onConfirm = onConfirm
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if (isError) {
+            ErrorSharingPokemon()
+        }
     }
 }
 
@@ -123,9 +135,34 @@ private fun DialogButtons(
     }
 }
 
+@Composable
+private fun ErrorSharingPokemon(modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = Icons.Default.Warning,
+            contentDescription = null,
+            modifier = Modifier.size(60.dp),
+            tint = MaterialTheme.colorScheme.error
+        )
+        Text(
+            text = stringResource(R.string.error_sharing_pokemon),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.error
+        )
+    }
+}
+
 @Preview
 @Composable
 fun SharePokemonToReceiverDialogPreveiw() {
-    SharePokemonToReceiverDialog(text = "", onDismiss = { }, onConfirm = { }, onTokenChange = { })
+    SharePokemonToReceiverDialog(isError = false, text = "", onDismiss = { }, onConfirm = { }, onTokenChange = { })
+}
+@Preview
+@Composable
+fun SharePokemonToReceiverDialogErrorPreveiw() {
+    SharePokemonToReceiverDialog(isError = true, text = "", onDismiss = { }, onConfirm = { }, onTokenChange = { })
 }
 

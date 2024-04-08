@@ -19,6 +19,7 @@ import com.example.pokedexapp.domain.models.SharePokemonModel
 import com.example.pokedexapp.domain.repository.PokemonRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
@@ -119,7 +120,8 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel) {
         withContext(Dispatchers.IO) {
-            pokedexServerApi.sharePokemon(body = sharePokemonModel.toSharePokemonNotificationDto()).execute()
+            val response = pokedexServerApi.sharePokemon(body = sharePokemonModel.toSharePokemonNotificationDto()).execute()
+            if (response.code() == 400) throw IllegalArgumentException()
         }
     }
 }

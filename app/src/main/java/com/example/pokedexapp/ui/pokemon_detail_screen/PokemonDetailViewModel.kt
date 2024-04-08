@@ -62,7 +62,7 @@ class PokemonDetailViewModel @Inject constructor(
     }
 
     fun sharePokemonToReceiver() {
-        _state.updateState { copy(isSharingPokemonToReceiver = true) }
+        _state.updateState { copy(isErrorSharingPokemonToReceiver = false) }
 
         viewModelScope.launch {
             try {
@@ -76,7 +76,7 @@ class PokemonDetailViewModel @Inject constructor(
                     )
                 }
             }catch (ex: Exception){
-                //To implement error state
+                _state.updateState { copy(isErrorSharingPokemonToReceiver = true) }
             }
         }
     }

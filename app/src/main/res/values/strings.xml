@@ -28,4 +28,5 @@
     <string name="share_pokemon_to_receiver_dialog_placeholder">Receiver token</string>
     <string name="copy_my_token_button">Copy my token</string>
     <string name="send_button">Send</string>
+    <string name="error_sharing_pokemon">Error sharing pokemon</string>
 </resources>

@@ -101,11 +101,11 @@ fun PokemonDetailScreen(
                 pokemonDetailViewModel.updateReceiverToken(event.text)
             }
 
-            PokemonDetailScreenOnEvent.SharePokemonToReceiver -> {
+            is PokemonDetailScreenOnEvent.SharePokemonToReceiver -> {
                 pokemonDetailViewModel.sharePokemonToReceiver()
             }
 
-            PokemonDetailScreenOnEvent.SwitchIsSharingPokemonToReceiver -> {
+            is PokemonDetailScreenOnEvent.SwitchIsSharingPokemonToReceiver -> {
                 pokemonDetailViewModel.switchSharePokemonToReceiverDialog()
             }
         }
@@ -119,6 +119,7 @@ fun PokemonDetailScreen(
         isSharingPokemonToReceiver = pokemonDetailState.isSharingPokemonToReceiver,
         currentSprite = pokemonDetailState.pokemonSprite,
         evolutionChain = pokemonDetailState.evolutionChain,
+        isErrorSharingPokemonToReceiver= pokemonDetailState.isErrorSharingPokemonToReceiver,
         onEvent = ::onEvent,
         modifier = Modifier.fillMaxSize(),
     )
@@ -132,8 +133,9 @@ private fun PokemonDetailScreenContent(
     text: String,
     isSharingPokemonToReceiver: Boolean,
     currentSprite: PokemonSprite?,
-    onEvent: (PokemonDetailScreenOnEvent) -> Unit,
     evolutionChain: PokemonEvolutionChainModel,
+    isErrorSharingPokemonToReceiver: Boolean,
+    onEvent: (PokemonDetailScreenOnEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val pokemonImageSize = 200.dp
@@ -181,6 +183,7 @@ private fun PokemonDetailScreenContent(
 
                 if (isSharingPokemonToReceiver) {
                     SharePokemonToReceiverDialog(
+                        isError = isErrorSharingPokemonToReceiver,
                         text = text,
                         onDismiss = { onEvent(PokemonDetailScreenOnEvent.SwitchIsSharingPokemonToReceiver) },
                         onConfirm = { onEvent(PokemonDetailScreenOnEvent.SharePokemonToReceiver) },
@@ -628,6 +631,7 @@ private fun PokemonDetailScreenPreview() {
         pokemon = pokemon,
         evolutionChain = PokemonEvolutionChainModel(),
         currentSprite = null,
+        isErrorSharingPokemonToReceiver = false,
         onEvent = { },
     )
 }
@@ -643,6 +647,7 @@ private fun PokemonDetailScreenLoadingPreview() {
         pokemon = null,
         evolutionChain = PokemonEvolutionChainModel(),
         currentSprite = null,
+        isErrorSharingPokemonToReceiver = false,
         onEvent = { },
     )
 }
@@ -658,6 +663,7 @@ private fun PokemonDetailScreenErrorPreview() {
         pokemon = null,
         evolutionChain = PokemonEvolutionChainModel(),
         currentSprite = null,
+        isErrorSharingPokemonToReceiver = false,
         onEvent = { },
     )
 }
