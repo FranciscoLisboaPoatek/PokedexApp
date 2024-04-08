@@ -17,6 +17,7 @@
     <string name="navigate_up">navigate up</string>
     <string name="no_search_results_found">No search results found</string>
     <string name="retry_loading">retry loading</string>
+    <string name="evolves_from">Evolves From</string>
     <string name="something_went_wrong">Ops… Something went wrong</string>
     <string name="error_searching_content">Error searching content</string>
 </resources>

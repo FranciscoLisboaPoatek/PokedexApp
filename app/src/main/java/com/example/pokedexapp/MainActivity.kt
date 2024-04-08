@@ -39,7 +39,7 @@ fun PokedexApp() {
             route = Screen.PokemonDetailScreen.routeWithArgs,
             arguments = Screen.PokemonDetailScreen.arguments
         ){
-            PokemonDetailScreen(navigateUp = { navController.navigateUp() })
+            PokemonDetailScreen(navigateToDetails = { navController.navigateToPokemonDetail(it) }, navigateUp = { navController.navigateUp() })
         }
     }
 }

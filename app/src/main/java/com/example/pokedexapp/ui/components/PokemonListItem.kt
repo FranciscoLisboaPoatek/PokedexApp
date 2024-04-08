@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.pokedexapp.domain.models.PokemonModel
+import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 
 
@@ -124,7 +124,7 @@ fun TwoColorStrokeBox(
 @Composable
 fun PokemonListItemPreview() {
     PokemonListItem(
-        pokemon = PokemonSampleData.singlePokemonSampleData(),
+        pokemon = PokemonSampleData.singlePokemonListItemSampleData(),
         strokeWidthDp = 10.dp,
         onClick = { },
         modifier = Modifier.size(186.dp, 210.dp)
@@ -133,7 +133,7 @@ fun PokemonListItemPreview() {
 
 @Composable
 fun PokemonListItem(
-    pokemon: PokemonModel,
+    pokemon: PokemonListItemModel,
     strokeWidthDp: Dp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -155,9 +155,9 @@ fun PokemonListItem(
                 )
             )
         ) {
-            if (pokemon.frontDefaultSprite.spriteUrl != null) {
+            if (pokemon.spriteUrl != null) {
                 PokemonImage(
-                    image = pokemon.frontDefaultSprite.spriteUrl,
+                    image = pokemon.spriteUrl,
                     modifier = Modifier
                         .padding(top = 5.dp, start = 5.dp, end = 5.dp)
                         .weight(3f)

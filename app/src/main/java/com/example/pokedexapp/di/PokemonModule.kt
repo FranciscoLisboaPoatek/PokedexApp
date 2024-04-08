@@ -7,6 +7,7 @@ import com.example.pokedexapp.data.local_database.PokemonDatabase
 import com.example.pokedexapp.data.network.PokemonApi
 import com.example.pokedexapp.domain.repository.PokemonRepository
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
+import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -61,5 +62,11 @@ object PokemonModule {
     @Singleton
     fun providePokemonListUseCase(repository: PokemonRepository): PokemonListUseCase {
         return PokemonListUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun providePokemonEvolutionChainUseCase(repository: PokemonRepository): PokemonEvolutionChainUseCase{
+        return PokemonEvolutionChainUseCase(repository)
     }
 }

@@ -1,15 +1,17 @@
 package com.example.pokedexapp.domain.repository
 
-import com.example.pokedexapp.domain.models.PokemonModel
+import com.example.pokedexapp.domain.models.PokemonListItemModel
+import com.example.pokedexapp.domain.models.PokemonDetailModel
+import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 
 interface PokemonRepository {
-    suspend fun getPokemonById(pokemonId: String): PokemonModel?
-    suspend fun getPokemonByName(name: String): PokemonModel?
-
+    suspend fun getPokemonDetailById(pokemonId: String): PokemonDetailModel?
+    suspend fun getPokemonDetailByName(name: String): PokemonDetailModel?
+    suspend fun getPokemonEvolutionChain(speciesId: String): PokemonEvolutionChainModel
     suspend fun savePokemonList()
-
-    suspend fun getPokemonList(offset: Int, limit: Int = 20): List<PokemonModel>
-    suspend fun getPokemonSearchList(name:String, offset: Int, limit: Int = 20): List<PokemonModel>
+    suspend fun getPokemonList(offset: Int, limit: Int = 20): List<PokemonListItemModel>
+    suspend fun getPokemonSearchList(name:String, offset: Int, limit: Int = 20): List<PokemonListItemModel>
+    suspend fun getPokemonListItem(pokemonId: String): PokemonListItemModel?
 
 
 }
