@@ -1,4 +1,4 @@
-package com.example.pokedexapp.notifications
+package com.example.pokedexapp.ui.notifications
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

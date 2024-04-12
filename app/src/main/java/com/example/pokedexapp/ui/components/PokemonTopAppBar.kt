@@ -75,21 +75,17 @@ private fun LogoPokemonTopAppBar(
             PokemonLogo(modifier = Modifier.height(60.dp))
         },
         actions = {
-            TopAppBarIconButton(
-                icon = ImageVector.vectorResource(id = R.drawable.baseline_notifications_active_24),
+            TopAppBarDailyNotificationButton(
                 enabled = areActionsEnabled,
                 onClick = {
                     onSendNotificationClick()
                 },
-                contentDescription = stringResource(R.string.show_random_pokemon_notification)
             )
-            TopAppBarIconButton(
-                icon = Icons.Default.Search,
+            TopAppBarSearchButton(
                 enabled = areActionsEnabled,
                 onClick = {
                     onSearchClick()
                 },
-                contentDescription = stringResource(R.string.open_search)
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
@@ -134,14 +130,11 @@ private fun SearchPokemonTopAppBar(
             }
         },
         actions = {
-            TopAppBarIconButton(
-                icon = Icons.Default.Close,
-                enabled = true,
+            TopAppBarCloseSearchButton(
                 onClick = {
                     onSearchTextChange("")
                     onCloseSearchCLick()
                 },
-                contentDescription = stringResource(R.string.close_search)
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
@@ -207,6 +200,44 @@ private fun TopAppBarIconButton(
             tint = if (enabled) Color.White else Color.LightGray
         )
     }
+}
+
+@Composable
+private fun TopAppBarDailyNotificationButton(
+    enabled: Boolean,
+    onClick: () -> Unit,
+) {
+    TopAppBarIconButton(
+        icon = ImageVector.vectorResource(id = R.drawable.baseline_notifications_active_24),
+        enabled = enabled,
+        onClick = onClick,
+        contentDescription = stringResource(R.string.show_random_pokemon_notification)
+    )
+}
+
+@Composable
+private fun TopAppBarSearchButton(
+    enabled: Boolean,
+    onClick: () -> Unit,
+) {
+    TopAppBarIconButton(
+        icon = Icons.Default.Search,
+        enabled = enabled,
+        onClick = onClick,
+        contentDescription = stringResource(R.string.open_search)
+    )
+}
+
+@Composable
+private fun TopAppBarCloseSearchButton(
+    onClick: () -> Unit,
+) {
+    TopAppBarIconButton(
+        icon = Icons.Default.Close,
+        enabled = true,
+        onClick = onClick,
+        contentDescription = stringResource(id = R.string.close_search)
+    )
 }
 
 @Preview

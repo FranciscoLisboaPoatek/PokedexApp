@@ -6,7 +6,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonListItemModel
-import com.example.pokedexapp.notifications.DailyPokemonNotification
+import com.example.pokedexapp.ui.notifications.DailyPokemonNotification
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.ui.utils.updateState

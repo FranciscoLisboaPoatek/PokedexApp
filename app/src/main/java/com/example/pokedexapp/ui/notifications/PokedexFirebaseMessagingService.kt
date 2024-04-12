@@ -1,4 +1,4 @@
-package com.example.pokedexapp.notifications
+package com.example.pokedexapp.ui.notifications
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage

@@ -3,7 +3,7 @@ package com.example.pokedexapp
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
-import com.example.pokedexapp.notifications.createNotificationChannels
+import com.example.pokedexapp.ui.notifications.createNotificationChannels
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

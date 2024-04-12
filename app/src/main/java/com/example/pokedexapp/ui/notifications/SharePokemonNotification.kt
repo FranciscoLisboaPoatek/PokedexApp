@@ -1,4 +1,4 @@
-package com.example.pokedexapp.notifications
+package com.example.pokedexapp.ui.notifications
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -8,6 +8,7 @@ import androidx.core.app.NotificationCompat
 import com.example.pokedexapp.MainActivity
 import com.example.pokedexapp.R
 import com.example.pokedexapp.ui.utils.INTENT_EXTRA_DEEPLINK_KEY
+import com.example.pokedexapp.ui.utils.SHARE_POKEMON_NOTIFICATION_ID_KEY
 
 
 class SharePokemonNotification(
@@ -21,7 +22,7 @@ class SharePokemonNotification(
 
         val pendingIntent = PendingIntent.getActivity(
             context,
-            2,
+            SHARE_POKEMON_NOTIFICATION_ID_KEY,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -37,7 +38,7 @@ class SharePokemonNotification(
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         notificationManager.notify(
-            2,
+            SHARE_POKEMON_NOTIFICATION_ID_KEY,
             notification
         )
     }

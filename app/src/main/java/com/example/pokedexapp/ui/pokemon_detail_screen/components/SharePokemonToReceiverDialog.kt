@@ -157,12 +157,12 @@ private fun ErrorSharingPokemon(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-fun SharePokemonToReceiverDialogPreveiw() {
+fun SharePokemonToReceiverDialogPreview() {
     SharePokemonToReceiverDialog(isError = false, text = "", onDismiss = { }, onConfirm = { }, onTokenChange = { })
 }
 @Preview
 @Composable
-fun SharePokemonToReceiverDialogErrorPreveiw() {
+fun SharePokemonToReceiverDialogErrorPreview() {
     SharePokemonToReceiverDialog(isError = true, text = "", onDismiss = { }, onConfirm = { }, onTokenChange = { })
 }
 
