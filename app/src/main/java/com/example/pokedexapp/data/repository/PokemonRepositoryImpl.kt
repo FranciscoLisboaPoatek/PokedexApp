@@ -22,7 +22,7 @@ import kotlinx.coroutines.withContext
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
-class PokemonRepositoryImpl @Inject constructor(
+class  PokemonRepositoryImpl @Inject constructor(
     private val pokemonApi: PokemonApi,
     private val pokemonDao: PokemonDao,
     private val pokedexServerApi: PokedexServerApi
