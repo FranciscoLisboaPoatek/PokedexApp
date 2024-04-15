@@ -112,7 +112,7 @@ class PokemonListViewModel @Inject constructor(
         }
     }
 
-    fun searchPokemonListByName(pokemonName: String) {
+    private fun searchPokemonListByName(pokemonName: String) {
         if (pokemonName.isBlank()) {
             updateList(_state.value.copy(isDefaultList = true, showNoSearchResultsFound = false, errorSearching = false))
             return

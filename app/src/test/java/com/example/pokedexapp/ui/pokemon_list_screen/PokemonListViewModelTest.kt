@@ -51,6 +51,38 @@ class PokemonListViewModelTest {
 
     @Test
     fun loadInitialData() {
+
+        coEvery {
+            pokemonListUseCaseMock.getPokemonList(
+                any(),
+                any()
+            )
+        } returns listOf()
+
+        coEvery { pokemonListUseCaseMock.insertAllPokemon() } returns Unit
+
+        viewModel.loadInitialData()
+        dispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(true, viewModel.state.value.couldLoadInitialData)
+        assertEquals(false, viewModel.state.value.isLoading)
+    }
+
+    @Test
+    fun loadInitialData_error() {
+
+        coEvery {
+            pokemonListUseCaseMock.getPokemonList(
+                any(),
+                any()
+            )
+        } throws Exception()
+
+        viewModel.loadInitialData()
+        dispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(false, viewModel.state.value.couldLoadInitialData)
+        assertEquals(false, viewModel.state.value.isLoading)
     }
 
     @Test
@@ -61,16 +93,6 @@ class PokemonListViewModelTest {
         assertEquals(false, viewModel.state.value.isSearchMode)
     }
 
-    @Test
-    fun changeSearchText_callsSearchPokemonByName() = runTest {
-
-        coEvery { firebaseAnalyticsLoggerMock.logFirebaseEvent(any(), any()) } just Runs
-
-        viewModel.changeSearchText("Pikachu")
-        assertEquals("Pikachu", viewModel.state.value.searchText)
-
-        dispatcher.scheduler.advanceUntilIdle()
-    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
@@ -138,9 +160,8 @@ class PokemonListViewModelTest {
                 any(),
                 any()
             )
-        } answers {
-            throw IllegalStateException()
-        }
+        } throws Exception()
+
         try {
             viewModel.getPokemonList()
 
@@ -165,13 +186,13 @@ class PokemonListViewModelTest {
             }
         }
 
-        coEvery { pokemonListUseCaseMock.getPokemonSearchList("bulba", 0) } returns listOf(
+        coEvery { pokemonListUseCaseMock.getPokemonSearchList("Pikachu", 0) } returns listOf(
             PokemonSampleData.singlePokemonListItemSampleData()
         )
 
         coEvery { firebaseAnalyticsLoggerMock.logFirebaseEvent(any(), any()) } just Runs
 
-        viewModel.searchPokemonListByName("bulba")
+        viewModel.changeSearchText("Pikachu")
         dispatcher.scheduler.advanceUntilIdle()
 
         job.cancel()
@@ -181,7 +202,7 @@ class PokemonListViewModelTest {
             PokemonSampleData.singlePokemonListItemSampleData()
         )
 
-        assertEquals(listOf(false, true, false), stateList.map { it.isLoading })
+        assertEquals(listOf(false, false, true, false), stateList.map { it.isLoading })
 
         assertEquals(false, viewModel.state.value.isDefaultList)
 
@@ -194,23 +215,64 @@ class PokemonListViewModelTest {
         coEvery { firebaseAnalyticsLoggerMock.logFirebaseEvent(any(), any()) } just Runs
 
 
-        viewModel.searchPokemonListByName("pikachu")
+        viewModel.changeSearchText("Pikachu")
         dispatcher.scheduler.advanceUntilIdle()
 
         assertEquals(true, viewModel.state.value.showNoSearchResultsFound)
     }
 
     @Test
+    fun searchPokemonListByName_error() {
+        coEvery {
+            pokemonListUseCaseMock.getPokemonSearchList(
+                any(),
+                any()
+            )
+        } throws Exception()
+
+        coEvery { firebaseAnalyticsLoggerMock.logFirebaseEvent(any(), any()) } just Runs
+
+        viewModel.changeSearchText("Pikachu")
+        dispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(true, viewModel.state.value.errorSearching)
+
+    }
+
+    @Test
     fun appendSearchList() {
+        coEvery { pokemonListUseCaseMock.getPokemonSearchList("Pikachu", any()) } returns listOf(
+            PokemonSampleData.singlePokemonListItemSampleData()
+        )
+
+        coEvery { firebaseAnalyticsLoggerMock.logFirebaseEvent(any(), any()) } just Runs
+
+        viewModel.changeSearchText("Pikachu")
+        dispatcher.scheduler.advanceUntilIdle()
+        assertEquals(1, viewModel.state.value.pokemonList.size)
+
+        viewModel.appendSearchList()
+        dispatcher.scheduler.advanceUntilIdle()
+        assertEquals(2, viewModel.state.value.pokemonList.size)
+        assertEquals(false, viewModel.state.value.isDefaultList)
     }
 
     @Test
-    fun sendNotification() {
+    fun appendSearchList_error() {
+        coEvery {
+            pokemonListUseCaseMock.getPokemonSearchList(
+                any(),
+                any()
+            )
+        } throws Exception()
+
+        coEvery { firebaseAnalyticsLoggerMock.logFirebaseEvent(any(), any()) } just Runs
+
+        viewModel.appendSearchList()
+        dispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(true, viewModel.state.value.errorAppendingSearchList)
     }
 
-    @Test
-    fun updateList() {
-
-    }
 }
 
