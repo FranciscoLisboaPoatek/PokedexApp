@@ -10,22 +10,27 @@ import com.example.pokedexapp.R
 import com.example.pokedexapp.ui.utils.INTENT_EXTRA_DEEPLINK_KEY
 import com.example.pokedexapp.ui.utils.SHARE_POKEMON_NOTIFICATION_ID_KEY
 
-
 class SharePokemonNotification(
-    val context: Context
+    val context: Context,
 ) {
-    fun showNotification(deeplink: String, title: String, body: String) {
-        val intent = Intent(
-            context,
-            MainActivity::class.java
-        ).putExtra(INTENT_EXTRA_DEEPLINK_KEY, deeplink)
+    fun showNotification(
+        deeplink: String,
+        title: String,
+        body: String,
+    ) {
+        val intent =
+            Intent(
+                context,
+                MainActivity::class.java,
+            ).putExtra(INTENT_EXTRA_DEEPLINK_KEY, deeplink)
 
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            SHARE_POKEMON_NOTIFICATION_ID_KEY,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val pendingIntent =
+            PendingIntent.getActivity(
+                context,
+                SHARE_POKEMON_NOTIFICATION_ID_KEY,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
         val notification =
             NotificationCompat.Builder(context, NotificationChannels.SHARE_POKEMON.channelId)
                 .setSmallIcon(R.drawable.baseline_catching_pokemon_24)
@@ -39,7 +44,7 @@ class SharePokemonNotification(
 
         notificationManager.notify(
             SHARE_POKEMON_NOTIFICATION_ID_KEY,
-            notification
+            notification,
         )
     }
 }

@@ -23,23 +23,24 @@ fun EvolvesFromPokemon(
     pokemonName: String,
     pokemonSpriteUrl: String?,
     navigateToDetails: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = stringResource(R.string.evolves_from),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
         )
         PokemonImageWrapper(
             image = pokemonSpriteUrl,
             imageSize = 120.dp,
-            modifier = Modifier
-                .padding(5.dp)
-                .clip(RoundedCornerShape(30.dp))
-                .clickable { navigateToDetails(pokemonId) }
+            modifier =
+                Modifier
+                    .padding(5.dp)
+                    .clip(RoundedCornerShape(30.dp))
+                    .clickable { navigateToDetails(pokemonId) },
         )
         Text(text = pokemonName, style = MaterialTheme.typography.titleMedium)
     }
@@ -53,7 +54,7 @@ private fun EvolvesFromPokemonPreview() {
             pokemonId = PokemonSampleData.singlePokemonDetailSampleData().id,
             pokemonName = PokemonSampleData.singlePokemonDetailSampleData().name,
             pokemonSpriteUrl = PokemonSampleData.singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
-            navigateToDetails = { }
+            navigateToDetails = { },
         )
     }
 }

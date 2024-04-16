@@ -47,23 +47,23 @@ fun PokemonBaseStatsGraph(
         baseStatLabel = {
             BaseStatLabel(
                 pokemonBaseStats = pokemon.baseStats[it],
-                style = baseStatLabelTextStyle
+                style = baseStatLabelTextStyle,
             )
         },
         baseStatBar = {
             BaseStatProgressBar(
                 statValue = pokemon.baseStats[it].value.toFloat(),
                 color = pokemon.baseStats[it].color,
-                modifier = Modifier.height(statProgressBarHeight)
+                modifier = Modifier.height(statProgressBarHeight),
             )
         },
         baseStatValue = {
             BaseStatValue(
                 pokemonBaseStats = pokemon.baseStats[it],
-                style = baseStatValueTextStyle
+                style = baseStatValueTextStyle,
             )
         },
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -76,16 +76,14 @@ fun BaseStatsGraph(
     baseStatLabel: @Composable (index: Int) -> Unit,
     baseStatBar: @Composable (index: Int) -> Unit,
     baseStatValue: @Composable (index: Int) -> Unit,
-
-    ) {
+) {
     val baseStatLabelRep = @Composable { repeat(baseStatsIndex) { baseStatLabel(it) } }
     val baseStatBarRep = @Composable { repeat(baseStatsIndex) { baseStatBar(it) } }
     val baseStatValueRep = @Composable { repeat(baseStatsIndex) { baseStatValue(it) } }
 
     Layout(
         contents = listOf(baseStatLabelRep, baseStatBarRep, baseStatValueRep),
-        modifier = modifier
-
+        modifier = modifier,
     ) { (baseStatLabelMeasurable, baseStatBarMeasurable, baseStatValueMeasurable), constraints ->
 
         require(baseStatLabelMeasurable.size > 1)
@@ -94,39 +92,45 @@ fun BaseStatsGraph(
         val spaceBetweenHorizontallyPx = spaceBetweenHorizontally.roundToPx()
 
         val totalHeightOfComponents = MutableList<Int>(3) { 0 }
-        val largestLabelWidth = baseStatLabelMeasurable.maxOf {
-            it.minIntrinsicWidth(constraints.maxHeight)
-        }
+        val largestLabelWidth =
+            baseStatLabelMeasurable.maxOf {
+                it.minIntrinsicWidth(constraints.maxHeight)
+            }
 
-        val baseStatLabelPlaceable = baseStatLabelMeasurable.map { measurable ->
-            val placeable = measurable.measure(constraints.copy(minWidth = largestLabelWidth))
-            totalHeightOfComponents[0] += placeable.height
-            placeable
-        }
+        val baseStatLabelPlaceable =
+            baseStatLabelMeasurable.map { measurable ->
+                val placeable = measurable.measure(constraints.copy(minWidth = largestLabelWidth))
+                totalHeightOfComponents[0] += placeable.height
+                placeable
+            }
 
-        val largestStatValue = baseStatValueMeasurable.maxOf { measurable ->
-            measurable.minIntrinsicWidth(constraints.maxHeight)
-        }
+        val largestStatValue =
+            baseStatValueMeasurable.maxOf { measurable ->
+                measurable.minIntrinsicWidth(constraints.maxHeight)
+            }
 
-        val baseStatValuePlaceable = baseStatValueMeasurable.map { measurable ->
-            val placeable = measurable.measure(constraints.copy(minWidth = largestStatValue))
-            totalHeightOfComponents[1] += placeable.height
-            placeable
-        }
+        val baseStatValuePlaceable =
+            baseStatValueMeasurable.map { measurable ->
+                val placeable = measurable.measure(constraints.copy(minWidth = largestStatValue))
+                totalHeightOfComponents[1] += placeable.height
+                placeable
+            }
 
         val baseStatBarWidth =
             constraints.maxWidth - largestLabelWidth - largestStatValue - (2 * spaceBetweenHorizontallyPx)
 
-        val baseStatBarPlaceable = baseStatBarMeasurable.map { measurable ->
-            val placeable = measurable.measure(
-                constraints.copy(
-                    minWidth = baseStatBarWidth,
-                    maxWidth = baseStatBarWidth
-                )
-            )
-            totalHeightOfComponents[2] += placeable.height
-            placeable
-        }
+        val baseStatBarPlaceable =
+            baseStatBarMeasurable.map { measurable ->
+                val placeable =
+                    measurable.measure(
+                        constraints.copy(
+                            minWidth = baseStatBarWidth,
+                            maxWidth = baseStatBarWidth,
+                        ),
+                    )
+                totalHeightOfComponents[2] += placeable.height
+                placeable
+            }
 
         val highestComponent = totalHeightOfComponents.max() / baseStatsIndex
         val totalHeight =
@@ -135,8 +139,7 @@ fun BaseStatsGraph(
         val statBarHeight = baseStatBarPlaceable.first().height
         val statLabelHeight = baseStatLabelPlaceable.first().height
 
-        layout(constraints.maxWidth, totalHeight)
-        {
+        layout(constraints.maxWidth, totalHeight) {
             var yPosition =
                 if (statBarHeight > statLabelHeight) (statBarHeight - statLabelHeight) / 2 else 0
             baseStatLabelPlaceable.forEachIndexed { index, placeable ->
@@ -144,33 +147,37 @@ fun BaseStatsGraph(
                 val currentBaseStatBar = baseStatBarPlaceable[index]
                 currentBaseStatBar.place(
                     largestLabelWidth + spaceBetweenHorizontallyPx,
-                    yPosition + (placeable.height / 2) - (currentBaseStatBar.height / 2)
+                    yPosition + (placeable.height / 2) - (currentBaseStatBar.height / 2),
                 )
 
                 baseStatValuePlaceable[index].place(
                     largestLabelWidth + currentBaseStatBar.width + 2 * spaceBetweenHorizontallyPx,
-                    yPosition
+                    yPosition,
                 )
                 yPosition += highestComponent + spaceBetweenVerticallyPx
             }
-
         }
     }
-
 }
 
 @Composable
-private fun BaseStatLabel(pokemonBaseStats: PokemonBaseStats, style: TextStyle) {
+private fun BaseStatLabel(
+    pokemonBaseStats: PokemonBaseStats,
+    style: TextStyle,
+) {
     Text(
         text = stringResource(id = chooseBaseStatStringId(pokemonBaseStats)),
         style = style,
         textAlign = TextAlign.End,
-        modifier = Modifier
+        modifier = Modifier,
     )
 }
 
 @Composable
-private fun BaseStatValue(pokemonBaseStats: PokemonBaseStats, style: TextStyle) {
+private fun BaseStatValue(
+    pokemonBaseStats: PokemonBaseStats,
+    style: TextStyle,
+) {
     Text(
         text = pokemonBaseStats.value.toString(),
         style = style,
@@ -192,20 +199,20 @@ private fun chooseBaseStatStringId(pokemonBaseStats: PokemonBaseStats): Int {
 private fun BaseStatProgressBar(
     statValue: Float,
     color: Color,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var progress by remember { mutableStateOf(0f) }
 
     val progressAnimation: Float by animateFloatAsState(
         targetValue = progress,
         animationSpec = tween(1000),
-        label = BASE_STAT_PROGRESS_BAR_ANIMATION_LABEL_KEY
+        label = BASE_STAT_PROGRESS_BAR_ANIMATION_LABEL_KEY,
     )
 
     val maxStat = 200f
     Surface(
         shape = CircleShape,
-        modifier = modifier
+        modifier = modifier,
     ) {
         LinearProgressIndicator(
             progress = { progressAnimation / maxStat },

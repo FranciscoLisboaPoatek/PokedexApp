@@ -5,15 +5,15 @@ import com.example.pokedexapp.data.network.PokemonApiDto
 import com.example.pokedexapp.data.network.PokemonListItemApiDto
 import com.example.pokedexapp.data.network.StatListItem
 import com.example.pokedexapp.data.network.TypeListItem
+import com.example.pokedexapp.data.pokedex_server.SharePokemonDto
 import com.example.pokedexapp.data.utils.extractPokemonIdFromUrl
 import com.example.pokedexapp.data.utils.treatName
-import com.example.pokedexapp.data.pokedex_server.SharePokemonDto
 import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonDetailModel
 import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.models.PokemonMinimalInfo
-import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.models.PokemonSprite
+import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.domain.models.PokemonTypes.Companion.getPokemonTypeByString
 import com.example.pokedexapp.domain.models.SharePokemonModel
 
@@ -33,7 +33,7 @@ object PokemonMapper {
             frontDefaultSprite = PokemonSprite.FrontDefaultSprite(sprites.front_default),
             frontShinySprite = PokemonSprite.FrontShinySprite(sprites.front_shiny),
             backDefaultSprite = PokemonSprite.BackDefaultSprite(sprites.back_default),
-            backShinySprite = PokemonSprite.BackShinySprite(sprites.back_shiny)
+            backShinySprite = PokemonSprite.BackShinySprite(sprites.back_shiny),
         )
     }
 
@@ -45,7 +45,7 @@ object PokemonMapper {
             name = name.treatName(),
             spriteUrl = sprites.front_default,
             primaryType = primaryType ?: PokemonTypes.NORMAL,
-            secondaryType = secondaryType
+            secondaryType = secondaryType,
         )
     }
 
@@ -61,7 +61,7 @@ object PokemonMapper {
         return SharePokemonDto(
             receiver = receiver,
             deeplink = deeplink,
-            pokemonName = pokemonName
+            pokemonName = pokemonName,
         )
     }
 }

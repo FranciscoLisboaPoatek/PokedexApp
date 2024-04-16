@@ -41,6 +41,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,13 +54,11 @@ class MainActivity : ComponentActivity() {
                     RequestNotificationPermission(context = context)
                 }
             }
-            LaunchedEffect(key1 = Unit){
+            LaunchedEffect(key1 = Unit) {
                 handleIntent(intent)
             }
         }
-
     }
-
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
@@ -67,18 +66,15 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleIntent(intent: Intent?) {
-
         val deeplink = intent?.extras?.getString(INTENT_EXTRA_DEEPLINK_KEY)
         if (deeplink != null) {
             viewModel.handleDeepLink(deeplink.toUri())
         }
     }
-
 }
 
 @Composable
 fun PokedexApp() {
-
     val viewModel: MainViewModel = hiltViewModel()
     val navController = rememberNavController()
 
@@ -94,22 +90,25 @@ fun PokedexApp() {
     }
 
     NavHost(navController = navController, startDestination = Screen.PokemonListScreen.route) {
-
         composable(route = Screen.PokemonListScreen.route) {
             PokemonListScreen { navController.navigateToPokemonDetail(it) }
         }
         composable(
             route = Screen.PokemonDetailScreen.routeWithArgs,
-            deepLinks = listOf(navDeepLink {
-                uriPattern = DEEPLINK_URI_SCHEME.plus(Screen.PokemonDetailScreen.routeWithArgs)
-            }),
-            arguments = Screen.PokemonDetailScreen.arguments
-        ){
-            PokemonDetailScreen(navigateToDetails = { navController.navigateToPokemonDetail(it) }, navigateUp = { navController.navigateUp() })
+            deepLinks =
+                listOf(
+                    navDeepLink {
+                        uriPattern = DEEPLINK_URI_SCHEME.plus(Screen.PokemonDetailScreen.routeWithArgs)
+                    },
+                ),
+            arguments = Screen.PokemonDetailScreen.arguments,
+        ) {
+            PokemonDetailScreen(
+                navigateToDetails = { navController.navigateToPokemonDetail(it) },
+                navigateUp = { navController.navigateUp() },
+            )
         }
-
     }
-
 }
 
 @Composable
@@ -119,18 +118,21 @@ private fun RequestNotificationPermission(context: Context) {
             mutableStateOf(
                 ContextCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
+                    Manifest.permission.POST_NOTIFICATIONS,
+                ) == PackageManager.PERMISSION_GRANTED,
             )
-        } else mutableStateOf(true)
+        } else {
+            mutableStateOf(true)
+        }
     }
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            hasNotificationPermission = isGranted
-        }
-    )
+    val launcher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted ->
+                hasNotificationPermission = isGranted
+            },
+        )
 
     LaunchedEffect(key1 = launcher) {
         if (!hasNotificationPermission) {
@@ -139,11 +141,8 @@ private fun RequestNotificationPermission(context: Context) {
             }
         }
     }
-
 }
 
 private fun NavController.navigateToPokemonDetail(pokemonId: String) {
     this.navigate("${Screen.PokemonDetailScreen.route}/$pokemonId")
 }
-
-

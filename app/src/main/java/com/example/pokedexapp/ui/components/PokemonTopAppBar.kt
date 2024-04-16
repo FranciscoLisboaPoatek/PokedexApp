@@ -47,20 +47,30 @@ fun PokemonTopAppBar(
     areActionsEnabled: Boolean,
     onSearchTextChange: (String) -> Unit,
     onSendNotificationClick: () -> Unit,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
 ) {
     var wasSearchClicked by remember { mutableStateOf(false) }
 
-    if (searchMode) SearchPokemonTopAppBar(
-        searchText = searchText,
-        wasSearchClicked = wasSearchClicked,
-        onSearchTextChange = { wasSearchClicked = false; onSearchTextChange(it) },
-        onCloseSearchCLick = { onSearchClick() })
-    else LogoPokemonTopAppBar(
-        areActionsEnabled = areActionsEnabled,
-        onSendNotificationClick = onSendNotificationClick,
-        onSearchClick = { wasSearchClicked = true; onSearchClick() })
-
+    if (searchMode) {
+        SearchPokemonTopAppBar(
+            searchText = searchText,
+            wasSearchClicked = wasSearchClicked,
+            onSearchTextChange = {
+                wasSearchClicked = false
+                onSearchTextChange(it)
+            },
+            onCloseSearchCLick = { onSearchClick() },
+        )
+    } else {
+        LogoPokemonTopAppBar(
+            areActionsEnabled = areActionsEnabled,
+            onSendNotificationClick = onSendNotificationClick,
+            onSearchClick = {
+                wasSearchClicked = true
+                onSearchClick()
+            },
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,9 +98,10 @@ private fun LogoPokemonTopAppBar(
                 },
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = TopBarBlueColor
-        ),
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = TopBarBlueColor,
+            ),
     )
 }
 
@@ -100,7 +111,7 @@ private fun SearchPokemonTopAppBar(
     searchText: String,
     wasSearchClicked: Boolean,
     onSearchTextChange: (String) -> Unit,
-    onCloseSearchCLick: () -> Unit
+    onCloseSearchCLick: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -112,23 +123,23 @@ private fun SearchPokemonTopAppBar(
 
     TopAppBar(
         title =
-        {
-            Surface(
-                color = Color.White,
-                shape = RoundedCornerShape(10.dp),
-                border = BorderStroke(1.dp, Color.Black),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SearchTextField(
-                    text = searchText,
-                    onSearchTextChange = {
-                        onSearchTextChange(it)
-                    },
-                    focusRequester = focusRequester,
-                    modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp)
-                )
-            }
-        },
+            {
+                Surface(
+                    color = Color.White,
+                    shape = RoundedCornerShape(10.dp),
+                    border = BorderStroke(1.dp, Color.Black),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    SearchTextField(
+                        text = searchText,
+                        onSearchTextChange = {
+                            onSearchTextChange(it)
+                        },
+                        focusRequester = focusRequester,
+                        modifier = Modifier.padding(vertical = 5.dp, horizontal = 10.dp),
+                    )
+                }
+            },
         actions = {
             TopAppBarCloseSearchButton(
                 onClick = {
@@ -137,9 +148,10 @@ private fun SearchPokemonTopAppBar(
                 },
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = TopBarBlueColor
-        ),
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = TopBarBlueColor,
+            ),
     )
 }
 
@@ -148,26 +160,28 @@ private fun SearchTextField(
     text: String,
     onSearchTextChange: (String) -> Unit,
     focusRequester: FocusRequester,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     BasicTextField(
         value = text,
         onValueChange = {
             onSearchTextChange(it)
         },
-        textStyle = MaterialTheme.typography.titleLarge.copy(
-            color = Color.Black
-        ),
+        textStyle =
+            MaterialTheme.typography.titleLarge.copy(
+                color = Color.Black,
+            ),
         cursorBrush = SolidColor(Color.Black),
         singleLine = true,
-        modifier = modifier
-            .focusRequester(focusRequester)
+        modifier =
+            modifier
+                .focusRequester(focusRequester),
     ) { innerTextField ->
         if (text.isBlank()) {
             Text(
                 text = stringResource(R.string.pokemon_search_hint),
                 color = Color.Black.copy(alpha = 0.5f),
-                maxLines = 1
+                maxLines = 1,
             )
         }
         innerTextField()
@@ -175,14 +189,12 @@ private fun SearchTextField(
 }
 
 @Composable
-private fun PokemonLogo(
-    modifier: Modifier = Modifier
-) {
+private fun PokemonLogo(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.pokemon_logo),
         contentDescription = null,
         alignment = Alignment.Center,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -191,13 +203,13 @@ private fun TopAppBarIconButton(
     icon: ImageVector,
     enabled: Boolean,
     onClick: () -> Unit,
-    contentDescription: String? = null
+    contentDescription: String? = null,
 ) {
     IconButton(onClick = onClick, enabled = enabled) {
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = if (enabled) Color.White else Color.LightGray
+            tint = if (enabled) Color.White else Color.LightGray,
         )
     }
 }
@@ -211,7 +223,7 @@ private fun TopAppBarDailyNotificationButton(
         icon = ImageVector.vectorResource(id = R.drawable.baseline_notifications_active_24),
         enabled = enabled,
         onClick = onClick,
-        contentDescription = stringResource(R.string.show_random_pokemon_notification)
+        contentDescription = stringResource(R.string.show_random_pokemon_notification),
     )
 }
 
@@ -224,19 +236,17 @@ private fun TopAppBarSearchButton(
         icon = Icons.Default.Search,
         enabled = enabled,
         onClick = onClick,
-        contentDescription = stringResource(R.string.open_search)
+        contentDescription = stringResource(R.string.open_search),
     )
 }
 
 @Composable
-private fun TopAppBarCloseSearchButton(
-    onClick: () -> Unit,
-) {
+private fun TopAppBarCloseSearchButton(onClick: () -> Unit) {
     TopAppBarIconButton(
         icon = Icons.Default.Close,
         enabled = true,
         onClick = onClick,
-        contentDescription = stringResource(id = R.string.close_search)
+        contentDescription = stringResource(id = R.string.close_search),
     )
 }
 
@@ -249,7 +259,7 @@ fun PokemonTopAppBarPreview() {
         areActionsEnabled = true,
         onSearchTextChange = { },
         onSendNotificationClick = { },
-        onSearchClick = { }
+        onSearchClick = { },
     )
 }
 
@@ -262,6 +272,6 @@ fun PokemonTopAppBarSearchModePreview() {
         areActionsEnabled = true,
         onSearchTextChange = { },
         onSendNotificationClick = { },
-        onSearchClick = { }
+        onSearchClick = { },
     )
 }

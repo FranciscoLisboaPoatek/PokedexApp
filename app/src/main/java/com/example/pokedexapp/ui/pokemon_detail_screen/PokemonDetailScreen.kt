@@ -32,7 +32,7 @@ import com.example.pokedexapp.ui.theme.TopBarBlueColor
 fun PokemonDetailScreen(
     pokemonDetailViewModel: PokemonDetailViewModel = hiltViewModel(),
     navigateToDetails: (String) -> Unit,
-    navigateUp: () -> Unit
+    navigateUp: () -> Unit,
 ) {
     val pokemonDetailState by pokemonDetailViewModel.state.collectAsState()
 
@@ -88,7 +88,7 @@ fun PokemonDetailScreen(
 private fun PokemonDetailScreenContent(
     state: PokemonDetailScreenUiState,
     onEvent: (PokemonDetailScreenOnEvent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val pokemonImageSize = 200.dp
 
@@ -98,16 +98,16 @@ private fun PokemonDetailScreenContent(
             topBar = {
                 PokemonDetailTopAppBarWrapper(
                     currentSprite = state.pokemonSprite,
-                    onEvent = onEvent
+                    onEvent = onEvent,
                 )
-            }
+            },
         ) { scaffoldPadding ->
             Box(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(scaffoldPadding)
-            )
-            {
+                modifier =
+                    Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(scaffoldPadding),
+            ) {
                 PokemonInformationSheet(
                     isLoading = state.isLoading,
                     isError = state.isError,
@@ -115,24 +115,25 @@ private fun PokemonDetailScreenContent(
                     evolutionChain = state.evolutionChain,
                     contentTopSpace = pokemonImageSize / 2 - 20.dp,
                     onEvent = onEvent,
-                    modifier = Modifier
-                        .animateContentSize()
-                        .padding(
-                            top = pokemonImageSize / 2 + 20.dp,
-                            start = 30.dp,
-                            end = 30.dp
-                        )
-                        .padding(bottom = 32.dp)
-                        .fillMaxWidth()
+                    modifier =
+                        Modifier
+                            .animateContentSize()
+                            .padding(
+                                top = pokemonImageSize / 2 + 20.dp,
+                                start = 30.dp,
+                                end = 30.dp,
+                            )
+                            .padding(bottom = 32.dp)
+                            .fillMaxWidth(),
                 )
 
                 if (!state.isLoading && !state.isError) {
                     PokemonImageWrapper(
                         image = state.pokemonSprite?.spriteUrl,
                         imageSize = pokemonImageSize,
-                        modifier = Modifier
-                            .fillMaxWidth()
-
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
                     )
                 }
 
@@ -145,10 +146,10 @@ private fun PokemonDetailScreenContent(
                         onTokenChange = { newToken ->
                             onEvent(
                                 PokemonDetailScreenOnEvent.OnReceiverTokenChange(
-                                    newToken
-                                )
+                                    newToken,
+                                ),
                             )
-                        }
+                        },
                     )
                 }
             }
@@ -156,24 +157,27 @@ private fun PokemonDetailScreenContent(
     }
 }
 
-
 @Composable
 private fun PokemonTypesColorBackground(
     pokemon: PokemonDetailModel?,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .background(
-                Brush.linearGradient(
-                    colorStops = arrayOf(
-                        0f to (pokemon?.primaryType?.color ?: TopBarBlueColor),
-                        1f to (pokemon?.secondaryType?.color
-                            ?: MaterialTheme.colorScheme.background)
-                    )
-                )
-            )
+        modifier =
+            modifier
+                .background(
+                    Brush.linearGradient(
+                        colorStops =
+                            arrayOf(
+                                0f to (pokemon?.primaryType?.color ?: TopBarBlueColor),
+                                1f to (
+                                    pokemon?.secondaryType?.color
+                                        ?: MaterialTheme.colorScheme.background
+                                ),
+                            ),
+                    ),
+                ),
     ) {
         content()
     }
@@ -182,7 +186,7 @@ private fun PokemonTypesColorBackground(
 @Composable
 private fun PokemonDetailTopAppBarWrapper(
     currentSprite: PokemonSprite?,
-    onEvent: (PokemonDetailScreenOnEvent) -> Unit
+    onEvent: (PokemonDetailScreenOnEvent) -> Unit,
 ) {
     if (currentSprite != null) {
         PokemonDetailTopAppBar(
@@ -190,14 +194,16 @@ private fun PokemonDetailTopAppBarWrapper(
             rotateSprite = { onEvent(PokemonDetailScreenOnEvent.RotateSprite(currentSprite.spriteType)) },
             changeShinySprite = { onEvent(PokemonDetailScreenOnEvent.ChangeShinySprite(currentSprite.spriteType)) },
             openSharePokemonToReceiverDialog = { onEvent(PokemonDetailScreenOnEvent.SwitchIsSharingPokemonToReceiver) },
-            navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) })
+            navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) },
+        )
     } else {
         PokemonDetailTopAppBar(
             isShinySprite = false,
             rotateSprite = { },
             changeShinySprite = { },
             openSharePokemonToReceiverDialog = { },
-            navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) })
+            navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) },
+        )
     }
 }
 

@@ -31,21 +31,20 @@ fun PokemonDetailTopAppBar(
             RotateIconButton(rotateSprite)
             ShinyIconButton(isShinySprite, changeShinySprite)
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent
-        )
+        colors =
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+            ),
     )
 }
 
 @Composable
-private fun NavigateUpIconButton(
-    navigateUp: () -> Unit
-) {
+private fun NavigateUpIconButton(navigateUp: () -> Unit) {
     IconButton(onClick = { navigateUp() }) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(R.string.navigate_up),
-            tint = Color.Black
+            tint = Color.Black,
         )
     }
 }
@@ -53,47 +52,48 @@ private fun NavigateUpIconButton(
 @Composable
 private fun ShinyIconButton(
     isShinySprite: Boolean,
-    changeShinySprite: () -> Unit
+    changeShinySprite: () -> Unit,
 ) {
     IconButton(
         onClick = { changeShinySprite() },
     ) {
         Icon(
-            painter = if (isShinySprite) painterResource(id = R.drawable.baseline_star_24) else painterResource(
-                id = R.drawable.baseline_star_border_24
-            ),
+            painter =
+                if (isShinySprite) {
+                    painterResource(id = R.drawable.baseline_star_24)
+                } else {
+                    painterResource(
+                        id = R.drawable.baseline_star_border_24,
+                    )
+                },
             contentDescription = stringResource(R.string.shiny_icon_button),
-            tint = if (isShinySprite) Color.Red else Color.Black
+            tint = if (isShinySprite) Color.Red else Color.Black,
         )
     }
 }
 
 @Composable
-private fun RotateIconButton(
-    rotateSprite: () -> Unit
-) {
+private fun RotateIconButton(rotateSprite: () -> Unit) {
     IconButton(
-        onClick = { rotateSprite() }
+        onClick = { rotateSprite() },
     ) {
         Icon(
             painter = painterResource(id = R.drawable.baseline_360_24),
             contentDescription = stringResource(R.string.rotate_sprite_icon_button),
-            tint = Color.Black
+            tint = Color.Black,
         )
     }
 }
 
 @Composable
-private fun SharePokemonToReceiverIcon(
-    openSharePokemonToReceiverDialog: () -> Unit
-) {
+private fun SharePokemonToReceiverIcon(openSharePokemonToReceiverDialog: () -> Unit) {
     IconButton(
-        onClick = { openSharePokemonToReceiverDialog() }
+        onClick = { openSharePokemonToReceiverDialog() },
     ) {
         Icon(
             painter = painterResource(id = R.drawable.baseline_share_24),
             contentDescription = stringResource(R.string.share_pokemon_to_a_receiver),
-            tint = Color.Black
+            tint = Color.Black,
         )
     }
 }
@@ -106,8 +106,9 @@ private fun PokemonDetailTopAppBarPreview() {
         navigateUp = {},
         rotateSprite = {},
         changeShinySprite = {},
-        openSharePokemonToReceiverDialog = {}
-    )}
+        openSharePokemonToReceiverDialog = {},
+    )
+}
 
 @Preview
 @Composable
@@ -117,6 +118,6 @@ private fun PokemonDetailTopAppBarShinyPreview() {
         navigateUp = {},
         rotateSprite = {},
         changeShinySprite = {},
-        openSharePokemonToReceiverDialog = {}
+        openSharePokemonToReceiverDialog = {},
     )
 }

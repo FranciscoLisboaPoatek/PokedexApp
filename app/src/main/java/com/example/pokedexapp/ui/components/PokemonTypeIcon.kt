@@ -19,11 +19,16 @@ import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.ui.theme.PokedexAppTheme
 
 @Composable
-fun PokemonTypeIcon(pokemonType: PokemonTypes,textPaddingValues: PaddingValues, textStyle: TextStyle, modifier: Modifier = Modifier) {
+fun PokemonTypeIcon(
+    pokemonType: PokemonTypes,
+    textPaddingValues: PaddingValues,
+    textStyle: TextStyle,
+    modifier: Modifier = Modifier,
+) {
     Surface(
         color = pokemonType.color,
         shape = CircleShape,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = pokemonType.name,
@@ -40,12 +45,12 @@ fun PokemonTypeIcon(pokemonType: PokemonTypes,textPaddingValues: PaddingValues, 
 @Preview
 @Composable
 fun PokemonTypeIconPreview() {
-    PokedexAppTheme{
+    PokedexAppTheme {
         PokemonTypeIcon(
             PokemonTypes.POISON,
             PaddingValues(horizontal = 5.dp),
             MaterialTheme.typography.titleLarge,
-            modifier = Modifier.wrapContentSize()
+            modifier = Modifier.wrapContentSize(),
         )
     }
 }

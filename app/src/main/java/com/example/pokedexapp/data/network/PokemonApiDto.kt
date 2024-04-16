@@ -8,7 +8,7 @@ data class PokemonApiDto(
     val species: Species,
     val sprites: SpritesDto,
     val stats: List<StatListItem>,
-    val types: List<TypeListItem>
+    val types: List<TypeListItem>,
 )
 
 data class SpritesDto(
@@ -20,22 +20,22 @@ data class SpritesDto(
 
 data class StatListItem(
     val base_stat: Int,
-    val stat: Stat
+    val stat: Stat,
 )
 
 data class Stat(
-    val name: String
+    val name: String,
 )
 
 data class TypeListItem(
-    val type: Type
+    val type: Type,
 )
 
 data class Type(
-    val name: String
+    val name: String,
 )
 
 data class Species(
     val name: String,
-    val url: String
+    val url: String,
 )

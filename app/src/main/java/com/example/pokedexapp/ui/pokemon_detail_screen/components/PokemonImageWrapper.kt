@@ -15,22 +15,26 @@ import coil.compose.AsyncImage
 import com.example.pokedexapp.ui.components.NoPokemonImageIcon
 
 @Composable
-fun PokemonImageWrapper(image: String?, imageSize: Dp, modifier: Modifier = Modifier) {
+fun PokemonImageWrapper(
+    image: String?,
+    imageSize: Dp,
+    modifier: Modifier = Modifier,
+) {
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = modifier,
     ) {
         if (image != null) {
             AsyncImage(
                 model = image,
                 contentDescription = null,
-                modifier = Modifier.size(imageSize)
+                modifier = Modifier.size(imageSize),
             )
         } else {
             NoPokemonImageIcon(
                 tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.size(imageSize / 2)
+                modifier = Modifier.size(imageSize / 2),
             )
         }
     }

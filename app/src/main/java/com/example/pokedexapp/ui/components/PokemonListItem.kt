@@ -1,6 +1,5 @@
 package com.example.pokedexapp.ui.components
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -26,7 +25,6 @@ import coil.compose.AsyncImage
 import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 
-
 @Composable
 fun TwoColorStrokeBox(
     firstColor: Color,
@@ -34,85 +32,90 @@ fun TwoColorStrokeBox(
     strokeWidthDp: Dp,
     modifier: Modifier,
     onClick: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .clickable { onClick() }
-            .drawBehind {
-                val strokeWidthPx = strokeWidthDp.toPx()
-                val offset = strokeWidthPx / 2
-                //top line
-                drawLine(
-                    start = Offset(0f, offset),
-                    end = Offset((size.width - strokeWidthPx) + 1, offset),
-                    color = firstColor,
-                    strokeWidth = strokeWidthPx
-                )
-                //start line
-                drawLine(
-                    start = Offset(offset, strokeWidthPx - 1),
-                    end = Offset(offset, (size.height - strokeWidthPx) + 1),
-                    color = firstColor,
-                    strokeWidth = strokeWidthPx
-                )
+        modifier =
+            modifier
+                .clickable { onClick() }
+                .drawBehind {
+                    val strokeWidthPx = strokeWidthDp.toPx()
+                    val offset = strokeWidthPx / 2
+                    // top line
+                    drawLine(
+                        start = Offset(0f, offset),
+                        end = Offset((size.width - strokeWidthPx) + 1, offset),
+                        color = firstColor,
+                        strokeWidth = strokeWidthPx,
+                    )
+                    // start line
+                    drawLine(
+                        start = Offset(offset, strokeWidthPx - 1),
+                        end = Offset(offset, (size.height - strokeWidthPx) + 1),
+                        color = firstColor,
+                        strokeWidth = strokeWidthPx,
+                    )
 
-                //bottom line
-                drawLine(
-                    start = Offset(size.width, size.height - offset),
-                    end = Offset(strokeWidthPx - 1, size.height - offset),
-                    color = secondColor,
-                    strokeWidth = strokeWidthPx
-                )
-                //end line
-                drawLine(
-                    start = Offset(size.width - offset, strokeWidthPx - 1),
-                    end = Offset(size.width - offset, (size.height - strokeWidthPx) + 1),
-                    color = secondColor,
-                    strokeWidth = strokeWidthPx
-                )
+                    // bottom line
+                    drawLine(
+                        start = Offset(size.width, size.height - offset),
+                        end = Offset(strokeWidthPx - 1, size.height - offset),
+                        color = secondColor,
+                        strokeWidth = strokeWidthPx,
+                    )
+                    // end line
+                    drawLine(
+                        start = Offset(size.width - offset, strokeWidthPx - 1),
+                        end = Offset(size.width - offset, (size.height - strokeWidthPx) + 1),
+                        color = secondColor,
+                        strokeWidth = strokeWidthPx,
+                    )
 
-                //start-bottom corner
-                drawPath(
-                    path = Path().apply {
-                        moveTo(0f, size.height - strokeWidthPx)
-                        lineTo(0f, size.height)
-                        lineTo(strokeWidthPx, size.height - strokeWidthPx)
-                        close()
-                    },
-                    color = firstColor,
-                )
-                //top-end corner
-                drawPath(
-                    path = Path().apply {
-                        moveTo(size.width - strokeWidthPx, 0f)
-                        lineTo(size.width - strokeWidthPx, strokeWidthPx)
-                        lineTo(size.width, 0f)
-                        close()
-                    },
-                    color = firstColor,
-                )
-                //bottom-start corner
-                drawPath(
-                    path = Path().apply {
-                        moveTo(strokeWidthPx, size.height)
-                        lineTo(0f, size.height)
-                        lineTo(strokeWidthPx, size.height - strokeWidthPx)
-                        close()
-                    },
-                    color = secondColor,
-                )
-                //end-top corner
-                drawPath(
-                    path = Path().apply {
-                        moveTo(size.width, strokeWidthPx)
-                        lineTo(size.width - strokeWidthPx, strokeWidthPx)
-                        lineTo(size.width, 0f)
-                        close()
-                    },
-                    color = secondColor,
-                )
-            },
+                    // start-bottom corner
+                    drawPath(
+                        path =
+                            Path().apply {
+                                moveTo(0f, size.height - strokeWidthPx)
+                                lineTo(0f, size.height)
+                                lineTo(strokeWidthPx, size.height - strokeWidthPx)
+                                close()
+                            },
+                        color = firstColor,
+                    )
+                    // top-end corner
+                    drawPath(
+                        path =
+                            Path().apply {
+                                moveTo(size.width - strokeWidthPx, 0f)
+                                lineTo(size.width - strokeWidthPx, strokeWidthPx)
+                                lineTo(size.width, 0f)
+                                close()
+                            },
+                        color = firstColor,
+                    )
+                    // bottom-start corner
+                    drawPath(
+                        path =
+                            Path().apply {
+                                moveTo(strokeWidthPx, size.height)
+                                lineTo(0f, size.height)
+                                lineTo(strokeWidthPx, size.height - strokeWidthPx)
+                                close()
+                            },
+                        color = secondColor,
+                    )
+                    // end-top corner
+                    drawPath(
+                        path =
+                            Path().apply {
+                                moveTo(size.width, strokeWidthPx)
+                                lineTo(size.width - strokeWidthPx, strokeWidthPx)
+                                lineTo(size.width, 0f)
+                                close()
+                            },
+                        color = secondColor,
+                    )
+                },
     ) {
         Box(modifier = Modifier.padding(strokeWidthDp - 0.4.dp)) {
             content()
@@ -127,7 +130,7 @@ fun PokemonListItemPreview() {
         pokemon = PokemonSampleData.singlePokemonListItemSampleData(),
         strokeWidthDp = 10.dp,
         onClick = { },
-        modifier = Modifier.size(186.dp, 210.dp)
+        modifier = Modifier.size(186.dp, 210.dp),
     )
 }
 
@@ -136,48 +139,55 @@ fun PokemonListItem(
     pokemon: PokemonListItemModel,
     strokeWidthDp: Dp,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     TwoColorStrokeBox(
         pokemon.primaryType.color,
         pokemon.secondaryType?.color ?: pokemon.primaryType.color,
         strokeWidthDp,
         onClick = { onClick() },
-        modifier = modifier
+        modifier = modifier,
     ) {
         Column(
-            modifier = Modifier.background(
-                Brush.verticalGradient(
-                    colorStops = arrayOf(
-                        0f to pokemon.primaryType.color,
-                        1f to MaterialTheme.colorScheme.background
-                    )
-                )
-            )
+            modifier =
+                Modifier.background(
+                    Brush.verticalGradient(
+                        colorStops =
+                            arrayOf(
+                                0f to pokemon.primaryType.color,
+                                1f to MaterialTheme.colorScheme.background,
+                            ),
+                    ),
+                ),
         ) {
             if (pokemon.spriteUrl != null) {
                 PokemonImage(
                     image = pokemon.spriteUrl,
-                    modifier = Modifier
-                        .padding(top = 5.dp, start = 5.dp, end = 5.dp)
-                        .weight(3f)
-                        .fillMaxWidth()
+                    modifier =
+                        Modifier
+                            .padding(top = 5.dp, start = 5.dp, end = 5.dp)
+                            .weight(3f)
+                            .fillMaxWidth(),
                 )
-            }else {
-                NoPokemonImageIcon(tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier
-                    .padding(top = 40.dp, bottom = 20.dp, start = 40.dp, end = 40.dp)
-                    .weight(3f)
-                    .fillMaxWidth())
+            } else {
+                NoPokemonImageIcon(
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier =
+                        Modifier
+                            .padding(top = 40.dp, bottom = 20.dp, start = 40.dp, end = 40.dp)
+                            .weight(3f)
+                            .fillMaxWidth(),
+                )
             }
 
             PokemonName(
                 name = pokemon.name,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .weight(1f)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .padding(horizontal = 8.dp)
+                        .weight(1f)
+                        .fillMaxWidth(),
             )
-
         }
     }
 }
@@ -185,26 +195,25 @@ fun PokemonListItem(
 @Composable
 private fun PokemonImage(
     image: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     AsyncImage(
         model = image,
         contentDescription = null,
-        modifier = modifier
-
+        modifier = modifier,
     )
 }
 
 @Composable
 private fun PokemonName(
     name: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = name,
         textAlign = TextAlign.Center,
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
-        modifier = modifier
+        modifier = modifier,
     )
 }

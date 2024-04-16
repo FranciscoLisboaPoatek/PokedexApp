@@ -22,25 +22,25 @@ import com.example.pokedexapp.R
 fun PokemonHeightWeight(
     pokemonHeight: Float,
     pokemonWeight: Float,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = modifier,
     ) {
         PokemonMeasurement(
             content = stringResource(id = R.string.weight_in_kg, pokemonWeight.toString()),
             icon = painterResource(id = R.drawable.weight_icon),
             color = Color.Gray,
             modifier = Modifier.weight(1f),
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.End,
         )
         PokemonMeasurement(
             content = stringResource(id = R.string.height_in_m, pokemonHeight.toString()),
             icon = painterResource(id = R.drawable.height_icon),
             color = Color.Gray,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
     }
 }
@@ -56,28 +56,29 @@ private fun PokemonMeasurement(
     Row(
         horizontalArrangement = horizontalArrangement,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Icon(
             painter = icon,
             contentDescription = null,
             tint = color,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(48.dp),
         )
         Text(
             text = content,
             color = color,
             style = MaterialTheme.typography.titleLarge,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
+
 @Preview
 @Composable
 private fun PokemonHeightWeightPreview() {
     PokemonHeightWeight(
         pokemonWeight = 10f,
-        pokemonHeight = 10f
+        pokemonHeight = 10f,
     )
 }
