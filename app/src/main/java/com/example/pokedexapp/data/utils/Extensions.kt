@@ -1,11 +1,6 @@
-package com.example.pokedexapp.ui.utils
+package com.example.pokedexapp.data.utils
 
-import kotlinx.coroutines.flow.MutableStateFlow
-
-inline fun <T : Any> MutableStateFlow<T>.updateState(transform: T.() -> T) {
-    value = transform(value)
-}
-
+val POKEMON_SPRITE_BASE_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
 fun String.treatName(): String {
     return this.replace('-', ' ').split(" ")
         .joinToString(" ") { it.replaceFirstChar { it.uppercase() } }

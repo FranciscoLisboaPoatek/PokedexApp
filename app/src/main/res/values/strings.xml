@@ -17,6 +17,16 @@
     <string name="navigate_up">navigate up</string>
     <string name="no_search_results_found">No search results found</string>
     <string name="retry_loading">retry loading</string>
+    <string name="evolves_from">Evolves From</string>
     <string name="something_went_wrong">Ops… Something went wrong</string>
     <string name="error_searching_content">Error searching content</string>
+    <string name="daily_pokemon_notification_title">Daily Pokemon!</string>
+    <string name="daily_pokemon_notification_text">Get to know more about %1$s!</string>
+    <string name="show_random_pokemon_notification">Show random pokemon notification</string>
+    <string name="share_pokemon_to_a_receiver">Share Pokemon to a receiver</string>
+    <string name="close_dialog">Close dialog</string>
+    <string name="share_pokemon_to_receiver_dialog_placeholder">Receiver token</string>
+    <string name="copy_my_token_button">Copy my token</string>
+    <string name="send_button">Send</string>
+    <string name="error_sharing_pokemon">Error sharing pokemon</string>
 </resources>
