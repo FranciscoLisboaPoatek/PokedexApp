@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +48,10 @@ import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.PokemonListItem
 import com.example.pokedexapp.ui.components.PokemonTopAppBar
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
+import com.google.firebase.analytics.analytics
 
 @Composable
 fun PokemonListScreen(
@@ -66,6 +71,9 @@ fun PokemonListScreen(
             }
 
             is PokemonListScreenOnEvent.OnPokemonCLick -> {
+                Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+                    param(FirebaseAnalytics.Param.ITEM_ID, event.pokemonId)
+                }
                 navigateToDetails(event.pokemonId)
             }
 
@@ -76,6 +84,10 @@ fun PokemonListScreen(
 
             PokemonListScreenOnEvent.RetryLoadingData -> {
                 viewModel.loadInitialData()
+            }
+
+            is PokemonListScreenOnEvent.OnSendNotificationClick -> {
+                viewModel.sendNotification(event.context)
             }
         }
     }
@@ -91,14 +103,22 @@ private fun PokemonListScreenContent(
     onEvent: (PokemonListScreenOnEvent) -> Unit
 ) {
     val defaultListState = rememberLazyGridState()
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             PokemonTopAppBar(
                 searchText = state.searchText,
                 searchMode = state.isSearchMode,
-                enableSearch = state.couldLoadInitialData,
+                areActionsEnabled = state.couldLoadInitialData,
                 onSearchTextChange = { onEvent(PokemonListScreenOnEvent.OnSearchTextValueChange(it)) },
-                handleSearchClick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) }
+                onSendNotificationClick = {
+                    onEvent(
+                        PokemonListScreenOnEvent.OnSendNotificationClick(
+                            context
+                        )
+                    )
+                },
+                onSearchClick = { onEvent(PokemonListScreenOnEvent.OnSearchClick) }
             )
         },
     ) {

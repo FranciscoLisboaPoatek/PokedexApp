@@ -3,9 +3,12 @@ package com.example.pokedexapp.ui.pokemon_detail_screen
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pokedexapp.domain.models.SharePokemonModel
 import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.domain.models.SpriteType
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
+import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
+import com.example.pokedexapp.ui.Screen
 import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
 import com.example.pokedexapp.ui.utils.updateState
@@ -18,6 +21,7 @@ import javax.inject.Inject
 class PokemonDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val pokemonDetailUseCase: PokemonDetailUseCase,
+    private val sharePokemonUseCase: SharePokemonUseCase,
     private val pokemonEvolutionChainUseCase: PokemonEvolutionChainUseCase
 ) : ViewModel() {
 
@@ -27,6 +31,14 @@ class PokemonDetailViewModel @Inject constructor(
 
     init {
         updatePokemon(pokemonId = pokemonId)
+    }
+
+    fun switchSharePokemonToReceiverDialog(){
+        _state.updateState { copy(isSharingPokemonToReceiver = !isSharingPokemonToReceiver) }
+    }
+
+    fun updateReceiverToken(newToken: String){
+        _state.updateState { copy(receiverToken = newToken) }
     }
 
     fun changeShinyPokemonSprite(actualPokemonSprite: SpriteType) {
@@ -47,6 +59,26 @@ class PokemonDetailViewModel @Inject constructor(
             SpriteType.BACK_SHINY_DEFAULT -> state.value.pokemonDetailModel?.frontShinySprite
         }
         _state.updateState { copy(pokemonSprite = sprite) }
+    }
+
+    fun sharePokemonToReceiver() {
+        _state.updateState { copy(isErrorSharingPokemonToReceiver = false) }
+
+        viewModelScope.launch {
+            try {
+                _state.value.pokemonDetailModel?.let {
+                    sharePokemonUseCase.sharePokemonTo(
+                        SharePokemonModel(
+                            receiver = _state.value.receiverToken,
+                            deeplink = Screen.PokemonDetailScreen.makeDeeplink(it.id),
+                            pokemonName = it.name
+                        )
+                    )
+                }
+            }catch (ex: Exception){
+                _state.updateState { copy(isErrorSharingPokemonToReceiver = true) }
+            }
+        }
     }
 
     fun updatePokemon(pokemonId: String) {

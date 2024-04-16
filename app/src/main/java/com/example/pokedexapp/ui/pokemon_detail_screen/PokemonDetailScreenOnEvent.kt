@@ -7,4 +7,7 @@ sealed class PokemonDetailScreenOnEvent() {
     data class RotateSprite (val sprite: SpriteType): PokemonDetailScreenOnEvent()
     data class NavigateToDetails (val pokemonId: String): PokemonDetailScreenOnEvent()
     object NavigateUp: PokemonDetailScreenOnEvent()
+    data class OnReceiverTokenChange(val text: String): PokemonDetailScreenOnEvent()
+    object SwitchIsSharingPokemonToReceiver: PokemonDetailScreenOnEvent()
+    object SharePokemonToReceiver: PokemonDetailScreenOnEvent()
 }

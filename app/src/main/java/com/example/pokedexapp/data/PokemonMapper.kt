@@ -7,12 +7,15 @@ import com.example.pokedexapp.data.network.StatListItem
 import com.example.pokedexapp.data.network.TypeListItem
 import com.example.pokedexapp.data.utils.extractPokemonIdFromUrl
 import com.example.pokedexapp.data.utils.treatName
+import com.example.pokedexapp.data.pokedex_server.SharePokemonDto
 import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonDetailModel
 import com.example.pokedexapp.domain.models.PokemonListItemModel
-import com.example.pokedexapp.domain.models.PokemonSprite
+import com.example.pokedexapp.domain.models.PokemonMinimalInfo
 import com.example.pokedexapp.domain.models.PokemonTypes
+import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.models.PokemonTypes.Companion.getPokemonTypeByString
+import com.example.pokedexapp.domain.models.SharePokemonModel
 
 object PokemonMapper {
     fun PokemonApiDto.toPokemonModel(): PokemonDetailModel {
@@ -49,6 +52,18 @@ object PokemonMapper {
     fun PokemonListItemApiDto.toPokemonDaoDto(): PokemonDaoDto {
         return PokemonDaoDto(id = url.extractPokemonIdFromUrl(), name = name.treatName(), url = url)
     }
+
+    fun PokemonDaoDto.toPokemonMinimalInfo(): PokemonMinimalInfo {
+        return PokemonMinimalInfo(id = id.toString(), name = name)
+    }
+
+    fun SharePokemonModel.toSharePokemonNotificationDto(): SharePokemonDto {
+        return SharePokemonDto(
+            receiver = receiver,
+            deeplink = deeplink,
+            pokemonName = pokemonName
+        )
+    }
 }
 
 private fun TypeListItem.toPokemonType(): PokemonTypes? {
@@ -57,7 +72,7 @@ private fun TypeListItem.toPokemonType(): PokemonTypes? {
 
 private fun List<StatListItem>.toPokemonBaseStatList(): MutableList<PokemonBaseStats> {
     val pokemonBaseStatsList = mutableListOf<PokemonBaseStats>()
-    this.forEach{
+    this.forEach {
         PokemonBaseStats.getPokemonBaseStatByString(it.stat.name, it.base_stat)
             ?.let { pokemonBaseState -> pokemonBaseStatsList.add(pokemonBaseState) }
     }

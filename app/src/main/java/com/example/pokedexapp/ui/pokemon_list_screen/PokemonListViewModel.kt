@@ -1,12 +1,19 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonListItemModel
+import com.example.pokedexapp.ui.notifications.DailyPokemonNotification
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
+import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.ui.utils.updateState
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.FlowPreview
@@ -18,7 +25,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PokemonListViewModel @Inject constructor(
-    private val pokemonListUseCase: PokemonListUseCase
+    private val pokemonListUseCase: PokemonListUseCase,
+    private val randomPokemonUseCase: RandomPokemonUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PokemonListScreenUiState())
@@ -58,7 +66,7 @@ class PokemonListViewModel @Inject constructor(
     }
 
     fun changeIsSearchMode() {
-        if(!_state.value.isSearchMode && _state.value.isLoading) return
+        if (!_state.value.isSearchMode && _state.value.isLoading) return
         _state.updateState { copy(isSearchMode = !_state.value.isSearchMode) }
     }
 
@@ -110,6 +118,10 @@ class PokemonListViewModel @Inject constructor(
             updateList(_state.value.copy(isDefaultList = true, showNoSearchResultsFound = false, errorSearching = false))
             return
         }
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SEARCH){
+            param(FirebaseAnalytics.Param.SEARCH_TERM,pokemonName)
+        }
+
 
         _state.updateState { copy(isLoading = true, errorSearching = false, searchListEnded = false, showNoSearchResultsFound = false) }
         searchJob?.cancel()
@@ -170,6 +182,16 @@ class PokemonListViewModel @Inject constructor(
             } catch (ex: Exception) {
                 _state.updateState { copy(isLoadingAppend = false, errorAppendingSearchList = true) }
             }
+        }
+    }
+
+    fun sendNotification(context: Context) {
+        viewModelScope.launch {
+            val randomPokemon = randomPokemonUseCase.getRandomPokemonMinimalInfo()
+            DailyPokemonNotification(context = context).showNotification(
+                pokemonId = randomPokemon.id,
+                pokemonName = randomPokemon.name
+            )
         }
     }
 

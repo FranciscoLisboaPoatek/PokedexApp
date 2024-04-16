@@ -1,7 +1,7 @@
 package com.example.pokedexapp.ui.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,12 +20,14 @@ fun PokemonDetailTopAppBar(
     isShinySprite: Boolean,
     navigateUp: () -> Unit,
     rotateSprite: () -> Unit,
-    changeShinySprite: () -> Unit
+    changeShinySprite: () -> Unit,
+    openSharePokemonToReceiverDialog: () -> Unit,
 ) {
     TopAppBar(
         title = @Composable {},
         navigationIcon = { NavigateUpIconButton(navigateUp) },
         actions = {
+            SharePokemonToReceiverIcon(openSharePokemonToReceiverDialog)
             RotateIconButton(rotateSprite)
             ShinyIconButton(isShinySprite, changeShinySprite)
         },
@@ -36,16 +38,20 @@ fun PokemonDetailTopAppBar(
 }
 
 @Composable
-fun NavigateUpIconButton(
+private fun NavigateUpIconButton(
     navigateUp: () -> Unit
 ) {
     IconButton(onClick = { navigateUp() }) {
-        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(R.string.navigate_up), tint = Color.Black )
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = stringResource(R.string.navigate_up),
+            tint = Color.Black
+        )
     }
 }
 
 @Composable
-fun ShinyIconButton(
+private fun ShinyIconButton(
     isShinySprite: Boolean,
     changeShinySprite: () -> Unit
 ) {
@@ -63,7 +69,7 @@ fun ShinyIconButton(
 }
 
 @Composable
-fun RotateIconButton(
+private fun RotateIconButton(
     rotateSprite: () -> Unit
 ) {
     IconButton(
@@ -77,14 +83,40 @@ fun RotateIconButton(
     }
 }
 
-@Preview
 @Composable
-private fun PokemonDetailTopAppBarPreview() {
-    PokemonDetailTopAppBar(false,{}, {}) {}
+private fun SharePokemonToReceiverIcon(
+    openSharePokemonToReceiverDialog: () -> Unit
+) {
+    IconButton(
+        onClick = { openSharePokemonToReceiverDialog() }
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.baseline_share_24),
+            contentDescription = stringResource(R.string.share_pokemon_to_a_receiver),
+            tint = Color.Black
+        )
+    }
 }
 
 @Preview
 @Composable
+private fun PokemonDetailTopAppBarPreview() {
+    PokemonDetailTopAppBar(
+        isShinySprite = false,
+        navigateUp = {},
+        rotateSprite = {},
+        changeShinySprite = {},
+        openSharePokemonToReceiverDialog = {}
+    )}
+
+@Preview
+@Composable
 private fun PokemonDetailTopAppBarShinyPreview() {
-    PokemonDetailTopAppBar(true,{}, {}) {}
+    PokemonDetailTopAppBar(
+        isShinySprite = true,
+        navigateUp = {},
+        rotateSprite = {},
+        changeShinySprite = {},
+        openSharePokemonToReceiverDialog = {}
+    )
 }
