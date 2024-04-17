@@ -17,24 +17,24 @@ import com.example.pokedexapp.ui.components.PokemonTypeIcon
 fun PokemonTypesIcons(
     primaryType: PokemonTypes,
     secondaryType: PokemonTypes?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-        modifier = modifier
+        modifier = modifier,
     ) {
         PokemonTypeIcon(
             pokemonType = primaryType,
             textPaddingValues = PaddingValues(vertical = 5.dp),
             textStyle = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.width(100.dp)
+            modifier = Modifier.width(100.dp),
         )
         if (secondaryType != null) {
             PokemonTypeIcon(
                 pokemonType = secondaryType,
                 textPaddingValues = PaddingValues(vertical = 5.dp),
                 textStyle = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.width(100.dp)
+                modifier = Modifier.width(100.dp),
             )
         }
     }

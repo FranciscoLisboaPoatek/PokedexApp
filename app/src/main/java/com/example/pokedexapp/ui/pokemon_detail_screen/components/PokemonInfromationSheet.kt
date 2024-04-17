@@ -27,7 +27,6 @@ import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.pokemon_detail_screen.PokemonDetailScreenOnEvent
 
-
 @Composable
 fun PokemonInformationSheet(
     isLoading: Boolean,
@@ -36,22 +35,22 @@ fun PokemonInformationSheet(
     evolutionChain: PokemonEvolutionChainModel,
     contentTopSpace: Dp,
     onEvent: (PokemonDetailScreenOnEvent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val informationSheetModifier = Modifier.padding(vertical = contentTopSpace)
     Surface(
         color = MaterialTheme.colorScheme.background,
         shape = RoundedCornerShape(10.dp),
         shadowElevation = 10.dp,
-        modifier = modifier
+        modifier = modifier,
     ) {
         if (isLoading) {
             LoadingPokemonInformationSheet(
-                modifier = informationSheetModifier
+                modifier = informationSheetModifier,
             )
         } else if (isError) {
             ErrorPokemonInformationSheet(
-                modifier = informationSheetModifier
+                modifier = informationSheetModifier,
             )
         } else {
             if (pokemon != null) {
@@ -59,7 +58,7 @@ fun PokemonInformationSheet(
                     pokemon = pokemon,
                     evolutionChain = evolutionChain,
                     onEvent = onEvent,
-                    modifier = informationSheetModifier
+                    modifier = informationSheetModifier,
                 )
             }
         }
@@ -75,18 +74,18 @@ private fun LoadingPokemonInformationSheet(modifier: Modifier = Modifier) {
 private fun ErrorPokemonInformationSheet(modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Icon(
             imageVector = Icons.Default.Warning,
             contentDescription = null,
             modifier = Modifier.size(80.dp),
-            tint = MaterialTheme.colorScheme.error
+            tint = MaterialTheme.colorScheme.error,
         )
         Text(
             text = stringResource(R.string.pokemon_information_sheet_error),
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.error
+            color = MaterialTheme.colorScheme.error,
         )
     }
 }
@@ -96,17 +95,16 @@ private fun SuccessPokemonInformationSheet(
     pokemon: PokemonDetailModel,
     evolutionChain: PokemonEvolutionChainModel,
     onEvent: (PokemonDetailScreenOnEvent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier,
     ) {
-
         PokemonName(
             pokemonId = pokemon.id,
             pokemonName = pokemon.name,
-            modifier = Modifier.padding(horizontal = 8.dp)
+            modifier = Modifier.padding(horizontal = 8.dp),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -121,19 +119,20 @@ private fun SuccessPokemonInformationSheet(
         PokemonHeightWeight(
             pokemonHeight = pokemon.height,
             pokemonWeight = pokemon.weight,
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
+            modifier =
+                Modifier
+                    .padding(horizontal = 8.dp),
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
         PokemonBaseStatsGraph(
             pokemon = pokemon,
-            modifier = Modifier
-                .padding(horizontal = 12.dp)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .padding(horizontal = 12.dp)
+                    .fillMaxWidth(),
         )
-
 
         if (evolutionChain.evolvesFromPokemonName != null && evolutionChain.evolvesFromPokemonId != null) {
             Spacer(modifier = Modifier.height(48.dp))
@@ -142,7 +141,7 @@ private fun SuccessPokemonInformationSheet(
                 pokemonId = evolutionChain.evolvesFromPokemonId,
                 pokemonName = evolutionChain.evolvesFromPokemonName,
                 pokemonSpriteUrl = evolutionChain.evolvesFromPokemonSpriteUrl,
-                navigateToDetails = { onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it)) }
+                navigateToDetails = { onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it)) },
             )
         }
     }
@@ -158,8 +157,7 @@ private fun LoadingPokemonInformationSheetPreview() {
         evolutionChain = PokemonEvolutionChainModel(),
         contentTopSpace = 20.dp,
         onEvent = { },
-        modifier = Modifier.fillMaxWidth()
-
+        modifier = Modifier.fillMaxWidth(),
     )
 }
 
@@ -173,7 +171,7 @@ private fun ErrorPokemonInformationSheetPreview() {
         evolutionChain = PokemonEvolutionChainModel(),
         contentTopSpace = 20.dp,
         onEvent = { },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 }
 
@@ -184,14 +182,14 @@ private fun SuccessPokemonInformationSheetPreview() {
         isLoading = false,
         isError = false,
         pokemon = PokemonSampleData.singlePokemonDetailSampleData(),
-        evolutionChain = PokemonEvolutionChainModel(
-            evolvesFromPokemonId = PokemonSampleData.singlePokemonDetailSampleData().id,
-            evolvesFromPokemonName = PokemonSampleData.singlePokemonDetailSampleData().name,
-            evolvesFromPokemonSpriteUrl = PokemonSampleData.singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
-        ),
+        evolutionChain =
+            PokemonEvolutionChainModel(
+                evolvesFromPokemonId = PokemonSampleData.singlePokemonDetailSampleData().id,
+                evolvesFromPokemonName = PokemonSampleData.singlePokemonDetailSampleData().name,
+                evolvesFromPokemonSpriteUrl = PokemonSampleData.singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
+            ),
         contentTopSpace = 20.dp,
         onEvent = { },
-        modifier = Modifier.fillMaxWidth()
-
+        modifier = Modifier.fillMaxWidth(),
     )
 }

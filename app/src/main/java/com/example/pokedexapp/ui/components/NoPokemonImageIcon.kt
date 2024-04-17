@@ -8,11 +8,14 @@ import androidx.compose.ui.res.painterResource
 import com.example.pokedexapp.R
 
 @Composable
-fun NoPokemonImageIcon(tint: Color, modifier: Modifier = Modifier) {
+fun NoPokemonImageIcon(
+    tint: Color,
+    modifier: Modifier = Modifier,
+) {
     Icon(
         painter = painterResource(id = R.drawable.baseline_no_photography_24),
         contentDescription = null,
         tint = tint,
-        modifier = modifier
+        modifier = modifier,
     )
 }

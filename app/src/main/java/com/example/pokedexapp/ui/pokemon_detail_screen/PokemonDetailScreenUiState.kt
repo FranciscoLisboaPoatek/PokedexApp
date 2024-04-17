@@ -12,5 +12,5 @@ data class PokemonDetailScreenUiState(
     val evolutionChain: PokemonEvolutionChainModel = PokemonEvolutionChainModel(),
     val receiverToken: String = "",
     val isSharingPokemonToReceiver: Boolean = false,
-    val isErrorSharingPokemonToReceiver: Boolean = false
+    val isErrorSharingPokemonToReceiver: Boolean = false,
 )

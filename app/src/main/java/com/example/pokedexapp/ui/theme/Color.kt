@@ -1,6 +1,5 @@
 package com.example.pokedexapp.ui.theme
 
-
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -38,7 +37,6 @@ val IceTypeColor = Color(0xFF98D8D8)
 val DragonTypeColor = Color(0xFF7038F8)
 val DarkTypeColor = Color(0xFF705848)
 val FairyTypeColor = Color(0xFFEE99AC)
-
 
 val NormalTypeBackgroundColor = Color(0xFFA8A878)
 val FightingTypeBackgroundColor = Color(0xFFC03028)

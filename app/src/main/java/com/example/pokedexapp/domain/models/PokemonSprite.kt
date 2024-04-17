@@ -15,6 +15,7 @@ sealed class PokemonSprite(val spriteType: SpriteType, val spriteUrl: String?) {
         PokemonSprite(SpriteType.FRONT_SHINY_DEFAULT, spriteUrl)
 
     class BackDefaultSprite(spriteUrl: String?) : PokemonSprite(SpriteType.BACK_DEFAULT, spriteUrl)
+
     class BackShinySprite(spriteUrl: String?) :
         PokemonSprite(SpriteType.BACK_SHINY_DEFAULT, spriteUrl)
 }

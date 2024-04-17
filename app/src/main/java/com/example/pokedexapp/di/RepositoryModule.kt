@@ -13,7 +13,5 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindPokemonRepository(
-        pokemonRepositoryImpl: PokemonRepositoryImpl
-    ): PokemonRepository
+    abstract fun bindPokemonRepository(pokemonRepositoryImpl: PokemonRepositoryImpl): PokemonRepository
 }

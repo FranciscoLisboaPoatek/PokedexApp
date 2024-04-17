@@ -16,7 +16,11 @@ import androidx.compose.ui.unit.sp
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 
 @Composable
-fun PokemonName(pokemonId: String, pokemonName: String, modifier: Modifier = Modifier) {
+fun PokemonName(
+    pokemonId: String,
+    pokemonName: String,
+    modifier: Modifier = Modifier,
+) {
     Text(
         buildAnnotatedString {
             withStyle(style = SpanStyle(color = Color.Gray)) {
@@ -39,7 +43,7 @@ private fun PokemonNamePreview() {
     Surface {
         PokemonName(
             pokemonId = PokemonSampleData.singlePokemonDetailSampleData().id,
-            pokemonName = PokemonSampleData.singlePokemonDetailSampleData().name
+            pokemonName = PokemonSampleData.singlePokemonDetailSampleData().name,
         )
     }
 }

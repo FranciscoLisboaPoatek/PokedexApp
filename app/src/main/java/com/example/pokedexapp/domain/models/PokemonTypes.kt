@@ -56,7 +56,8 @@ enum class PokemonTypes(val color: Color, val backgroundColor: Color) {
     ICE(IceTypeColor, IceTypeBackgroundColor),
     DRAGON(DragonTypeColor, DragonTypeBackgroundColor),
     DARK(DarkTypeColor, DarkTypeBackgroundColor),
-    FAIRY(FairyTypeColor, FairyTypeBackgroundColor);
+    FAIRY(FairyTypeColor, FairyTypeBackgroundColor),
+    ;
 
     companion object {
         fun getPokemonTypeByString(pokemonTypeString: String): PokemonTypes? {

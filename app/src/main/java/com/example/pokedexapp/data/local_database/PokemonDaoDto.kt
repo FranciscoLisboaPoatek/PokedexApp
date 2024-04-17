@@ -8,5 +8,5 @@ import androidx.room.PrimaryKey
 data class PokemonDaoDto(
     @PrimaryKey(autoGenerate = false) val id: Int,
     @ColumnInfo val name: String,
-    @ColumnInfo val url: String
+    @ColumnInfo val url: String,
 )
