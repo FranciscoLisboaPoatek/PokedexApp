@@ -35,7 +35,6 @@ import com.google.firebase.messaging.messaging
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-
 @Composable
 fun SharePokemonToReceiverDialog(
     isError: Boolean,
@@ -44,13 +43,11 @@ fun SharePokemonToReceiverDialog(
     onConfirm: () -> Unit,
     onTokenChange: (String) -> Unit,
 ) {
-
     Dialog(
         onDismissRequest = onDismiss,
     ) {
         Surface(
-            shape = RoundedCornerShape(10.dp)
-
+            shape = RoundedCornerShape(10.dp),
         ) {
             Column {
                 CloseDialogIconButton(close = onDismiss, modifier = Modifier.align(Alignment.End))
@@ -64,11 +61,14 @@ fun SharePokemonToReceiverDialog(
 }
 
 @Composable
-private fun CloseDialogIconButton(close: () -> Unit, modifier: Modifier = Modifier) {
+private fun CloseDialogIconButton(
+    close: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     IconButton(onClick = close, modifier = modifier) {
         Icon(
             imageVector = Icons.Default.Close,
-            contentDescription = stringResource(R.string.close_dialog)
+            contentDescription = stringResource(R.string.close_dialog),
         )
     }
 }
@@ -78,15 +78,16 @@ fun DialogContent(
     isError: Boolean,
     text: String,
     onTokenChange: (String) -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.padding(
-            start = 30.dp,
-            end = 30.dp,
-            bottom = 30.dp
-        ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier.padding(
+                start = 30.dp,
+                end = 30.dp,
+                bottom = 30.dp,
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         OutlinedTextField(
             value = text,
@@ -98,7 +99,7 @@ fun DialogContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         DialogButtons(
-            onConfirm = onConfirm
+            onConfirm = onConfirm,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -110,15 +111,13 @@ fun DialogContent(
 }
 
 @Composable
-private fun DialogButtons(
-    onConfirm: () -> Unit
-) {
+private fun DialogButtons(onConfirm: () -> Unit) {
     val scope = rememberCoroutineScope()
     val clipboard = LocalClipboardManager.current
 
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         OutlinedButton(onClick = {
             scope.launch {
@@ -139,30 +138,30 @@ private fun DialogButtons(
 private fun ErrorSharingPokemon(modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Icon(
             imageVector = Icons.Default.Warning,
             contentDescription = null,
             modifier = Modifier.size(60.dp),
-            tint = MaterialTheme.colorScheme.error
+            tint = MaterialTheme.colorScheme.error,
         )
         Text(
             text = stringResource(R.string.error_sharing_pokemon),
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.error
+            color = MaterialTheme.colorScheme.error,
         )
     }
 }
 
 @Preview
 @Composable
-fun SharePokemonToReceiverDialogPreveiw() {
+fun SharePokemonToReceiverDialogPreview() {
     SharePokemonToReceiverDialog(isError = false, text = "", onDismiss = { }, onConfirm = { }, onTokenChange = { })
 }
+
 @Preview
 @Composable
-fun SharePokemonToReceiverDialogErrorPreveiw() {
+fun SharePokemonToReceiverDialogErrorPreview() {
     SharePokemonToReceiverDialog(isError = true, text = "", onDismiss = { }, onConfirm = { }, onTokenChange = { })
 }
-

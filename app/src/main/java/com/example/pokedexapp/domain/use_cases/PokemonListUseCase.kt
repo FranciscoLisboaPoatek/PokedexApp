@@ -4,17 +4,24 @@ import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.repository.PokemonRepository
 
 class PokemonListUseCase(
-    private val repository: PokemonRepository
+    private val repository: PokemonRepository,
 ) {
     suspend fun insertAllPokemon() {
         repository.savePokemonList()
     }
 
-    suspend fun getPokemonList(offset: Int, limit: Int = 20): List<PokemonListItemModel> {
+    suspend fun getPokemonList(
+        offset: Int,
+        limit: Int = 20,
+    ): List<PokemonListItemModel> {
         return repository.getPokemonList(offset = offset, limit = limit)
     }
 
-    suspend fun getPokemonSearchList(name: String, offset: Int, limit: Int = 20): List<PokemonListItemModel> {
+    suspend fun getPokemonSearchList(
+        name: String,
+        offset: Int,
+        limit: Int = 20,
+    ): List<PokemonListItemModel> {
         return repository.getPokemonSearchList(name = name, offset = offset, limit = limit)
     }
 }

@@ -11,10 +11,17 @@ interface PokemonDao {
     fun insertAllPokemon(pokemonList: List<PokemonDaoDto>)
 
     @Query("SELECT * FROM Pokemon WHERE name LIKE :pokemonName LIMIT :limit OFFSET :offset")
-    fun searchPokemonByName(pokemonName: String, offset: Int, limit: Int): List<PokemonDaoDto>
+    fun searchPokemonByName(
+        pokemonName: String,
+        offset: Int,
+        limit: Int,
+    ): List<PokemonDaoDto>
 
     @Query("SELECT * FROM Pokemon LIMIT :limit OFFSET :offset")
-    fun pokemonPagination(offset: Int, limit: Int): List<PokemonDaoDto>
+    fun pokemonPagination(
+        offset: Int,
+        limit: Int,
+    ): List<PokemonDaoDto>
 
     @Query("DELETE FROM Pokemon")
     fun deleteAllPokemon()

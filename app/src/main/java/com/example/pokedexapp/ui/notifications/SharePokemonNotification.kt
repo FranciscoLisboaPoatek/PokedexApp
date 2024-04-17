@@ -1,4 +1,4 @@
-package com.example.pokedexapp.notifications
+package com.example.pokedexapp.ui.notifications
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -8,23 +8,29 @@ import androidx.core.app.NotificationCompat
 import com.example.pokedexapp.MainActivity
 import com.example.pokedexapp.R
 import com.example.pokedexapp.ui.utils.INTENT_EXTRA_DEEPLINK_KEY
-
+import com.example.pokedexapp.ui.utils.SHARE_POKEMON_NOTIFICATION_ID_KEY
 
 class SharePokemonNotification(
-    val context: Context
+    val context: Context,
 ) {
-    fun showNotification(deeplink: String, title: String, body: String) {
-        val intent = Intent(
-            context,
-            MainActivity::class.java
-        ).putExtra(INTENT_EXTRA_DEEPLINK_KEY, deeplink)
+    fun showNotification(
+        deeplink: String,
+        title: String,
+        body: String,
+    ) {
+        val intent =
+            Intent(
+                context,
+                MainActivity::class.java,
+            ).putExtra(INTENT_EXTRA_DEEPLINK_KEY, deeplink)
 
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            2,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val pendingIntent =
+            PendingIntent.getActivity(
+                context,
+                SHARE_POKEMON_NOTIFICATION_ID_KEY,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
         val notification =
             NotificationCompat.Builder(context, NotificationChannels.SHARE_POKEMON.channelId)
                 .setSmallIcon(R.drawable.baseline_catching_pokemon_24)
@@ -37,8 +43,8 @@ class SharePokemonNotification(
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         notificationManager.notify(
-            2,
-            notification
+            SHARE_POKEMON_NOTIFICATION_ID_KEY,
+            notification,
         )
     }
 }

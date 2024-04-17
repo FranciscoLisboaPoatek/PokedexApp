@@ -1,10 +1,9 @@
-package com.example.pokedexapp.notifications
+package com.example.pokedexapp.ui.notifications
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class PokedexFirebaseMessagingService : FirebaseMessagingService() {
-
     override fun onNewToken(token: String) {
         super.onNewToken(token)
     }
@@ -18,7 +17,7 @@ class PokedexFirebaseMessagingService : FirebaseMessagingService() {
                     message.notification?.let { notification ->
                         sendSharePokemonNotification(
                             notification = notification,
-                            data = message.data
+                            data = message.data,
                         )
                     }
                 }
@@ -30,7 +29,7 @@ class PokedexFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun sendSharePokemonNotification(
         notification: RemoteMessage.Notification,
-        data: Map<String, String>
+        data: Map<String, String>,
     ) {
         val title = notification.title
         val body = notification.body
@@ -40,7 +39,7 @@ class PokedexFirebaseMessagingService : FirebaseMessagingService() {
                 .showNotification(
                     deeplink = deeplink,
                     title = title,
-                    body = body
+                    body = body,
                 )
         }
     }

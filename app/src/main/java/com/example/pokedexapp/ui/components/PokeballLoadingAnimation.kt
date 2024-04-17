@@ -20,17 +20,18 @@ fun PokeballLoadingAnimation(modifier: Modifier = Modifier) {
     val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.pokeball_animation))
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Surface(
             shape = CircleShape,
-            shadowElevation = 5.dp
+            shadowElevation = 5.dp,
         ) {
             LottieAnimation(
                 composition = composition,
                 iterations = LottieConstants.IterateForever,
-                modifier = Modifier
-                    .size(50.dp)
+                modifier =
+                    Modifier
+                        .size(50.dp),
             )
         }
     }

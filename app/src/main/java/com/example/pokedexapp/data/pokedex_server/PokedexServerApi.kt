@@ -7,6 +7,6 @@ import retrofit2.http.POST
 interface PokedexServerApi {
     @POST("share_pokemon")
     fun sharePokemon(
-        @Body body: SharePokemonDto
+        @Body body: SharePokemonDto,
     ): Call<Void>
 }

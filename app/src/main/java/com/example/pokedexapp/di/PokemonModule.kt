@@ -35,9 +35,10 @@ object PokemonModule {
     @Provides
     @Singleton
     fun providePokemonApi(): PokemonApi {
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
+        val moshi =
+            Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
 
         return Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
@@ -49,10 +50,10 @@ object PokemonModule {
     @Provides
     @Singleton
     fun providePokedexServerApi(): PokedexServerApi {
-
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
+        val moshi =
+            Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
 
         return Retrofit.Builder()
             .baseUrl("http://10.0.2.2:8080/")
@@ -64,11 +65,13 @@ object PokemonModule {
 
     @Provides
     @Singleton
-    fun providePokemonDatabase(@ApplicationContext application: Context): PokemonDatabase {
+    fun providePokemonDatabase(
+        @ApplicationContext application: Context,
+    ): PokemonDatabase {
         return Room.databaseBuilder(
             application,
             PokemonDatabase::class.java,
-            "PokemonDatabase"
+            "PokemonDatabase",
         ).fallbackToDestructiveMigration()
             .build()
     }
@@ -91,7 +94,7 @@ object PokemonModule {
 
     @Provides
     @Singleton
-    fun providePokemonEvolutionChainUseCase(repository: PokemonRepository): PokemonEvolutionChainUseCase{
+    fun providePokemonEvolutionChainUseCase(repository: PokemonRepository): PokemonEvolutionChainUseCase {
         return PokemonEvolutionChainUseCase(repository)
     }
 
