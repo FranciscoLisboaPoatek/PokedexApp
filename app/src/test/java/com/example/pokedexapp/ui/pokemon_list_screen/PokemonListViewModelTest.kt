@@ -123,6 +123,9 @@ class PokemonListViewModelTest {
 
             assertEquals(true, viewModel.state.value.isDefaultList)
 
+            // #1 State starts with isLoading = false
+            // #2 When enters coroutine isLoading = true
+            // #3 When it finishes getting the list, isLoading = false
             assertEquals(listOf(false, true, false), stateList.map { it.isLoadingAppend })
 
             viewModel.getPokemonList()
@@ -202,7 +205,12 @@ class PokemonListViewModelTest {
                 PokemonSampleData.singlePokemonListItemSampleData(),
             )
 
+            // #1 State starts with isLoading = false
+            // #2 ChangeSearchText updates the searchText, but still isLoading = false
+            // #3 When enters coroutine isLoading = true
+            // #4 When it finishes getting the list, isLoading = false
             assertEquals(listOf(false, false, true, false), stateList.map { it.isLoading })
+
             assertEquals(false, viewModel.state.value.isDefaultList)
             assertEquals(false, viewModel.state.value.isLoading)
         }
@@ -268,9 +276,13 @@ class PokemonListViewModelTest {
 
             job.cancel()
 
+            // #1 State starts with isLoading = false
+            // #2 When enters coroutine isLoading = true
+            // #3 When it finishes getting the list, isLoading = false
+            assertEquals(listOf(false, true, false), stateList.map { it.isLoadingAppend })
+
             assertEquals(2, viewModel.state.value.pokemonList.size)
             assertEquals(false, viewModel.state.value.isDefaultList)
-            assertEquals(listOf(false, true, false), stateList.map { it.isLoadingAppend })
         }
 
     @Test
