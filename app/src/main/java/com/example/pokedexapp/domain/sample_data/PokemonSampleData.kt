@@ -136,7 +136,103 @@ class PokemonSampleData {
                     primaryType = PokemonTypes.FAIRY,
                     secondaryType = null,
                 ),
+                PokemonListItemModel(
+                    id = "258",
+                    name = "Mudkip",
+                    spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/258.png",
+                    primaryType = PokemonTypes.WATER,
+                    secondaryType = null,
+                ),
+                PokemonListItemModel(
+                    id = "144",
+                    name = "Articuno",
+                    spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/144.png",
+                    primaryType = PokemonTypes.ICE,
+                    secondaryType = PokemonTypes.FLYING,
+                ),
+                PokemonListItemModel(
+                    id = "155",
+                    name = "Cyndaquil",
+                    spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/155.png",
+                    primaryType = PokemonTypes.FIRE,
+                    secondaryType = null,
+                ),
+                PokemonListItemModel(
+                    id = "1",
+                    name = "Bulbasaur",
+                    spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+                    primaryType = PokemonTypes.GRASS,
+                    secondaryType = PokemonTypes.POISON,
+                ),
+                PokemonListItemModel(
+                    id = "2",
+                    name = "Ivysaur",
+                    spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png",
+                    primaryType = PokemonTypes.GRASS,
+                    secondaryType = PokemonTypes.POISON,
+                ),
+                PokemonListItemModel(
+                    id = "3",
+                    name = "Venusaur",
+                    spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png",
+                    primaryType = PokemonTypes.GRASS,
+                    secondaryType = PokemonTypes.POISON,
+                ),
+                PokemonListItemModel(
+                    id = "4",
+                    name = "Charmander",
+                    spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png",
+                    primaryType = PokemonTypes.FIRE,
+                    secondaryType = null,
+                ),
+                PokemonListItemModel(
+                    id = "5",
+                    name = "Charmeleon",
+                    spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png",
+                    primaryType = PokemonTypes.FIRE,
+                    secondaryType = null,
+                ),
+                PokemonListItemModel(
+                    id = "6",
+                    name = "Charizard",
+                    spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png",
+                    primaryType = PokemonTypes.FIRE,
+                    secondaryType = PokemonTypes.FLYING,
+                ),
+                PokemonListItemModel(
+                    id = "177",
+                    name = "Natu",
+                    spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/177.png",
+                    primaryType = PokemonTypes.PSYCHIC,
+                    secondaryType = PokemonTypes.FLYING,
+                ),
             )
+
+        fun pokemonDetailListSampleData(): List<PokemonDetailModel> =
+            pokemonListSampleData().map {
+                PokemonDetailModel(
+                    id = it.id,
+                    speciesId = "0",
+                    name = it.name,
+                    height = 0f,
+                    weight = 0f,
+                    baseStats =
+                        listOf(
+                            PokemonBaseStats.Hp(0),
+                            PokemonBaseStats.Attack(0),
+                            PokemonBaseStats.Defense(0),
+                            PokemonBaseStats.SpecialAttack(0),
+                            PokemonBaseStats.SpecialDefense(0),
+                            PokemonBaseStats.Speed(0),
+                        ),
+                    primaryType = it.primaryType,
+                    secondaryType = it.secondaryType,
+                    frontDefaultSprite = PokemonSprite.FrontDefaultSprite(it.spriteUrl),
+                    frontShinySprite = PokemonSprite.FrontShinySprite(""),
+                    backDefaultSprite = PokemonSprite.BackDefaultSprite(""),
+                    backShinySprite = PokemonSprite.BackShinySprite(""),
+                )
+            }
 
         fun pokemonSearchListSampleData(): List<PokemonListItemModel> =
             listOf(

@@ -17,78 +17,30 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.PokemonListItem
 import com.example.pokedexapp.ui.components.PokemonTopAppBar
+import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenTestTags.POKEMON_LIST_TAG
 import com.example.pokedexapp.ui.pokemon_list_screen.components.ErrorSearching
 import com.example.pokedexapp.ui.pokemon_list_screen.components.NoSearchResultsFound
 import com.example.pokedexapp.ui.pokemon_list_screen.components.RetryLoadingData
-import com.google.firebase.Firebase
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.analytics
-import com.google.firebase.analytics.logEvent
 
-@Composable
-fun PokemonListScreen(
-    viewModel: PokemonListViewModel = hiltViewModel(),
-    navigateToDetails: (String) -> Unit,
-) {
-    val state by viewModel.state.collectAsState()
-
-    fun onEvent(event: PokemonListScreenOnEvent) {
-        when (event) {
-            is PokemonListScreenOnEvent.OnSearchClick -> {
-                viewModel.changeIsSearchMode()
-            }
-
-            is PokemonListScreenOnEvent.OnSearchTextValueChange -> {
-                viewModel.changeSearchText(event.text)
-            }
-
-            is PokemonListScreenOnEvent.OnPokemonCLick -> {
-                Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
-                    param(FirebaseAnalytics.Param.ITEM_ID, event.pokemonId)
-                }
-                navigateToDetails(event.pokemonId)
-            }
-
-            PokemonListScreenOnEvent.AppendToList -> {
-                if (state.isDefaultList) {
-                    viewModel.getPokemonList()
-                } else {
-                    viewModel.appendSearchList()
-                }
-            }
-
-            PokemonListScreenOnEvent.RetryLoadingData -> {
-                viewModel.loadInitialData()
-            }
-
-            is PokemonListScreenOnEvent.OnSendNotificationClick -> {
-                viewModel.sendNotification(event.context)
-            }
-        }
-    }
-    PokemonListScreenContent(
-        state = state,
-        onEvent = ::onEvent,
-    )
+object PokemonListScreenTestTags {
+    const val POKEMON_LIST_TAG = "POKEMON_LIST"
 }
 
 @Composable
-private fun PokemonListScreenContent(
+fun PokemonListScreen(
     state: PokemonListScreenUiState,
     onEvent: (PokemonListScreenOnEvent) -> Unit,
 ) {
@@ -184,6 +136,7 @@ private fun PokemonList(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(16.dp),
             state = state,
+            modifier = Modifier.testTag(POKEMON_LIST_TAG),
         ) {
             items(pokemonList.size, key = { pokemonList[it].id }) { pokemonIndex ->
                 val pokemon = pokemonList[pokemonIndex]
@@ -225,7 +178,7 @@ private fun PokemonList(
 @Preview
 @Composable
 fun PokemonListScreenPreview() {
-    PokemonListScreenContent(
+    PokemonListScreen(
         PokemonListScreenUiState(
             isLoading = false,
             isLoadingAppend = false,
@@ -243,7 +196,7 @@ fun PokemonListScreenPreview() {
 @Preview
 @Composable
 fun PokemonListScreenSearchPreview() {
-    PokemonListScreenContent(
+    PokemonListScreen(
         PokemonListScreenUiState(
             isLoading = false,
             isLoadingAppend = false,
@@ -261,7 +214,7 @@ fun PokemonListScreenSearchPreview() {
 @Preview
 @Composable
 fun PokemonListScreenLoadingPreview() {
-    PokemonListScreenContent(
+    PokemonListScreen(
         PokemonListScreenUiState(
             isLoading = true,
             isLoadingAppend = false,
@@ -279,7 +232,7 @@ fun PokemonListScreenLoadingPreview() {
 @Preview
 @Composable
 fun PokemonListScreenLoadingAppendPreview() {
-    PokemonListScreenContent(
+    PokemonListScreen(
         PokemonListScreenUiState(
             isLoading = false,
             isLoadingAppend = true,

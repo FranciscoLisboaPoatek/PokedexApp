@@ -45,6 +45,36 @@ class PokemonListViewModel
             observerSearchText()
         }
 
+        fun onEvent(event: PokemonListScreenOnEvent) {
+            when (event) {
+                is PokemonListScreenOnEvent.OnSearchClick -> {
+                    changeIsSearchMode()
+                }
+
+                is PokemonListScreenOnEvent.OnSearchTextValueChange -> {
+                    changeSearchText(event.text)
+                }
+
+                PokemonListScreenOnEvent.AppendToList -> {
+                    if (state.value.isDefaultList) {
+                        getPokemonList()
+                    } else {
+                        appendSearchList()
+                    }
+                }
+
+                PokemonListScreenOnEvent.RetryLoadingData -> {
+                    loadInitialData()
+                }
+
+                is PokemonListScreenOnEvent.OnSendNotificationClick -> {
+                    sendNotification(event.context)
+                }
+
+                else -> {}
+            }
+        }
+
         fun loadInitialData() {
             _state.updateState { copy(isLoading = true) }
             viewModelScope.launch {

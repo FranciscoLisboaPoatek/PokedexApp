@@ -2,10 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="PokemonDetailScreenErrorPreview">
-        <State />
-      </entry>
-      <entry key="PokemonDetailScreenLoadingPreview">
+      <entry key="PokemonListScreenKtTest">
         <State />
       </entry>
       <entry key="app">
@@ -23,6 +20,18 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-04-08T16:41:23.594096Z" />
         </State>
+      </entry>
+      <entry key="append_to_default_list()">
+        <State />
+      </entry>
+      <entry key="append_to_search_list()">
+        <State />
+      </entry>
+      <entry key="searchPokemon_noResultsFound()">
+        <State />
+      </entry>
+      <entry key="show_random_pokemon_notification()">
+        <State />
       </entry>
     </value>
   </component>

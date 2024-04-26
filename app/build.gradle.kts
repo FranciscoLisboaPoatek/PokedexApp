@@ -21,7 +21,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.pokedexapp.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -68,6 +68,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.appcompat:appcompat:1.6.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -110,6 +111,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
+
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
+
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
 }
 
 kapt {
