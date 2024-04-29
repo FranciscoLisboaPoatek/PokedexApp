@@ -110,6 +110,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+
+    testImplementation("io.mockk:mockk:1.13.10")
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
 }
 
 kapt {
