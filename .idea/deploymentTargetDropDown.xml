@@ -3,6 +3,22 @@
   <component name="deploymentTargetDropDown">
     <value>
       <entry key="PokemonListScreenKtTest">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Francisco Lisboa\.android\avd\Medium_Phone_API_34.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-04-29T14:27:48.119403600Z" />
+        </State>
+      </entry>
+      <entry key="PokemonListScreenViewModelIntegrationTest">
         <State />
       </entry>
       <entry key="app">
@@ -25,12 +41,6 @@
         <State />
       </entry>
       <entry key="append_to_search_list()">
-        <State />
-      </entry>
-      <entry key="searchPokemon_noResultsFound()">
-        <State />
-      </entry>
-      <entry key="show_random_pokemon_notification()">
         <State />
       </entry>
     </value>

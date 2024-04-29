@@ -39,12 +39,31 @@ import org.junit.Rule
 import org.junit.Test
 
 @HiltAndroidTest
-class PokemonListScreenKtTest {
+class PokemonListScreenViewModelIntegrationTest {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
     var composeTestRule = createAndroidComposeRule<TestActivity>()
+
+    companion object {
+        @JvmStatic
+        @BeforeClass
+        fun grantPhonePermission() {
+            val instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
+            val uiAutomation: UiAutomation = instrumentation.uiAutomation
+            if (Build.VERSION.SDK_INT >= 28) {
+                uiAutomation.adoptShellPermissionIdentity()
+
+                uiAutomation.grantRuntimePermission(
+                    instrumentation.targetContext.packageName,
+                    Manifest.permission.POST_NOTIFICATIONS,
+                )
+
+                uiAutomation.dropShellPermissionIdentity()
+            }
+        }
+    }
 
     @Before
     fun setup() {
@@ -135,22 +154,4 @@ class PokemonListScreenKtTest {
             .performScrollToNode(hasTextExactly("Natu")).assertExists()
     }
 
-    companion object {
-        @JvmStatic
-        @BeforeClass
-        fun grantPhonePermission() {
-            val instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation()
-            val uiAutomation: UiAutomation = instrumentation.uiAutomation
-            if (Build.VERSION.SDK_INT >= 28) {
-                uiAutomation.adoptShellPermissionIdentity()
-
-                uiAutomation.grantRuntimePermission(
-                    instrumentation.targetContext.packageName,
-                    Manifest.permission.POST_NOTIFICATIONS,
-                )
-
-                uiAutomation.dropShellPermissionIdentity()
-            }
-        }
-    }
 }
