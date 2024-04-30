@@ -153,5 +153,4 @@ class PokemonListScreenViewModelIntegrationTest {
         composeTestRule.onNodeWithTag(POKEMON_LIST_TAG)
             .performScrollToNode(hasTextExactly("Natu")).assertExists()
     }
-
 }

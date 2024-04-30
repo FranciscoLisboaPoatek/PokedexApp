@@ -14,11 +14,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.R
+import com.example.pokedexapp.ui.pokemon_list_screen.components.RetryLoadingDataTestTags.RETRY_BUTTON_TAG
+import com.example.pokedexapp.ui.pokemon_list_screen.components.RetryLoadingDataTestTags.RETRY_LOADING_DATA_TAG
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
+
+object RetryLoadingDataTestTags {
+    const val RETRY_BUTTON_TAG = "RETRY_BUTTON"
+    const val RETRY_LOADING_DATA_TAG = "RETRY_LOADING_DATA"
+}
 
 @Composable
 fun RetryLoadingData(
@@ -28,9 +36,9 @@ fun RetryLoadingData(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = modifier,
+        modifier = modifier.testTag(RETRY_LOADING_DATA_TAG),
     ) {
-        IconButton(onClick = { reloadData() }) {
+        IconButton(onClick = { reloadData() }, modifier = Modifier.testTag(RETRY_BUTTON_TAG)) {
             Icon(
                 imageVector = Icons.Default.Refresh,
                 contentDescription = stringResource(R.string.retry_loading),
