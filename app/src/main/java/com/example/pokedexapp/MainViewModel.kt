@@ -2,6 +2,7 @@ package com.example.pokedexapp
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import com.example.pokedexapp.ui.Navigator
 import com.example.pokedexapp.ui.utils.updateState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +11,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel
     @Inject
-    constructor() : ViewModel() {
+    constructor(
+        navigator: Navigator
+    ) : ViewModel() {
         val uiState: MutableStateFlow<MainActivityUiState> = MutableStateFlow(MainActivityUiState())
 
         fun handleDeepLink(uri: Uri) {
