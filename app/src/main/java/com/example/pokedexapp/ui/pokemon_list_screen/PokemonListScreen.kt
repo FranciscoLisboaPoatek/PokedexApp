@@ -34,6 +34,7 @@ import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenTestTags.P
 import com.example.pokedexapp.ui.pokemon_list_screen.components.ErrorSearching
 import com.example.pokedexapp.ui.pokemon_list_screen.components.NoSearchResultsFound
 import com.example.pokedexapp.ui.pokemon_list_screen.components.RetryLoadingData
+import com.example.pokedexapp.ui.utils.REMAINING_LIST_ITEMS_TO_LOAD_MORE
 
 object PokemonListScreenTestTags {
     const val POKEMON_LIST_TAG = "POKEMON_LIST"
@@ -142,7 +143,7 @@ private fun PokemonList(
                 val pokemon = pokemonList[pokemonIndex]
 
                 LaunchedEffect(pokemonList.size) {
-                    if (pokemonIndex == pokemonList.size - 10) {
+                    if (pokemonIndex == pokemonList.size - REMAINING_LIST_ITEMS_TO_LOAD_MORE) {
                         onEvent(PokemonListScreenOnEvent.AppendToList)
                     }
                 }
