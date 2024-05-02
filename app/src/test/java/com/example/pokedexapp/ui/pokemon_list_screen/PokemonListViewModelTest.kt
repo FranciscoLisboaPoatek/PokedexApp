@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
-import com.example.pokedexapp.ui.firebase.FirebaseAnalyticsLogger
+import com.example.pokedexapp.ui.analytics.AnalyticsLogger
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.just
@@ -32,7 +32,7 @@ class PokemonListViewModelTest {
 
     private val randomPokemonUseCaseMock = mockk<RandomPokemonUseCase>()
 
-    private val firebaseAnalyticsLoggerMock = mockk<FirebaseAnalyticsLogger>()
+    private val analyticsLoggerMock = mockk<AnalyticsLogger>()
 
     private lateinit var viewModel: PokemonListViewModel
 
@@ -44,7 +44,7 @@ class PokemonListViewModelTest {
             PokemonListViewModel(
                 pokemonListUseCase = pokemonListUseCaseMock,
                 randomPokemonUseCase = randomPokemonUseCaseMock,
-                firebaseAnalyticsLogger = firebaseAnalyticsLoggerMock,
+                analyticsLogger = analyticsLoggerMock,
             )
         dispatcher.scheduler.advanceUntilIdle()
     }
@@ -188,12 +188,12 @@ class PokemonListViewModelTest {
                     }
                 }
 
-            coEvery { pokemonListUseCaseMock.getPokemonSearchList("Bulbasaur", 0) } returns
+            coEvery { pokemonListUseCaseMock.getPokemonSearchList("Bulbasaur", any(), any()) } returns
                 listOf(
                     PokemonSampleData.singlePokemonListItemSampleData(),
                 )
 
-            coEvery { firebaseAnalyticsLoggerMock.logFirebaseEvent(any(), any()) } just Runs
+            coEvery { analyticsLoggerMock.logEvent(any(), any()) } just Runs
 
             viewModel.changeSearchText("Bulbasaur")
             dispatcher.scheduler.advanceUntilIdle()
@@ -217,9 +217,9 @@ class PokemonListViewModelTest {
 
     @Test
     fun searchPokemonListByName_noResultsFound() {
-        coEvery { pokemonListUseCaseMock.getPokemonSearchList(any(), any()) } returns emptyList()
+        coEvery { pokemonListUseCaseMock.getPokemonSearchList(any(), any(), any()) } returns emptyList()
 
-        coEvery { firebaseAnalyticsLoggerMock.logFirebaseEvent(any(), any()) } just Runs
+        coEvery { analyticsLoggerMock.logEvent(any(), any()) } just Runs
 
         viewModel.changeSearchText("Pikachu")
         dispatcher.scheduler.advanceUntilIdle()
@@ -234,10 +234,11 @@ class PokemonListViewModelTest {
             pokemonListUseCaseMock.getPokemonSearchList(
                 any(),
                 any(),
+                any(),
             )
         } throws Exception()
 
-        coEvery { firebaseAnalyticsLoggerMock.logFirebaseEvent(any(), any()) } just Runs
+        coEvery { analyticsLoggerMock.logEvent(any(), any()) } just Runs
 
         viewModel.changeSearchText("Pikachu")
         dispatcher.scheduler.advanceUntilIdle()
@@ -252,12 +253,12 @@ class PokemonListViewModelTest {
         runTest {
             val stateList = mutableListOf<PokemonListScreenUiState>()
 
-            coEvery { pokemonListUseCaseMock.getPokemonSearchList("Pikachu", any()) } returns
+            coEvery { pokemonListUseCaseMock.getPokemonSearchList("Pikachu", any(), any()) } returns
                 listOf(
                     PokemonSampleData.singlePokemonListItemSampleData(),
                 )
 
-            coEvery { firebaseAnalyticsLoggerMock.logFirebaseEvent(any(), any()) } just Runs
+            coEvery { analyticsLoggerMock.logEvent(any(), any()) } just Runs
 
             viewModel.changeSearchText("Pikachu")
             dispatcher.scheduler.advanceUntilIdle()
@@ -291,6 +292,7 @@ class PokemonListViewModelTest {
             pokemonListUseCaseMock.getPokemonSearchList(
                 any(),
                 any(),
+                any(),
             )
         } returns emptyList()
 
@@ -307,10 +309,11 @@ class PokemonListViewModelTest {
             pokemonListUseCaseMock.getPokemonSearchList(
                 any(),
                 any(),
+                any(),
             )
         } throws Exception()
 
-        coEvery { firebaseAnalyticsLoggerMock.logFirebaseEvent(any(), any()) } just Runs
+        coEvery { analyticsLoggerMock.logEvent(any(), any()) } just Runs
 
         viewModel.appendSearchList()
         dispatcher.scheduler.advanceUntilIdle()

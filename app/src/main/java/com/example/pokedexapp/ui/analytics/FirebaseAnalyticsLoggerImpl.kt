@@ -1,13 +1,13 @@
-package com.example.pokedexapp.ui.firebase
+package com.example.pokedexapp.ui.analytics
 
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject
 
-class FirebaseAnalyticsLogger
+class FirebaseAnalyticsLoggerImpl
     @Inject
-    constructor(private val firebaseAnalytics: FirebaseAnalytics) {
-        fun logFirebaseEvent(
+    constructor(private val firebaseAnalytics: FirebaseAnalytics) : AnalyticsLogger {
+        override fun logEvent(
             name: String,
             parameters: Map<String, String>,
         ) {

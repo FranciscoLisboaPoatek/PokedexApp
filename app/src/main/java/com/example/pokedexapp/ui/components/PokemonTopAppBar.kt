@@ -32,13 +32,24 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.R
+import com.example.pokedexapp.ui.components.PokemonTopAppBarTestTags.CLOSE_SEARCH_BUTTON_TAG
+import com.example.pokedexapp.ui.components.PokemonTopAppBarTestTags.OPEN_SEARCH_BUTTON_TAG
+import com.example.pokedexapp.ui.components.PokemonTopAppBarTestTags.SHOW_RANDOM_POKEMON_NOTIFICATION_BUTTON_TAG
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
+
+object PokemonTopAppBarTestTags {
+    const val SEARCH_TEXT_FIELD_TAG = "SEARCH_TEXT_FIELD"
+    const val OPEN_SEARCH_BUTTON_TAG = "OPEN_SEARCH_BUTTON"
+    const val CLOSE_SEARCH_BUTTON_TAG = "CLOSE_SEARCH_BUTTON"
+    const val SHOW_RANDOM_POKEMON_NOTIFICATION_BUTTON_TAG = "SHOW_RANDOM_POKEMON_NOTIFICATION_BUTTON"
+}
 
 @Composable
 fun PokemonTopAppBar(
@@ -175,7 +186,8 @@ private fun SearchTextField(
         singleLine = true,
         modifier =
             modifier
-                .focusRequester(focusRequester),
+                .focusRequester(focusRequester)
+                .testTag(PokemonTopAppBarTestTags.SEARCH_TEXT_FIELD_TAG),
     ) { innerTextField ->
         if (text.isBlank()) {
             Text(
@@ -203,9 +215,10 @@ private fun TopAppBarIconButton(
     icon: ImageVector,
     enabled: Boolean,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     contentDescription: String? = null,
 ) {
-    IconButton(onClick = onClick, enabled = enabled) {
+    IconButton(onClick = onClick, enabled = enabled, modifier = modifier) {
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
@@ -224,6 +237,7 @@ private fun TopAppBarDailyNotificationButton(
         enabled = enabled,
         onClick = onClick,
         contentDescription = stringResource(R.string.show_random_pokemon_notification),
+        modifier = Modifier.testTag(SHOW_RANDOM_POKEMON_NOTIFICATION_BUTTON_TAG),
     )
 }
 
@@ -237,6 +251,7 @@ private fun TopAppBarSearchButton(
         enabled = enabled,
         onClick = onClick,
         contentDescription = stringResource(R.string.open_search),
+        modifier = Modifier.testTag(OPEN_SEARCH_BUTTON_TAG),
     )
 }
 
@@ -247,6 +262,7 @@ private fun TopAppBarCloseSearchButton(onClick: () -> Unit) {
         enabled = true,
         onClick = onClick,
         contentDescription = stringResource(id = R.string.close_search),
+        modifier = Modifier.testTag(CLOSE_SEARCH_BUTTON_TAG),
     )
 }
 

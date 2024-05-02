@@ -12,7 +12,7 @@ class PokemonListUseCase(
 
     suspend fun getPokemonList(
         offset: Int,
-        limit: Int = 20,
+        limit: Int,
     ): List<PokemonListItemModel> {
         return repository.getPokemonList(offset = offset, limit = limit)
     }
@@ -20,7 +20,7 @@ class PokemonListUseCase(
     suspend fun getPokemonSearchList(
         name: String,
         offset: Int,
-        limit: Int = 20,
+        limit: Int,
     ): List<PokemonListItemModel> {
         return repository.getPokemonSearchList(name = name, offset = offset, limit = limit)
     }
