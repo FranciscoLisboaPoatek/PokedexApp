@@ -1,11 +1,10 @@
-package com.example.pokedexapp.ui
+package com.example.pokedexapp.ui.navigation
 
 import android.net.Uri
 import com.example.pokedexapp.ui.utils.updateState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class NavigatorImpl : Navigator {
-
     override val state = MutableStateFlow<NavigationEvent>(NavigationEvent.Empty)
 
     override fun navigateTo(route: String) {

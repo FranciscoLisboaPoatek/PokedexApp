@@ -5,6 +5,9 @@
       <entry key="PokemonListScreenTest">
         <State />
       </entry>
+      <entry key="PokemonListScreenViewModelIntegrationTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -18,11 +21,8 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-05-03T13:42:05.169485500Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-05-03T19:33:26.761986500Z" />
         </State>
-      </entry>
-      <entry key="appendToList_error()">
-        <State />
       </entry>
       <entry key="appendToList_loading()">
         <State />

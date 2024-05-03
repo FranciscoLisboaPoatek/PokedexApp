@@ -43,10 +43,12 @@ object PokemonListScreenTestTags {
 fun PokemonListScreen(
     state: PokemonListScreenUiState,
     onEvent: (PokemonListScreenOnEvent) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val defaultListState = rememberLazyGridState()
     val context = LocalContext.current
     Scaffold(
+        modifier = modifier,
         topBar = {
             PokemonTopAppBar(
                 searchText = state.searchText,

@@ -3,7 +3,6 @@ package com.example.pokedexapp.ui.pokemon_detail_screen
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -11,14 +10,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pokedexapp.domain.models.PokemonDetailModel
 import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
@@ -30,62 +26,6 @@ import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
 @Composable
 fun PokemonDetailScreen(
-    pokemonDetailViewModel: PokemonDetailViewModel = hiltViewModel(),
-    navigateToDetails: (String) -> Unit,
-    navigateUp: () -> Unit,
-) {
-    val pokemonDetailState by pokemonDetailViewModel.state.collectAsState()
-
-    fun onEvent(event: PokemonDetailScreenOnEvent) {
-        when (event) {
-            is PokemonDetailScreenOnEvent.ChangeShinySprite -> {
-                pokemonDetailViewModel.changeShinyPokemonSprite(event.sprite)
-            }
-
-            is PokemonDetailScreenOnEvent.NavigateUp -> {
-                navigateUp()
-            }
-
-            is PokemonDetailScreenOnEvent.NavigateToDetails -> {
-                navigateToDetails(event.pokemonId)
-            }
-
-            is PokemonDetailScreenOnEvent.RotateSprite -> {
-                pokemonDetailViewModel.rotatePokemonSprite(event.sprite)
-            }
-
-            is PokemonDetailScreenOnEvent.OnReceiverTokenChange -> {
-                pokemonDetailViewModel.updateReceiverToken(event.text)
-            }
-
-            is PokemonDetailScreenOnEvent.SharePokemonToReceiver -> {
-                pokemonDetailViewModel.sharePokemonToReceiver()
-            }
-
-            is PokemonDetailScreenOnEvent.SwitchIsSharingPokemonToReceiver -> {
-                pokemonDetailViewModel.switchSharePokemonToReceiverDialog()
-            }
-        }
-    }
-
-    PokemonDetailScreenContent(
-        PokemonDetailScreenUiState(
-            isLoading = pokemonDetailState.isLoading,
-            isError = pokemonDetailState.isError,
-            pokemonDetailModel = pokemonDetailState.pokemonDetailModel,
-            receiverToken = pokemonDetailState.receiverToken,
-            isSharingPokemonToReceiver = pokemonDetailState.isSharingPokemonToReceiver,
-            pokemonSprite = pokemonDetailState.pokemonSprite,
-            evolutionChain = pokemonDetailState.evolutionChain,
-            isErrorSharingPokemonToReceiver = pokemonDetailState.isErrorSharingPokemonToReceiver,
-        ),
-        onEvent = ::onEvent,
-        modifier = Modifier.fillMaxSize(),
-    )
-}
-
-@Composable
-private fun PokemonDetailScreenContent(
     state: PokemonDetailScreenUiState,
     onEvent: (PokemonDetailScreenOnEvent) -> Unit,
     modifier: Modifier = Modifier,
@@ -211,7 +151,7 @@ private fun PokemonDetailTopAppBarWrapper(
 @Composable
 private fun PokemonDetailScreenPreview() {
     val pokemon = PokemonSampleData.singlePokemonDetailSampleData()
-    PokemonDetailScreenContent(
+    PokemonDetailScreen(
         PokemonDetailScreenUiState(
             isLoading = false,
             pokemonDetailModel = pokemon,
@@ -223,7 +163,7 @@ private fun PokemonDetailScreenPreview() {
 @Preview
 @Composable
 private fun PokemonDetailScreenLoadingPreview() {
-    PokemonDetailScreenContent(
+    PokemonDetailScreen(
         PokemonDetailScreenUiState(
             isLoading = true,
         ),
@@ -234,7 +174,7 @@ private fun PokemonDetailScreenLoadingPreview() {
 @Preview
 @Composable
 private fun PokemonDetailScreenErrorPreview() {
-    PokemonDetailScreenContent(
+    PokemonDetailScreen(
         PokemonDetailScreenUiState(
             isLoading = false,
             isError = true,

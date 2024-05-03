@@ -1,4 +1,4 @@
-package com.example.pokedexapp.ui
+package com.example.pokedexapp.ui.navigation
 
 import android.net.Uri
 import kotlinx.coroutines.flow.MutableStateFlow

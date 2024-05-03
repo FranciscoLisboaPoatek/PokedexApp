@@ -1,4 +1,4 @@
-package com.example.pokedexapp.ui
+package com.example.pokedexapp.ui.navigation
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
