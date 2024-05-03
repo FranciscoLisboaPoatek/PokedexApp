@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,19 +30,24 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
+import com.example.pokedexapp.ui.NavigationEvent
+import com.example.pokedexapp.ui.Navigator
 import com.example.pokedexapp.ui.Screen
 import com.example.pokedexapp.ui.pokemon_detail_screen.PokemonDetailScreen
 import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreen
-import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenOnEvent
 import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListViewModel
 import com.example.pokedexapp.ui.theme.PokedexAppTheme
 import com.example.pokedexapp.ui.utils.DEEPLINK_URI_SCHEME
 import com.example.pokedexapp.ui.utils.INTENT_EXTRA_DEEPLINK_KEY
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     val viewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var navigator: Navigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +57,7 @@ class MainActivity : ComponentActivity() {
                 val context = LocalContext.current
 
                 Box(modifier = Modifier.fillMaxSize()) {
-                    PokedexApp()
+                    PokedexApp(navigator)
                     RequestNotificationPermission(context = context)
                 }
             }
@@ -77,35 +81,34 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PokedexApp() {
-    val viewModel: MainViewModel = hiltViewModel()
+fun PokedexApp(navigator: Navigator) {
     val navController = rememberNavController()
 
-    val state by viewModel.uiState.collectAsState()
+    val state = navigator.state.collectAsStateWithLifecycle().value
 
-    LaunchedEffect(key1 = state.event) {
-        when (state.event) {
-            is Event.NavigateWithDeeplink -> navController.navigate((state.event as Event.NavigateWithDeeplink).deeplink)
-            null -> {}
+    LaunchedEffect(key1 = state) {
+        when (state) {
+            is NavigationEvent.NavigateToScreen -> {
+                navController.navigate(state.route)
+            }
+            is NavigationEvent.NavigateUp -> {
+                navController.navigateUp()
+            }
+            is NavigationEvent.NavigateWithDeeplink -> {
+                navController.navigate(state.deeplink)
+            }
+            is NavigationEvent.Empty -> {}
         }
 
-        viewModel.consumeEvent()
+        navigator.consumeEvent()
     }
 
     NavHost(navController = navController, startDestination = Screen.PokemonListScreen.route) {
         composable(route = Screen.PokemonListScreen.route) {
             val viewModel = hiltViewModel<PokemonListViewModel>()
             val state by viewModel.state.collectAsStateWithLifecycle()
-            PokemonListScreen(state) { event ->
-                when (event) {
-                    is PokemonListScreenOnEvent.OnPokemonCLick -> {
-                        navController.navigateToPokemonDetail(event.pokemonId)
-                    }
-
-                    else -> {
-                        viewModel.onEvent(event)
-                    }
-                }
+            PokemonListScreen(state) {
+                viewModel.onEvent(it)
             }
         }
         composable(

@@ -1,6 +1,7 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
+import com.example.pokedexapp.ui.Navigator
+import com.example.pokedexapp.ui.Screen
 import com.example.pokedexapp.ui.notifications.DailyPokemonNotification
 import com.example.pokedexapp.ui.utils.updateState
 import com.google.firebase.Firebase
@@ -29,6 +32,7 @@ class PokemonListViewModel
     constructor(
         private val pokemonListUseCase: PokemonListUseCase,
         private val randomPokemonUseCase: RandomPokemonUseCase,
+        private val navigator: Navigator,
     ) : ViewModel() {
         private val _state = MutableStateFlow(PokemonListScreenUiState())
         val state get() = _state
@@ -71,7 +75,12 @@ class PokemonListViewModel
                     sendNotification(event.context)
                 }
 
-                else -> {}
+                is PokemonListScreenOnEvent.OnPokemonCLick -> {
+                    val route = Screen.PokemonDetailScreen.navigateToPokemonDetail(event.pokemonId)
+                    Log.w("navigation", route)
+
+                    navigator.navigateTo(route)
+                }
             }
         }
 
