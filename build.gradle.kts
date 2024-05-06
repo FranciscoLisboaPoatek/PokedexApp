@@ -10,17 +10,17 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
 }
 
-subprojects {
+allprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
-}
 
-ktlint {
-    version.set("1.2.1")
-    android = true
+    ktlint {
+        version.set("1.2.1")
+        android = true
 
-    reporters {
-        reporter(ReporterType.CHECKSTYLE)
-        reporter(ReporterType.PLAIN)
-        reporter(ReporterType.SARIF)
+        reporters {
+            reporter(ReporterType.CHECKSTYLE)
+            reporter(ReporterType.PLAIN)
+            reporter(ReporterType.SARIF)
+        }
     }
 }

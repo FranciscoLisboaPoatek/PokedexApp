@@ -112,6 +112,11 @@ dependencies {
 
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
 
+    testImplementation("io.mockk:mockk:1.13.10")
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
 
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")

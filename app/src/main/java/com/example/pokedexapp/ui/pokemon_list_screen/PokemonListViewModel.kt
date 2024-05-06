@@ -11,12 +11,11 @@ import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.ui.navigation.Navigator
 import com.example.pokedexapp.ui.navigation.Screen
+import com.example.pokedexapp.ui.analytics.AnalyticsLogger
 import com.example.pokedexapp.ui.notifications.DailyPokemonNotification
+import com.example.pokedexapp.ui.utils.LIST_ITEMS_PER_PAGE
 import com.example.pokedexapp.ui.utils.updateState
-import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.analytics
-import com.google.firebase.analytics.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.FlowPreview
@@ -32,6 +31,7 @@ class PokemonListViewModel
     constructor(
         private val pokemonListUseCase: PokemonListUseCase,
         private val randomPokemonUseCase: RandomPokemonUseCase,
+        private val analyticsLogger: AnalyticsLogger,
         private val navigator: Navigator,
     ) : ViewModel() {
         private val _state = MutableStateFlow(PokemonListScreenUiState())
@@ -89,7 +89,7 @@ class PokemonListViewModel
             viewModelScope.launch {
                 try {
                     pokemonListUseCase.insertAllPokemon()
-                    defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(0))
+                    defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(offset = 0, limit = LIST_ITEMS_PER_PAGE))
 
                     updateList(
                         _state.value.copy(
@@ -132,7 +132,7 @@ class PokemonListViewModel
 
             viewModelScope.launch {
                 try {
-                    val appendList = pokemonListUseCase.getPokemonList(offset = defaultPokemonList.size)
+                    val appendList = pokemonListUseCase.getPokemonList(offset = defaultPokemonList.size, limit = LIST_ITEMS_PER_PAGE)
 
                     if (appendList.isEmpty()) {
                         _state.updateState { copy(defaultListEnded = true, isLoadingAppend = false) }
@@ -152,14 +152,15 @@ class PokemonListViewModel
             }
         }
 
-        fun searchPokemonListByName(pokemonName: String) {
+        private fun searchPokemonListByName(pokemonName: String) {
             if (pokemonName.isBlank()) {
                 updateList(_state.value.copy(isDefaultList = true, showNoSearchResultsFound = false, errorSearching = false))
                 return
             }
-            Firebase.analytics.logEvent(FirebaseAnalytics.Event.SEARCH) {
-                param(FirebaseAnalytics.Param.SEARCH_TERM, pokemonName)
-            }
+            analyticsLogger.logEvent(
+                FirebaseAnalytics.Event.SEARCH,
+                mapOf(FirebaseAnalytics.Param.SEARCH_TERM to pokemonName),
+            )
 
             _state.updateState { copy(isLoading = true, errorSearching = false, searchListEnded = false, showNoSearchResultsFound = false) }
             searchJob?.cancel()
@@ -167,7 +168,7 @@ class PokemonListViewModel
                 viewModelScope.launch {
                     try {
                         val tempList =
-                            pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0)
+                            pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0, limit = LIST_ITEMS_PER_PAGE)
 
                         if (tempList.isEmpty()) {
                             _state.updateState {
@@ -204,6 +205,7 @@ class PokemonListViewModel
                         pokemonListUseCase.getPokemonSearchList(
                             name = searchText.value,
                             offset = searchPokemonList.size,
+                            limit = LIST_ITEMS_PER_PAGE,
                         )
                     if (appendList.isEmpty()) {
                         _state.updateState { copy(searchListEnded = true, isLoadingAppend = false) }

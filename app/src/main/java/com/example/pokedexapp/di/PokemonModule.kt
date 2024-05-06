@@ -12,6 +12,11 @@ import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
+import com.example.pokedexapp.ui.analytics.AnalyticsLogger
+import com.example.pokedexapp.ui.analytics.FirebaseAnalyticsLoggerImpl
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
 import com.example.pokedexapp.ui.navigation.Navigator
 import com.example.pokedexapp.ui.navigation.NavigatorImpl
 import com.squareup.moshi.Moshi
@@ -106,6 +111,16 @@ object PokemonModule {
     @Singleton
     fun provideSharePokemonUseCase(repository: PokemonRepository): SharePokemonUseCase {
         return SharePokemonUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAnalytics(): FirebaseAnalytics = Firebase.analytics
+
+    @Provides
+    @Singleton
+    fun provideAnalyticsLogger(firebaseAnalytics: FirebaseAnalytics): AnalyticsLogger {
+        return FirebaseAnalyticsLoggerImpl(firebaseAnalytics)
     }
 
     @Provides

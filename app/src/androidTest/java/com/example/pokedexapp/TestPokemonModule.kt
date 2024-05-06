@@ -9,6 +9,7 @@ import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
 import com.example.pokedexapp.ui.navigation.Navigator
+import com.example.pokedexapp.ui.analytics.AnalyticsLogger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -53,6 +54,12 @@ object TestPokemonModule {
     @Singleton
     fun provideSharePokemonUseCase(repository: PokemonRepository): SharePokemonUseCase {
         return SharePokemonUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAnalyticsLogger(): AnalyticsLogger {
+        return FakeAnalyticsLogger()
     }
 
     @Provides
