@@ -48,7 +48,7 @@ class PokemonListViewModelTest {
                 pokemonListUseCase = pokemonListUseCaseMock,
                 randomPokemonUseCase = randomPokemonUseCaseMock,
                 analyticsLogger = analyticsLoggerMock,
-                navigator = navigatorMock
+                navigator = navigatorMock,
             )
         dispatcher.scheduler.advanceUntilIdle()
     }

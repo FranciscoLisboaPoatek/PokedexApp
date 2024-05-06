@@ -8,8 +8,8 @@ import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
-import com.example.pokedexapp.ui.navigation.Navigator
 import com.example.pokedexapp.ui.analytics.AnalyticsLogger
+import com.example.pokedexapp.ui.navigation.Navigator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -64,7 +64,7 @@ object TestPokemonModule {
 
     @Provides
     @Singleton
-    fun provideNavigator(): Navigator  {
+    fun provideNavigator(): Navigator {
         return FakeNavigator()
     }
 }

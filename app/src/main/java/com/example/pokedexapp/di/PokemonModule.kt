@@ -14,11 +14,11 @@ import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
 import com.example.pokedexapp.ui.analytics.AnalyticsLogger
 import com.example.pokedexapp.ui.analytics.FirebaseAnalyticsLoggerImpl
+import com.example.pokedexapp.ui.navigation.Navigator
+import com.example.pokedexapp.ui.navigation.NavigatorImpl
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
-import com.example.pokedexapp.ui.navigation.Navigator
-import com.example.pokedexapp.ui.navigation.NavigatorImpl
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module

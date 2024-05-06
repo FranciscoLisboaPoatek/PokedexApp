@@ -1,7 +1,6 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
@@ -9,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
+import com.example.pokedexapp.ui.analytics.AnalyticsLogger
 import com.example.pokedexapp.ui.navigation.Navigator
 import com.example.pokedexapp.ui.navigation.Screen
-import com.example.pokedexapp.ui.analytics.AnalyticsLogger
 import com.example.pokedexapp.ui.notifications.DailyPokemonNotification
 import com.example.pokedexapp.ui.utils.LIST_ITEMS_PER_PAGE
 import com.example.pokedexapp.ui.utils.updateState
@@ -76,10 +75,11 @@ class PokemonListViewModel
                 }
 
                 is PokemonListScreenOnEvent.OnPokemonCLick -> {
-                    val route = Screen.PokemonDetailScreen.navigateToPokemonDetail(event.pokemonId)
-                    Log.w("navigation", route)
-
-                    navigator.navigateTo(route)
+                    analyticsLogger.logEvent(
+                        FirebaseAnalytics.Event.SELECT_ITEM,
+                        mapOf(FirebaseAnalytics.Param.ITEM_ID to event.pokemonId),
+                    )
+                    navigator.navigateTo(Screen.PokemonDetailScreen.navigateToPokemonDetail(event.pokemonId))
                 }
             }
         }
