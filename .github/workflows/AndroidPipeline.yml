@@ -36,19 +36,19 @@ jobs:
       - name: Upload Kotlin Script Lint Report
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: ktlintMainSourceSetCheck.xml
+          name: ktlintKotlinScriptCheck.xml
           path: app/build/reports/ktlint/ktlintKotlinScriptCheck/ktlintKotlinScriptCheck.xml
 
       - name: Upload Test Source Lint Report
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: ktlintMainSourceSetCheck.xml
+          name: ktlintTestSourceSetCheck.xml
           path: app/build/reports/ktlint/ktlintTestSourceSetCheck/ktlintTestSourceSetCheck.xml
 
       - name: Upload Android Test Source Lint Report
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: ktlintMainSourceSetCheck.xml
+          name: ktlintAndroidTestSourceSetCheck.xml
           path: app/build/reports/ktlint/ktlintAndroidTestSourceSetCheck/ktlintAndroidTestSourceSetCheck.xml
 
   build:
