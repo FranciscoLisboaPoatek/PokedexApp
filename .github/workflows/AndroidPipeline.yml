@@ -1,0 +1,89 @@
+name: AndroidPipeline
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - tool/cicd
+
+jobs:
+
+  lint:
+    runs-on: ubuntu_latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.5
+
+      - name: KtLint
+        uses: ./gradlew ktlintFormat
+
+      - name: Upload Main Source Lint Report
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ktlintMainSourceSetCheck.xml
+          path: app/build/reports/ktlint/ktlintMainSourceSetCheck/ktlintMainSourceSetCheck.xml
+
+      - name: Upload Kotlin Script Lint Report
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ktlintMainSourceSetCheck.xml
+          path: app/build/reports/ktlint/ktlintKotlinScriptCheck/ktlintKotlinScriptCheck.xml
+
+      - name: Upload Test Source Lint Report
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ktlintMainSourceSetCheck.xml
+          path: app/build/reports/ktlint/ktlintTestSourceSetCheck/ktlintTestSourceSetCheck.xml
+
+      - name: Upload Android Test Source Lint Report
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ktlintMainSourceSetCheck.xml
+          path: app/build/reports/ktlint/ktlintAndroidTestSourceSetCheck/ktlintAndroidTestSourceSetCheck.xml
+
+  build:
+    needs: [lint]
+    runs-on: ubuntu_latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.5
+
+      - name: Build With Gradle
+        uses: ./gradlew build
+
+  unit-test:
+    needs: [build]
+    runs-on: ubuntu_latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.5
+
+      - name: Run Tests
+        uses: ./gradlew test
+
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: unitTestReport.html
+          path: app/build/reports/tests/testDebugUnitTest/index.html
+
+  instrumentation-test:
+    needs: [unit-test]
+    runs-on: ubuntu_latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.5
+
+      - name: Run Instrumented Test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: ./gradlew connectedCheck
+
+      - name: Upload Instrumented Test Report
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: unitTestReport.html
+          path: app/build/reports/androidTests/connected/debug/index.html
+
