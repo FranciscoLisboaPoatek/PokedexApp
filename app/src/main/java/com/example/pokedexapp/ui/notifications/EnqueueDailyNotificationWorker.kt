@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.pokedexapp.ui.utils.DAILY_NOTIFICATION_WORKER_ID_KEY
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -26,7 +27,7 @@ object EnqueueDailyNotificationWorker {
                 .build()
 
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            "DailyNotification",
+            DAILY_NOTIFICATION_WORKER_ID_KEY,
             ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
             periodicWorkRequest,
         )
