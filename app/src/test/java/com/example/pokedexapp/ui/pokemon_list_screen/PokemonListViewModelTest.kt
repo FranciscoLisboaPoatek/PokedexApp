@@ -5,6 +5,7 @@ import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.ui.analytics.AnalyticsLogger
+import com.example.pokedexapp.ui.navigation.Navigator
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.just
@@ -34,6 +35,8 @@ class PokemonListViewModelTest {
 
     private val analyticsLoggerMock = mockk<AnalyticsLogger>()
 
+    private val navigatorMock = mockk<Navigator>()
+
     private lateinit var viewModel: PokemonListViewModel
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -45,6 +48,7 @@ class PokemonListViewModelTest {
                 pokemonListUseCase = pokemonListUseCaseMock,
                 randomPokemonUseCase = randomPokemonUseCaseMock,
                 analyticsLogger = analyticsLoggerMock,
+                navigator = navigatorMock,
             )
         dispatcher.scheduler.advanceUntilIdle()
     }

@@ -9,6 +9,8 @@ import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.ui.analytics.AnalyticsLogger
+import com.example.pokedexapp.ui.navigation.Navigator
+import com.example.pokedexapp.ui.navigation.Screen
 import com.example.pokedexapp.ui.notifications.DailyPokemonNotification
 import com.example.pokedexapp.ui.utils.LIST_ITEMS_PER_PAGE
 import com.example.pokedexapp.ui.utils.updateState
@@ -29,6 +31,7 @@ class PokemonListViewModel
         private val pokemonListUseCase: PokemonListUseCase,
         private val randomPokemonUseCase: RandomPokemonUseCase,
         private val analyticsLogger: AnalyticsLogger,
+        private val navigator: Navigator,
     ) : ViewModel() {
         private val _state = MutableStateFlow(PokemonListScreenUiState())
         val state get() = _state
@@ -71,7 +74,13 @@ class PokemonListViewModel
                     sendNotification(event.context)
                 }
 
-                else -> {}
+                is PokemonListScreenOnEvent.OnPokemonCLick -> {
+                    analyticsLogger.logEvent(
+                        FirebaseAnalytics.Event.SELECT_ITEM,
+                        mapOf(FirebaseAnalytics.Param.ITEM_ID to event.pokemonId),
+                    )
+                    navigator.navigateTo(Screen.PokemonDetailScreen.navigateToPokemonDetail(event.pokemonId))
+                }
             }
         }
 

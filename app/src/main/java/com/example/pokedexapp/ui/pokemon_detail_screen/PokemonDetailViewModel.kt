@@ -9,7 +9,8 @@ import com.example.pokedexapp.domain.models.SpriteType
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
-import com.example.pokedexapp.ui.Screen
+import com.example.pokedexapp.ui.navigation.Navigator
+import com.example.pokedexapp.ui.navigation.Screen
 import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
 import com.example.pokedexapp.ui.utils.updateState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ class PokemonDetailViewModel
         private val pokemonDetailUseCase: PokemonDetailUseCase,
         private val sharePokemonUseCase: SharePokemonUseCase,
         private val pokemonEvolutionChainUseCase: PokemonEvolutionChainUseCase,
+        private val navigator: Navigator,
     ) : ViewModel() {
         private val pokemonId: String = checkNotNull(savedStateHandle[POKEMON_ID_KEY])
         private val _state = MutableStateFlow(PokemonDetailScreenUiState())
@@ -32,6 +34,38 @@ class PokemonDetailViewModel
 
         init {
             updatePokemon(pokemonId = pokemonId)
+        }
+
+        fun onEvent(event: PokemonDetailScreenOnEvent) {
+            when (event) {
+                is PokemonDetailScreenOnEvent.ChangeShinySprite -> {
+                    changeShinyPokemonSprite(event.sprite)
+                }
+
+                is PokemonDetailScreenOnEvent.NavigateUp -> {
+                    navigator.navigateUp()
+                }
+
+                is PokemonDetailScreenOnEvent.NavigateToDetails -> {
+                    navigator.navigateTo(Screen.PokemonDetailScreen.navigateToPokemonDetail(event.pokemonId))
+                }
+
+                is PokemonDetailScreenOnEvent.RotateSprite -> {
+                    rotatePokemonSprite(event.sprite)
+                }
+
+                is PokemonDetailScreenOnEvent.OnReceiverTokenChange -> {
+                    updateReceiverToken(event.text)
+                }
+
+                is PokemonDetailScreenOnEvent.SharePokemonToReceiver -> {
+                    sharePokemonToReceiver()
+                }
+
+                is PokemonDetailScreenOnEvent.SwitchIsSharingPokemonToReceiver -> {
+                    switchSharePokemonToReceiverDialog()
+                }
+            }
         }
 
         fun switchSharePokemonToReceiverDialog() {

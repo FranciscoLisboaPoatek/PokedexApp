@@ -7,7 +7,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.example.pokedexapp.MainActivity
 import com.example.pokedexapp.R
-import com.example.pokedexapp.ui.Screen
+import com.example.pokedexapp.ui.navigation.Screen
 import com.example.pokedexapp.ui.utils.DAILY_NOTIFICATION_ID_KEY
 import com.example.pokedexapp.ui.utils.INTENT_EXTRA_DEEPLINK_KEY
 

@@ -44,16 +44,12 @@ class PokemonListScreenViewModelIntegrationTest {
         composeTestRule.setContent {
             val viewModel = hiltViewModel<PokemonListViewModel>()
             val state by viewModel.state.collectAsStateWithLifecycle()
-            PokemonListScreen(state) { event ->
-                when (event) {
-                    is PokemonListScreenOnEvent.OnPokemonCLick -> {
-                    }
-
-                    else -> {
-                        viewModel.onEvent(event)
-                    }
-                }
-            }
+            PokemonListScreen(
+                state = state,
+                onEvent = {
+                    viewModel.onEvent(it)
+                },
+            )
         }
     }
 

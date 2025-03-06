@@ -33,7 +33,8 @@ class PokemonListScreenTest {
                     PokemonListScreenUiState(
                         couldLoadInitialData = false,
                     ),
-            ) { }
+                onEvent = { },
+            )
         }
 
         composeTestRule.onNodeWithTag(RETRY_LOADING_DATA_TAG)
@@ -52,7 +53,8 @@ class PokemonListScreenTest {
                     PokemonListScreenUiState(
                         isLoading = true,
                     ),
-            ) { }
+                onEvent = { },
+            )
         }
 
         composeTestRule.onNodeWithTag(POKEBALL_LOADING_ANIMATION_TAG)
@@ -64,7 +66,7 @@ class PokemonListScreenTest {
     }
 
     @Test
-    fun loadInitialData_success()  {
+    fun loadInitialData_success() {
         composeTestRule.setContent {
             PokemonListScreen(
                 state =
@@ -72,7 +74,8 @@ class PokemonListScreenTest {
                         couldLoadInitialData = true,
                         pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList(),
                     ),
-            ) { }
+                onEvent = { },
+            )
         }
 
         composeTestRule.onNodeWithTag(POKEMON_LIST_TAG).assertExists()
@@ -83,7 +86,7 @@ class PokemonListScreenTest {
     }
 
     @Test
-    fun appendToList_isShowing_loading()  {
+    fun appendToList_isShowing_loading() {
         composeTestRule.setContent {
             PokemonListScreen(
                 state =
@@ -92,7 +95,8 @@ class PokemonListScreenTest {
                         couldLoadInitialData = true,
                         pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList(),
                     ),
-            ) { }
+                onEvent = { },
+            )
         }
 
         composeTestRule.onNodeWithTag(POKEMON_LIST_TAG).performScrollToNode(
@@ -101,7 +105,7 @@ class PokemonListScreenTest {
     }
 
     @Test
-    fun appendToList_isShowing_error()  {
+    fun appendToList_isShowing_error() {
         composeTestRule.setContent {
             PokemonListScreen(
                 state =
@@ -110,7 +114,8 @@ class PokemonListScreenTest {
                         couldLoadInitialData = true,
                         pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList(),
                     ),
-            ) { }
+                onEvent = { },
+            )
         }
 
         composeTestRule.onNodeWithTag(POKEMON_LIST_TAG).performScrollToNode(
@@ -119,7 +124,7 @@ class PokemonListScreenTest {
     }
 
     @Test
-    fun searchMode()  {
+    fun searchMode() {
         composeTestRule.setContent {
             PokemonListScreen(
                 state =
@@ -128,7 +133,8 @@ class PokemonListScreenTest {
                         couldLoadInitialData = true,
                         pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList(),
                     ),
-            ) { }
+                onEvent = { },
+            )
         }
 
         composeTestRule.onNodeWithTag(PokemonTopAppBarTestTags.SEARCH_TEXT_FIELD_TAG).assertIsDisplayed()
@@ -136,7 +142,7 @@ class PokemonListScreenTest {
     }
 
     @Test
-    fun search_isShowing_error()  {
+    fun search_isShowing_error() {
         composeTestRule.setContent {
             PokemonListScreen(
                 state =
@@ -146,14 +152,15 @@ class PokemonListScreenTest {
                         couldLoadInitialData = true,
                         pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList(),
                     ),
-            ) { }
+                onEvent = { },
+            )
         }
 
         composeTestRule.onNodeWithTag(ERROR_SEARCHING_TAG).assertIsDisplayed()
     }
 
     @Test
-    fun search_isShowing_noResultsFound()  {
+    fun search_isShowing_noResultsFound() {
         composeTestRule.setContent {
             PokemonListScreen(
                 state =
@@ -163,7 +170,8 @@ class PokemonListScreenTest {
                         showNoSearchResultsFound = true,
                         pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList(),
                     ),
-            ) { }
+                onEvent = { },
+            )
         }
 
         composeTestRule.onNodeWithTag(NO_SEARCH_RESULT_FOUND_TAG).assertIsDisplayed()
