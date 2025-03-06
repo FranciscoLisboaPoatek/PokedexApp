@@ -70,8 +70,6 @@ class PokemonDetailViewModelTest {
             )
 
         dispatcher.scheduler.advanceUntilIdle()
-
-        println(viewModel.state.value.pokemonDetailModel)
     }
 
     @Test
