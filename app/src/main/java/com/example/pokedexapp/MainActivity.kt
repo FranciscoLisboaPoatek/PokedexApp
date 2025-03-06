@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,6 +34,8 @@ import androidx.navigation.navDeepLink
 import com.example.pokedexapp.ui.Screen
 import com.example.pokedexapp.ui.pokemon_detail_screen.PokemonDetailScreen
 import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreen
+import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenOnEvent
+import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListViewModel
 import com.example.pokedexapp.ui.theme.PokedexAppTheme
 import com.example.pokedexapp.ui.utils.DEEPLINK_URI_SCHEME
 import com.example.pokedexapp.ui.utils.INTENT_EXTRA_DEEPLINK_KEY
@@ -91,7 +94,19 @@ fun PokedexApp() {
 
     NavHost(navController = navController, startDestination = Screen.PokemonListScreen.route) {
         composable(route = Screen.PokemonListScreen.route) {
-            PokemonListScreen { navController.navigateToPokemonDetail(it) }
+            val viewModel = hiltViewModel<PokemonListViewModel>()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+            PokemonListScreen(state) { event ->
+                when (event) {
+                    is PokemonListScreenOnEvent.OnPokemonCLick -> {
+                        navController.navigateToPokemonDetail(event.pokemonId)
+                    }
+
+                    else -> {
+                        viewModel.onEvent(event)
+                    }
+                }
+            }
         }
         composable(
             route = Screen.PokemonDetailScreen.routeWithArgs,

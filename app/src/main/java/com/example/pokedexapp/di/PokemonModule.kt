@@ -12,7 +12,8 @@ import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
-import com.example.pokedexapp.ui.firebase.FirebaseAnalyticsLogger
+import com.example.pokedexapp.ui.analytics.AnalyticsLogger
+import com.example.pokedexapp.ui.analytics.FirebaseAnalyticsLoggerImpl
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
@@ -116,7 +117,7 @@ object PokemonModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseAnalyticsLogger(firebaseAnalytics: FirebaseAnalytics): FirebaseAnalyticsLogger {
-        return FirebaseAnalyticsLogger(firebaseAnalytics)
+    fun provideAnalyticsLogger(firebaseAnalytics: FirebaseAnalytics): AnalyticsLogger {
+        return FirebaseAnalyticsLoggerImpl(firebaseAnalytics)
     }
 }
