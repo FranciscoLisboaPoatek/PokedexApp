@@ -9,7 +9,7 @@ import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 object EnqueueDailyNotificationWorker {
-    fun enqueue(context: Context)  {
+    fun enqueue(context: Context) {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 12)
         calendar.set(Calendar.MINUTE, 0)
