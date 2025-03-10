@@ -7,12 +7,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -39,77 +40,21 @@ fun TwoColorStrokeBox(
             modifier
                 .clickable { onClick() }
                 .drawBehind {
-                    val strokeWidthPx = strokeWidthDp.toPx()
-                    val offset = strokeWidthPx / 2
-                    // top line
-                    drawLine(
-                        start = Offset(0f, offset),
-                        end = Offset((size.width - strokeWidthPx) + 1, offset),
-                        color = firstColor,
-                        strokeWidth = strokeWidthPx,
-                    )
-                    // start line
-                    drawLine(
-                        start = Offset(offset, strokeWidthPx - 1),
-                        end = Offset(offset, (size.height - strokeWidthPx) + 1),
-                        color = firstColor,
-                        strokeWidth = strokeWidthPx,
-                    )
-
-                    // bottom line
-                    drawLine(
-                        start = Offset(size.width, size.height - offset),
-                        end = Offset(strokeWidthPx - 1, size.height - offset),
-                        color = secondColor,
-                        strokeWidth = strokeWidthPx,
-                    )
-                    // end line
-                    drawLine(
-                        start = Offset(size.width - offset, strokeWidthPx - 1),
-                        end = Offset(size.width - offset, (size.height - strokeWidthPx) + 1),
-                        color = secondColor,
-                        strokeWidth = strokeWidthPx,
-                    )
-
-                    // start-bottom corner
                     drawPath(
                         path =
                             Path().apply {
-                                moveTo(0f, size.height - strokeWidthPx)
-                                lineTo(0f, size.height)
-                                lineTo(strokeWidthPx, size.height - strokeWidthPx)
-                                close()
-                            },
-                        color = firstColor,
-                    )
-                    // top-end corner
-                    drawPath(
-                        path =
-                            Path().apply {
-                                moveTo(size.width - strokeWidthPx, 0f)
-                                lineTo(size.width - strokeWidthPx, strokeWidthPx)
+                                moveTo(0f, 0f)
                                 lineTo(size.width, 0f)
+                                lineTo(0f, size.height)
                                 close()
                             },
                         color = firstColor,
                     )
-                    // bottom-start corner
                     drawPath(
                         path =
                             Path().apply {
-                                moveTo(strokeWidthPx, size.height)
+                                moveTo(size.width, size.height)
                                 lineTo(0f, size.height)
-                                lineTo(strokeWidthPx, size.height - strokeWidthPx)
-                                close()
-                            },
-                        color = secondColor,
-                    )
-                    // end-top corner
-                    drawPath(
-                        path =
-                            Path().apply {
-                                moveTo(size.width, strokeWidthPx)
-                                lineTo(size.width - strokeWidthPx, strokeWidthPx)
                                 lineTo(size.width, 0f)
                                 close()
                             },
@@ -146,7 +91,7 @@ fun PokemonListItem(
         pokemon.secondaryType?.color ?: pokemon.primaryType.color,
         strokeWidthDp,
         onClick = { onClick() },
-        modifier = modifier,
+        modifier = modifier.clip(RoundedCornerShape(16.dp)),
     ) {
         Column(
             modifier =
@@ -158,6 +103,7 @@ fun PokemonListItem(
                                 1f to MaterialTheme.colorScheme.background,
                             ),
                     ),
+                    shape = RoundedCornerShape(8.dp),
                 ),
         ) {
             if (pokemon.spriteUrl != null) {
