@@ -29,6 +29,14 @@ lifecycleRuntimeCompose = "2.7.0"
 androidxWorkRuntimeKtx = "2.9.0"
 androidxTestRunner = "1.1.0"
 
+#Plugins
+androidGradlePlugin = "8.2.0"
+kotlinPlugin = "1.9.0"
+daggerHiltPlugin = "2.50"
+googleServicesPlugin = "4.4.1"
+firebaseCrashlyticsPlugin = "2.9.9"
+ktlintPlugin = "12.1.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -88,3 +96,9 @@ kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-seria
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 
 [plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin" }
+dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHiltPlugin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServicesPlugin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPlugin" }
