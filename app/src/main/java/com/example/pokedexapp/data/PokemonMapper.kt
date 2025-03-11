@@ -1,8 +1,8 @@
 package com.example.pokedexapp.data
 
 import com.example.pokedexapp.data.local_database.PokemonDaoDto
+import com.example.pokedexapp.data.network.BasicApiModel
 import com.example.pokedexapp.data.network.PokemonApiDto
-import com.example.pokedexapp.data.network.PokemonListItemApiDto
 import com.example.pokedexapp.data.network.StatListItem
 import com.example.pokedexapp.data.network.TypeListItem
 import com.example.pokedexapp.data.pokedex_server.SharePokemonDto
@@ -49,7 +49,7 @@ object PokemonMapper {
         )
     }
 
-    fun PokemonListItemApiDto.toPokemonDaoDto(): PokemonDaoDto {
+    fun BasicApiModel.toPokemonDaoDto(): PokemonDaoDto {
         return PokemonDaoDto(id = url.extractPokemonIdFromUrl(), name = name.treatName(), url = url)
     }
 
