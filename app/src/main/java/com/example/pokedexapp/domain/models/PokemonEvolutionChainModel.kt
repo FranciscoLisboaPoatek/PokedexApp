@@ -5,3 +5,10 @@ data class PokemonEvolutionChainModel(
     val evolvesFromPokemonName: String? = null,
     val evolvesFromPokemonSpriteUrl: String? = null,
 )
+
+data class PokemonEvolutionModel(
+    val id: String,
+    val name: String,
+    val spriteUrl: String,
+    val evolutions: List<PokemonEvolutionModel>? = null
+)

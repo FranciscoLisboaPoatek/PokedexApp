@@ -30,10 +30,10 @@ object PokemonMapper {
             baseStats = stats.toPokemonBaseStatList(),
             primaryType = primaryType ?: PokemonTypes.NORMAL,
             secondaryType = secondaryType,
-            frontDefaultSprite = PokemonSprite.FrontDefaultSprite(sprites.front_default),
-            frontShinySprite = PokemonSprite.FrontShinySprite(sprites.front_shiny),
-            backDefaultSprite = PokemonSprite.BackDefaultSprite(sprites.back_default),
-            backShinySprite = PokemonSprite.BackShinySprite(sprites.back_shiny),
+            frontDefaultSprite = PokemonSprite.FrontDefaultSprite(sprites.frontDefault),
+            frontShinySprite = PokemonSprite.FrontShinySprite(sprites.frontShiny),
+            backDefaultSprite = PokemonSprite.BackDefaultSprite(sprites.backDefault),
+            backShinySprite = PokemonSprite.BackShinySprite(sprites.backShiny),
         )
     }
 
@@ -43,7 +43,7 @@ object PokemonMapper {
         return PokemonListItemModel(
             id = id.toString(),
             name = name.treatName(),
-            spriteUrl = sprites.front_default,
+            spriteUrl = sprites.frontDefault,
             primaryType = primaryType ?: PokemonTypes.NORMAL,
             secondaryType = secondaryType,
         )
@@ -73,7 +73,7 @@ private fun TypeListItem.toPokemonType(): PokemonTypes? {
 private fun List<StatListItem>.toPokemonBaseStatList(): MutableList<PokemonBaseStats> {
     val pokemonBaseStatsList = mutableListOf<PokemonBaseStats>()
     this.forEach {
-        PokemonBaseStats.getPokemonBaseStatByString(it.stat.name, it.base_stat)
+        PokemonBaseStats.getPokemonBaseStatByString(it.stat.name, it.baseStat)
             ?.let { pokemonBaseState -> pokemonBaseStatsList.add(pokemonBaseState) }
     }
     return pokemonBaseStatsList

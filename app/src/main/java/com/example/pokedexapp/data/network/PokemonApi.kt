@@ -19,6 +19,11 @@ interface PokemonApi {
         @Path("id") id: Int,
     ): PokemonSpeciesApiDto?
 
+    @GET("evolution-chain/{id}")
+    suspend fun getPokemonEvolutionChain(
+        @Path("id") id: Int
+    ): PokemonEvolutionChainDto?
+
     @GET("pokemon?limit=100000")
     suspend fun getPokemonEntireList(): PokemonListResponse
 }
