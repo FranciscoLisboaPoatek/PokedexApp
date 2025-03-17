@@ -134,16 +134,7 @@ private fun SuccessPokemonInformationSheet(
                     .fillMaxWidth(),
         )
 
-        if (evolutionChain.evolvesFromPokemonName != null && evolutionChain.evolvesFromPokemonId != null) {
-            Spacer(modifier = Modifier.height(48.dp))
-
-            EvolvesFromPokemon(
-                pokemonId = evolutionChain.evolvesFromPokemonId,
-                pokemonName = evolutionChain.evolvesFromPokemonName,
-                pokemonSpriteUrl = evolutionChain.evolvesFromPokemonSpriteUrl,
-                navigateToDetails = { onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it)) },
-            )
-        }
+        PokemonEvolutionChain(evolutionChain = evolutionChain)
     }
 }
 
@@ -184,9 +175,9 @@ private fun SuccessPokemonInformationSheetPreview() {
         pokemon = PokemonSampleData.singlePokemonDetailSampleData(),
         evolutionChain =
             PokemonEvolutionChainModel(
-                evolvesFromPokemonId = PokemonSampleData.singlePokemonDetailSampleData().id,
-                evolvesFromPokemonName = PokemonSampleData.singlePokemonDetailSampleData().name,
-                evolvesFromPokemonSpriteUrl = PokemonSampleData.singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
+//                evolvesFromPokemonId = PokemonSampleData.singlePokemonDetailSampleData().id,
+//                evolvesFromPokemonName = PokemonSampleData.singlePokemonDetailSampleData().name,
+//                evolvesFromPokemonSpriteUrl = PokemonSampleData.singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
             ),
         contentTopSpace = 20.dp,
         onEvent = { },

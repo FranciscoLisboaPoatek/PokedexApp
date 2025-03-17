@@ -3,13 +3,16 @@ package com.example.pokedexapp.data
 import com.example.pokedexapp.data.local_database.PokemonDaoDto
 import com.example.pokedexapp.data.network.BasicApiModel
 import com.example.pokedexapp.data.network.PokemonApiDto
+import com.example.pokedexapp.data.network.PokemonEvolutionChainDto
 import com.example.pokedexapp.data.network.StatListItem
 import com.example.pokedexapp.data.network.TypeListItem
 import com.example.pokedexapp.data.pokedex_server.SharePokemonDto
 import com.example.pokedexapp.data.utils.extractPokemonIdFromUrl
 import com.example.pokedexapp.data.utils.treatName
+import com.example.pokedexapp.domain.models.ChainModel
 import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonDetailModel
+import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.models.PokemonMinimalInfo
 import com.example.pokedexapp.domain.models.PokemonSprite
@@ -64,6 +67,14 @@ object PokemonMapper {
             pokemonName = pokemonName,
         )
     }
+
+    fun PokemonEvolutionChainDto.toPokemonEvolutionChainModel(chain: List<ChainModel>): PokemonEvolutionChainModel {
+        return PokemonEvolutionChainModel(
+            id = this.id.toString(),
+            evolutions = chain
+        )
+    }
+
 }
 
 private fun TypeListItem.toPokemonType(): PokemonTypes? {

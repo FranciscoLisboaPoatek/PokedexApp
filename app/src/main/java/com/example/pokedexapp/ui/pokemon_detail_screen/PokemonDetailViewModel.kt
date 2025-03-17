@@ -123,14 +123,16 @@ class PokemonDetailViewModel
             viewModelScope.launch {
                 try {
                     val responsePokemonDetailModel = pokemonDetailUseCase.getPokemonById(pokemonId = pokemonId)
-                    val responseEvolutionChain = responsePokemonDetailModel?.let { getEvolutionChain(speciesId = it.speciesId) }
+                        ?: throw NoSuchElementException()
+                    val responseEvolutionChain = getEvolutionChain(speciesId = responsePokemonDetailModel.speciesId)
+
                     _state.updateState {
                         copy(
                             isLoading = false,
                             isError = false,
                             pokemonDetailModel = responsePokemonDetailModel,
-                            pokemonSprite = responsePokemonDetailModel?.frontDefaultSprite,
-                            evolutionChain = responseEvolutionChain ?: PokemonEvolutionChainModel(),
+                            pokemonSprite = responsePokemonDetailModel.frontDefaultSprite,
+                            evolutionChain = responseEvolutionChain,
                         )
                     }
                 } catch (ex: Exception) {

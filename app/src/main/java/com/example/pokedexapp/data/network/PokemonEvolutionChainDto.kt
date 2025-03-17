@@ -5,8 +5,6 @@ import com.squareup.moshi.Json
 data class PokemonEvolutionChainDto(
     val id: Int,
     val chain: Chain,
-    @Json(name = "baby_trigger_item")
-    val babyTriggerItem: Boolean
 )
 
 data class Chain(

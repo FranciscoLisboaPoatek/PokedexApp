@@ -1,14 +1,14 @@
 package com.example.pokedexapp.domain.models
 
 data class PokemonEvolutionChainModel(
-    val evolvesFromPokemonId: String? = null,
-    val evolvesFromPokemonName: String? = null,
-    val evolvesFromPokemonSpriteUrl: String? = null,
+    val id: String? = null,
+    val evolutions: List<ChainModel>? = null
 )
 
-data class PokemonEvolutionModel(
+data class ChainModel(
     val id: String,
     val name: String,
-    val spriteUrl: String,
-    val evolutions: List<PokemonEvolutionModel>? = null
+    val spriteUrl: String?,
+    val isBaby: Boolean,
+    val evolutions: List<ChainModel>? = null
 )
