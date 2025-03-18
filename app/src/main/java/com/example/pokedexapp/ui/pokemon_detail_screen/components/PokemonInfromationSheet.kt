@@ -37,7 +37,6 @@ fun PokemonInformationSheet(
     onEvent: (PokemonDetailScreenOnEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val informationSheetModifier = Modifier.padding(vertical = contentTopSpace)
     Surface(
         color = MaterialTheme.colorScheme.background,
         shape = RoundedCornerShape(10.dp),
@@ -46,11 +45,11 @@ fun PokemonInformationSheet(
     ) {
         if (isLoading) {
             LoadingPokemonInformationSheet(
-                modifier = informationSheetModifier,
+                modifier = Modifier.padding(vertical = contentTopSpace),
             )
         } else if (isError) {
             ErrorPokemonInformationSheet(
-                modifier = informationSheetModifier,
+                modifier = Modifier.padding(vertical = contentTopSpace),
             )
         } else {
             if (pokemon != null) {
@@ -58,7 +57,7 @@ fun PokemonInformationSheet(
                     pokemon = pokemon,
                     evolutionChain = evolutionChain,
                     onEvent = onEvent,
-                    modifier = informationSheetModifier,
+                    modifier = Modifier.padding(top = contentTopSpace, bottom = 16.dp),
                 )
             }
         }
@@ -133,6 +132,8 @@ private fun SuccessPokemonInformationSheet(
                     .padding(horizontal = 12.dp)
                     .fillMaxWidth(),
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         PokemonEvolutionChain(evolutionChain = evolutionChain, onClickPokemon = {
             if (pokemon.id != it) onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it))

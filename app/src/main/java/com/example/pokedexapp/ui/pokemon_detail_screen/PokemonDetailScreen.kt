@@ -150,11 +150,11 @@ private fun PokemonDetailTopAppBarWrapper(
 @Preview
 @Composable
 private fun PokemonDetailScreenPreview() {
-    val pokemon = PokemonSampleData.singlePokemonDetailSampleData()
     PokemonDetailScreen(
         PokemonDetailScreenUiState(
             isLoading = false,
-            pokemonDetailModel = pokemon,
+            pokemonDetailModel = PokemonSampleData.singlePokemonDetailSampleData(),
+            evolutionChain = PokemonSampleData.evolutionChainSampleData(),
         ),
         onEvent = { },
     )

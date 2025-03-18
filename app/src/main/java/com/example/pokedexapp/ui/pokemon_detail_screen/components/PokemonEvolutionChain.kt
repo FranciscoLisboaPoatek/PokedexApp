@@ -16,12 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.data.utils.treatName
 import com.example.pokedexapp.domain.models.ChainModel
 import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
+
+private const val EEVEE_POKEDEX_ID_STRING = "133"
 
 @Composable
 fun PokemonEvolutionChain(
@@ -30,11 +33,58 @@ fun PokemonEvolutionChain(
     onClickPokemon: (String) -> Unit,
 ) {
     evolutionChain.evolutions?.let {
-        PokemonColumn(
-            modifier = modifier,
-            evolutions = it,
-            onClickPokemon = onClickPokemon,
-        )
+        if (
+            evolutionChain.evolutions.firstOrNull()?.id == EEVEE_POKEDEX_ID_STRING
+        ) {
+            Eeveelutions(
+                modifier = modifier,
+                evolutionChain = evolutionChain,
+                onClickPokemon = onClickPokemon,
+            )
+        } else {
+            PokemonColumn(
+                modifier = modifier,
+                evolutions = it,
+                onClickPokemon = onClickPokemon,
+            )
+        }
+    }
+}
+
+@Composable
+private fun Eeveelutions(
+    modifier: Modifier = Modifier,
+    evolutionChain: PokemonEvolutionChainModel,
+    onClickPokemon: (String) -> Unit,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        evolutionChain.evolutions?.firstOrNull()?.let { eevee ->
+            PokemonEvolution(
+                modifier = Modifier.weight(1f),
+                pokemonName = eevee.name,
+                spriteUrl = eevee.spriteUrl,
+                isFirstStage = true,
+            ) {
+                onClickPokemon(eevee.id)
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+            ) {
+                eevee.evolutions?.forEach {
+                    PokemonEvolution(
+                        pokemonName = it.name,
+                        spriteUrl = it.spriteUrl,
+                        isVertical = false,
+                    ) {
+                        onClickPokemon(it.id)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -95,45 +145,85 @@ private fun PokemonEvolution(
     pokemonName: String,
     spriteUrl: String?,
     isFirstStage: Boolean = false,
+    isVertical: Boolean = true,
+    onClick: () -> Unit,
+) {
+    if (isVertical) {
+        Column(
+            modifier = modifier,
+        ) {
+            if (!isFirstStage) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = null,
+                    modifier =
+                        Modifier
+                            .size(48.dp)
+                            .align(Alignment.CenterHorizontally),
+                )
+            }
+
+            PokemonWithName(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                pokemonName = pokemonName,
+                spriteUrl = spriteUrl,
+                onClick = onClick,
+            )
+        }
+    } else {
+        Row(
+            modifier = modifier,
+        ) {
+            if (!isFirstStage) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = null,
+                    modifier =
+                        Modifier
+                            .size(48.dp)
+                            .align(Alignment.CenterVertically)
+                            .rotate(-90f),
+                )
+            }
+
+            PokemonWithName(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                pokemonName = pokemonName,
+                spriteUrl = spriteUrl,
+                onClick = onClick,
+            )
+        }
+    }
+}
+
+@Composable
+private fun PokemonWithName(
+    modifier: Modifier = Modifier,
+    pokemonName: String,
+    spriteUrl: String?,
     onClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier,
+        modifier =
+            modifier
+                .clip(RoundedCornerShape(16.dp))
+                .clickable { onClick() },
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (!isFirstStage) {
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowDown,
-                contentDescription = null,
-                modifier =
-                    Modifier
-                        .size(48.dp)
-                        .align(Alignment.CenterHorizontally),
-            )
-        }
-
-        Column(
+        PokemonImageWrapper(
             modifier =
                 Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .align(Alignment.CenterHorizontally)
-                    .clickable { onClick() },
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            PokemonImageWrapper(
-                modifier =
-                    Modifier
-                        .sizeIn(maxHeight = 120.dp, maxWidth = 120.dp)
-                        .aspectRatio(1f),
-                image = spriteUrl,
-                imageSize = null,
-            )
+                    .sizeIn(maxHeight = 120.dp, maxWidth = 120.dp)
+                    .aspectRatio(1f),
+            image = spriteUrl,
+            imageSize = null,
+        )
 
-            Text(
-                text = pokemonName.treatName(),
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
+        Text(
+            text = pokemonName.treatName(),
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
