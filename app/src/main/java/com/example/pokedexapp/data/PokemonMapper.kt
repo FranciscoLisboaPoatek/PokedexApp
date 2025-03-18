@@ -22,8 +22,7 @@ import com.example.pokedexapp.domain.models.SharePokemonModel
 
 object PokemonMapper {
     fun PokemonApiDto.toPokemonModel(): PokemonDetailModel {
-        val primaryType = types[0].toPokemonType()
-        val secondaryType = if (types.size > 1) types[1].toPokemonType() else null
+        val pokemonTypes = this.types.toPokemonTypes()
         return PokemonDetailModel(
             id = id.toString(),
             speciesId = species.url.extractPokemonIdFromUrl().toString(),
@@ -31,13 +30,19 @@ object PokemonMapper {
             height = height.decimeterToMeter(),
             weight = weight.hectogramsToKg(),
             baseStats = stats.toPokemonBaseStatList(),
-            primaryType = primaryType ?: PokemonTypes.NORMAL,
-            secondaryType = secondaryType,
+            primaryType = pokemonTypes.first,
+            secondaryType = pokemonTypes.second,
             frontDefaultSprite = PokemonSprite.FrontDefaultSprite(sprites.frontDefault),
             frontShinySprite = PokemonSprite.FrontShinySprite(sprites.frontShiny),
             backDefaultSprite = PokemonSprite.BackDefaultSprite(sprites.backDefault),
             backShinySprite = PokemonSprite.BackShinySprite(sprites.backShiny),
         )
+    }
+
+    fun List<TypeListItem>.toPokemonTypes(): Pair<PokemonTypes, PokemonTypes?> {
+        val primaryType = this[0].toPokemonType() ?: throw NoSuchElementException()
+        val secondaryType = if (this.size > 1) this[1].toPokemonType() else null
+        return Pair(primaryType, secondaryType)
     }
 
     fun PokemonApiDto.toPokemonListItemModel(): PokemonListItemModel {
@@ -71,10 +76,9 @@ object PokemonMapper {
     fun PokemonEvolutionChainDto.toPokemonEvolutionChainModel(chain: List<ChainModel>): PokemonEvolutionChainModel {
         return PokemonEvolutionChainModel(
             id = this.id.toString(),
-            evolutions = chain
+            evolutions = chain,
         )
     }
-
 }
 
 private fun TypeListItem.toPokemonType(): PokemonTypes? {

@@ -122,8 +122,9 @@ class PokemonDetailViewModel
             _state.updateState { copy(isLoading = true) }
             viewModelScope.launch {
                 try {
-                    val responsePokemonDetailModel = pokemonDetailUseCase.getPokemonById(pokemonId = pokemonId)
-                        ?: throw NoSuchElementException()
+                    val responsePokemonDetailModel =
+                        pokemonDetailUseCase.getPokemonById(pokemonId = pokemonId)
+                            ?: throw NoSuchElementException()
                     val responseEvolutionChain = getEvolutionChain(speciesId = responsePokemonDetailModel.speciesId)
 
                     _state.updateState {

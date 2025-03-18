@@ -2,7 +2,7 @@ package com.example.pokedexapp.domain.models
 
 data class PokemonEvolutionChainModel(
     val id: String? = null,
-    val evolutions: List<ChainModel>? = null
+    val evolutions: List<ChainModel>? = null,
 )
 
 data class ChainModel(
@@ -10,5 +10,5 @@ data class ChainModel(
     val name: String,
     val spriteUrl: String?,
     val isBaby: Boolean,
-    val evolutions: List<ChainModel>? = null
+    val evolutions: List<ChainModel>? = null,
 )

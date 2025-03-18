@@ -41,4 +41,3 @@ data class TypeListItem(
 data class Type(
     val name: String,
 )
-

@@ -134,7 +134,9 @@ private fun SuccessPokemonInformationSheet(
                     .fillMaxWidth(),
         )
 
-        PokemonEvolutionChain(evolutionChain = evolutionChain)
+        PokemonEvolutionChain(evolutionChain = evolutionChain, onClickPokemon = {
+            if (pokemon.id != it) onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it))
+        })
     }
 }
 
@@ -173,12 +175,7 @@ private fun SuccessPokemonInformationSheetPreview() {
         isLoading = false,
         isError = false,
         pokemon = PokemonSampleData.singlePokemonDetailSampleData(),
-        evolutionChain =
-            PokemonEvolutionChainModel(
-//                evolvesFromPokemonId = PokemonSampleData.singlePokemonDetailSampleData().id,
-//                evolvesFromPokemonName = PokemonSampleData.singlePokemonDetailSampleData().name,
-//                evolvesFromPokemonSpriteUrl = PokemonSampleData.singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
-            ),
+        evolutionChain = PokemonSampleData.evolutionChainSampleData(),
         contentTopSpace = 20.dp,
         onEvent = { },
         modifier = Modifier.fillMaxWidth(),

@@ -35,7 +35,7 @@ fun PokemonImageWrapper(
         } else {
             NoPokemonImageIcon(
                 tint = MaterialTheme.colorScheme.onSurface,
-                modifier =if (imageSize != null) Modifier.size(imageSize / 2)else Modifier.fillMaxSize(),
+                modifier = if (imageSize != null) Modifier.size(imageSize / 2) else Modifier.fillMaxSize(0.5f),
             )
         }
     }

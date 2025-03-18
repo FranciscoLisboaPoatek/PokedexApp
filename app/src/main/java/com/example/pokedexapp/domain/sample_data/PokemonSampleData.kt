@@ -1,7 +1,9 @@
 package com.example.pokedexapp.domain.sample_data
 
+import com.example.pokedexapp.domain.models.ChainModel
 import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonDetailModel
+import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.models.PokemonTypes
@@ -294,6 +296,39 @@ class PokemonSampleData {
                 backShinySprite =
                     PokemonSprite.BackShinySprite(
                         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/1.png",
+                    ),
+            )
+
+        fun evolutionChainSampleData(): PokemonEvolutionChainModel =
+            PokemonEvolutionChainModel(
+                id = "1",
+                evolutions =
+                    listOf(
+                        ChainModel(
+                            id = "1",
+                            name = "Bulbasaur",
+                            isBaby = false,
+                            spriteUrl = "",
+                            evolutions =
+                                listOf(
+                                    ChainModel(
+                                        id = "2",
+                                        name = "Ivysaur",
+                                        isBaby = false,
+                                        spriteUrl = "",
+                                        evolutions =
+                                            listOf(
+                                                ChainModel(
+                                                    id = "3",
+                                                    name = "Venusaur",
+                                                    isBaby = false,
+                                                    spriteUrl = "",
+                                                    evolutions = listOf(),
+                                                ),
+                                            ),
+                                    ),
+                                ),
+                        ),
                     ),
             )
     }

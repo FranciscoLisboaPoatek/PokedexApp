@@ -7,11 +7,11 @@ data class PokemonSpeciesApiDto(
     val evolvesFromSpecies: BasicApiModel?,
     @Json(name = "evolution_chain")
     val evolutionChain: UrlModel,
-    val varieties: List<PokemonVariety>
+    val varieties: List<PokemonVariety>,
 )
 
 data class PokemonVariety(
     @Json(name = "is_default")
     val isDefault: Boolean,
-    val pokemon: BasicApiModel
+    val pokemon: BasicApiModel,
 )
