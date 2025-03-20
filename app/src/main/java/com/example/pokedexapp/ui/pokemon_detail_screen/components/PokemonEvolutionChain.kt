@@ -130,7 +130,7 @@ private fun PokemonColumn(
                             pokemonEvolutionName = secondStage.name,
                             spriteUrl = secondStage.spriteUrl,
                             currentPokemonDetailId = currentPokemonDetailId,
-                            ) {
+                        ) {
                             onClickPokemon(secondStage.id)
                         }
 
@@ -142,7 +142,7 @@ private fun PokemonColumn(
                                     pokemonEvolutionName = thirdStage.name,
                                     spriteUrl = thirdStage.spriteUrl,
                                     currentPokemonDetailId = currentPokemonDetailId,
-                                    ) {
+                                ) {
                                     onClickPokemon(thirdStage.id)
                                 }
                             }

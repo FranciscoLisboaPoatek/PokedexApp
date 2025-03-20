@@ -140,7 +140,8 @@ private fun SuccessPokemonInformationSheet(
             currentPokemonDetailId = pokemon.id,
             onClickPokemon = {
                 onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it))
-            })
+            },
+        )
     }
 }
 
