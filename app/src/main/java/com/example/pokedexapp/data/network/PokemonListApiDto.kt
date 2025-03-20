@@ -1,5 +1,5 @@
 package com.example.pokedexapp.data.network
 
-data class PokemonListResponse(
+data class PokemonListApiDto(
     val results: List<BasicApiModel>,
 )

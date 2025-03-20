@@ -25,5 +25,5 @@ interface PokemonApi {
     ): PokemonEvolutionChainDto
 
     @GET("pokemon?limit=100000")
-    suspend fun getPokemonEntireList(): PokemonListResponse
+    suspend fun getPokemonEntireList(): PokemonListApiDto
 }
