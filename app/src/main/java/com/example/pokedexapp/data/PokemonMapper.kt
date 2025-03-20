@@ -1,15 +1,18 @@
 package com.example.pokedexapp.data
 
 import com.example.pokedexapp.data.local_database.PokemonDaoDto
+import com.example.pokedexapp.data.network.BasicApiModel
 import com.example.pokedexapp.data.network.PokemonApiDto
-import com.example.pokedexapp.data.network.PokemonListItemApiDto
+import com.example.pokedexapp.data.network.PokemonEvolutionChainDto
 import com.example.pokedexapp.data.network.StatListItem
 import com.example.pokedexapp.data.network.TypeListItem
 import com.example.pokedexapp.data.pokedex_server.SharePokemonDto
 import com.example.pokedexapp.data.utils.extractPokemonIdFromUrl
 import com.example.pokedexapp.data.utils.treatName
+import com.example.pokedexapp.domain.models.ChainModel
 import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonDetailModel
+import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.models.PokemonMinimalInfo
 import com.example.pokedexapp.domain.models.PokemonSprite
@@ -19,8 +22,7 @@ import com.example.pokedexapp.domain.models.SharePokemonModel
 
 object PokemonMapper {
     fun PokemonApiDto.toPokemonModel(): PokemonDetailModel {
-        val primaryType = types[0].toPokemonType()
-        val secondaryType = if (types.size > 1) types[1].toPokemonType() else null
+        val pokemonTypes = this.types.toPokemonTypes()
         return PokemonDetailModel(
             id = id.toString(),
             speciesId = species.url.extractPokemonIdFromUrl().toString(),
@@ -28,13 +30,19 @@ object PokemonMapper {
             height = height.decimeterToMeter(),
             weight = weight.hectogramsToKg(),
             baseStats = stats.toPokemonBaseStatList(),
-            primaryType = primaryType ?: PokemonTypes.NORMAL,
-            secondaryType = secondaryType,
-            frontDefaultSprite = PokemonSprite.FrontDefaultSprite(sprites.front_default),
-            frontShinySprite = PokemonSprite.FrontShinySprite(sprites.front_shiny),
-            backDefaultSprite = PokemonSprite.BackDefaultSprite(sprites.back_default),
-            backShinySprite = PokemonSprite.BackShinySprite(sprites.back_shiny),
+            primaryType = pokemonTypes.first,
+            secondaryType = pokemonTypes.second,
+            frontDefaultSprite = PokemonSprite.FrontDefaultSprite(sprites.frontDefault),
+            frontShinySprite = PokemonSprite.FrontShinySprite(sprites.frontShiny),
+            backDefaultSprite = PokemonSprite.BackDefaultSprite(sprites.backDefault),
+            backShinySprite = PokemonSprite.BackShinySprite(sprites.backShiny),
         )
+    }
+
+    fun List<TypeListItem>.toPokemonTypes(): Pair<PokemonTypes, PokemonTypes?> {
+        val primaryType = this[0].toPokemonType() ?: throw NoSuchElementException()
+        val secondaryType = if (this.size > 1) this[1].toPokemonType() else null
+        return Pair(primaryType, secondaryType)
     }
 
     fun PokemonApiDto.toPokemonListItemModel(): PokemonListItemModel {
@@ -43,13 +51,13 @@ object PokemonMapper {
         return PokemonListItemModel(
             id = id.toString(),
             name = name.treatName(),
-            spriteUrl = sprites.front_default,
+            spriteUrl = sprites.frontDefault,
             primaryType = primaryType ?: PokemonTypes.NORMAL,
             secondaryType = secondaryType,
         )
     }
 
-    fun PokemonListItemApiDto.toPokemonDaoDto(): PokemonDaoDto {
+    fun BasicApiModel.toPokemonDaoDto(): PokemonDaoDto {
         return PokemonDaoDto(id = url.extractPokemonIdFromUrl(), name = name.treatName(), url = url)
     }
 
@@ -64,6 +72,13 @@ object PokemonMapper {
             pokemonName = pokemonName,
         )
     }
+
+    fun PokemonEvolutionChainDto.toPokemonEvolutionChainModel(chain: List<ChainModel>): PokemonEvolutionChainModel {
+        return PokemonEvolutionChainModel(
+            id = this.id.toString(),
+            evolutions = chain,
+        )
+    }
 }
 
 private fun TypeListItem.toPokemonType(): PokemonTypes? {
@@ -73,7 +88,7 @@ private fun TypeListItem.toPokemonType(): PokemonTypes? {
 private fun List<StatListItem>.toPokemonBaseStatList(): MutableList<PokemonBaseStats> {
     val pokemonBaseStatsList = mutableListOf<PokemonBaseStats>()
     this.forEach {
-        PokemonBaseStats.getPokemonBaseStatByString(it.stat.name, it.base_stat)
+        PokemonBaseStats.getPokemonBaseStatByString(it.stat.name, it.baseStat)
             ?.let { pokemonBaseState -> pokemonBaseStatsList.add(pokemonBaseState) }
     }
     return pokemonBaseStatsList

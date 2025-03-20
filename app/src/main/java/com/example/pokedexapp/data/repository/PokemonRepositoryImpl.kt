@@ -1,16 +1,17 @@
 package com.example.pokedexapp.data.repository
 
 import com.example.pokedexapp.data.PokemonMapper.toPokemonDaoDto
+import com.example.pokedexapp.data.PokemonMapper.toPokemonEvolutionChainModel
 import com.example.pokedexapp.data.PokemonMapper.toPokemonListItemModel
 import com.example.pokedexapp.data.PokemonMapper.toPokemonMinimalInfo
 import com.example.pokedexapp.data.PokemonMapper.toPokemonModel
 import com.example.pokedexapp.data.PokemonMapper.toSharePokemonNotificationDto
 import com.example.pokedexapp.data.local_database.PokemonDao
+import com.example.pokedexapp.data.network.Chain
 import com.example.pokedexapp.data.network.PokemonApi
 import com.example.pokedexapp.data.pokedex_server.PokedexServerApi
-import com.example.pokedexapp.data.utils.POKEMON_SPRITE_BASE_URL
 import com.example.pokedexapp.data.utils.extractPokemonIdFromUrl
-import com.example.pokedexapp.data.utils.treatName
+import com.example.pokedexapp.domain.models.ChainModel
 import com.example.pokedexapp.domain.models.PokemonDetailModel
 import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.domain.models.PokemonListItemModel
@@ -19,7 +20,6 @@ import com.example.pokedexapp.domain.models.SharePokemonModel
 import com.example.pokedexapp.domain.repository.PokemonRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 class PokemonRepositoryImpl
@@ -42,23 +42,16 @@ class PokemonRepositoryImpl
 
         override suspend fun getPokemonEvolutionChain(speciesId: String): PokemonEvolutionChainModel =
             withContext(Dispatchers.IO) {
-                val evolvesFrom =
-                    pokemonApi.getPokemonSpeciesById(speciesId.toInt())?.evolvesFromSpecies
+                val species = pokemonApi.getPokemonSpeciesById(speciesId.toInt())
 
-                if (evolvesFrom != null) {
-                    val evolvesFromPokemonId = evolvesFrom.url.extractPokemonIdFromUrl()
-                    val spriteUrl = POKEMON_SPRITE_BASE_URL.plus("$evolvesFromPokemonId.png")
-                    return@withContext PokemonEvolutionChainModel(
-                        evolvesFromPokemonId = evolvesFromPokemonId.toString(),
-                        evolvesFromPokemonName = evolvesFrom.name.treatName(),
-                        evolvesFromPokemonSpriteUrl = spriteUrl,
-                    )
-                } else {
-                    return@withContext PokemonEvolutionChainModel(
-                        evolvesFromPokemonName = null,
-                        evolvesFromPokemonSpriteUrl = null,
-                    )
-                }
+                val evolutionChain =
+                    pokemonApi.getPokemonEvolutionChain(species.evolutionChain.url.extractPokemonIdFromUrl())
+
+                val evolutionChainList = mutableListOf<ChainModel>()
+
+                evolutionChainList.add(evolutionChain.chain.recursiveToChainModel())
+
+                return@withContext evolutionChain.toPokemonEvolutionChainModel(evolutionChainList)
             }
 
         override suspend fun savePokemonList() {
@@ -123,8 +116,33 @@ class PokemonRepositoryImpl
 
         override suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel) {
             withContext(Dispatchers.IO) {
-                val response = pokedexServerApi.sharePokemon(body = sharePokemonModel.toSharePokemonNotificationDto()).execute()
+                val response =
+                    pokedexServerApi.sharePokemon(body = sharePokemonModel.toSharePokemonNotificationDto())
+                        .execute()
                 if (response.code() == 400) throw IllegalArgumentException()
             }
+        }
+
+        private suspend fun Chain.recursiveToChainModel(): ChainModel {
+            val pokemonSpecies =
+                pokemonApi.getPokemonSpeciesById(this.species.url.extractPokemonIdFromUrl())
+
+            val defaultPokemon =
+                pokemonSpecies.varieties.find { it.isDefault } ?: pokemonSpecies.varieties.first()
+
+            val pokemonDetails =
+                pokemonApi.getPokemonByName(defaultPokemon.pokemon.name)
+                    ?: throw IllegalArgumentException()
+
+            return ChainModel(
+                id = pokemonDetails.id.toString(),
+                name = this.species.name,
+                spriteUrl = pokemonDetails.sprites.frontDefault,
+                isBaby = this.isBaby,
+                evolutions =
+                    this.evolvesTo.map { chain ->
+                        chain.recursiveToChainModel()
+                    },
+            )
         }
     }

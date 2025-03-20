@@ -37,7 +37,6 @@ fun PokemonInformationSheet(
     onEvent: (PokemonDetailScreenOnEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val informationSheetModifier = Modifier.padding(vertical = contentTopSpace)
     Surface(
         color = MaterialTheme.colorScheme.background,
         shape = RoundedCornerShape(10.dp),
@@ -46,11 +45,11 @@ fun PokemonInformationSheet(
     ) {
         if (isLoading) {
             LoadingPokemonInformationSheet(
-                modifier = informationSheetModifier,
+                modifier = Modifier.padding(vertical = contentTopSpace),
             )
         } else if (isError) {
             ErrorPokemonInformationSheet(
-                modifier = informationSheetModifier,
+                modifier = Modifier.padding(vertical = contentTopSpace),
             )
         } else {
             if (pokemon != null) {
@@ -58,7 +57,7 @@ fun PokemonInformationSheet(
                     pokemon = pokemon,
                     evolutionChain = evolutionChain,
                     onEvent = onEvent,
-                    modifier = informationSheetModifier,
+                    modifier = Modifier.padding(top = contentTopSpace, bottom = 16.dp),
                 )
             }
         }
@@ -134,16 +133,15 @@ private fun SuccessPokemonInformationSheet(
                     .fillMaxWidth(),
         )
 
-        if (evolutionChain.evolvesFromPokemonName != null && evolutionChain.evolvesFromPokemonId != null) {
-            Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            EvolvesFromPokemon(
-                pokemonId = evolutionChain.evolvesFromPokemonId,
-                pokemonName = evolutionChain.evolvesFromPokemonName,
-                pokemonSpriteUrl = evolutionChain.evolvesFromPokemonSpriteUrl,
-                navigateToDetails = { onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it)) },
-            )
-        }
+        PokemonEvolutionChain(
+            evolutionChain = evolutionChain,
+            currentPokemonDetailId = pokemon.id,
+            onClickPokemon = {
+                onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it))
+            },
+        )
     }
 }
 
@@ -182,12 +180,7 @@ private fun SuccessPokemonInformationSheetPreview() {
         isLoading = false,
         isError = false,
         pokemon = PokemonSampleData.singlePokemonDetailSampleData(),
-        evolutionChain =
-            PokemonEvolutionChainModel(
-                evolvesFromPokemonId = PokemonSampleData.singlePokemonDetailSampleData().id,
-                evolvesFromPokemonName = PokemonSampleData.singlePokemonDetailSampleData().name,
-                evolvesFromPokemonSpriteUrl = PokemonSampleData.singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
-            ),
+        evolutionChain = PokemonSampleData.evolutionChainSampleData(),
         contentTopSpace = 20.dp,
         onEvent = { },
         modifier = Modifier.fillMaxWidth(),

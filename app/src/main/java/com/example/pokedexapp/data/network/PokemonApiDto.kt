@@ -1,25 +1,32 @@
 package com.example.pokedexapp.data.network
 
+import com.squareup.moshi.Json
+
 data class PokemonApiDto(
     val id: Int,
     val name: String,
     val height: Int,
     val weight: Int,
-    val species: Species,
+    val species: BasicApiModel,
     val sprites: SpritesDto,
     val stats: List<StatListItem>,
     val types: List<TypeListItem>,
 )
 
 data class SpritesDto(
-    val back_default: String?,
-    val back_shiny: String?,
-    val front_default: String?,
-    val front_shiny: String?,
+    @Json(name = "back_default")
+    val backDefault: String?,
+    @Json(name = "back_shiny")
+    val backShiny: String?,
+    @Json(name = "front_default")
+    val frontDefault: String?,
+    @Json(name = "front_shiny")
+    val frontShiny: String?,
 )
 
 data class StatListItem(
-    val base_stat: Int,
+    @Json(name = "base_stat")
+    val baseStat: Int,
     val stat: Stat,
 )
 
@@ -33,9 +40,4 @@ data class TypeListItem(
 
 data class Type(
     val name: String,
-)
-
-data class Species(
-    val name: String,
-    val url: String,
 )

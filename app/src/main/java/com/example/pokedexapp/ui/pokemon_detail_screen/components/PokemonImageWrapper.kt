@@ -2,6 +2,7 @@ package com.example.pokedexapp.ui.pokemon_detail_screen.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -17,7 +18,7 @@ import com.example.pokedexapp.ui.components.NoPokemonImageIcon
 @Composable
 fun PokemonImageWrapper(
     image: String?,
-    imageSize: Dp,
+    imageSize: Dp?,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -29,12 +30,12 @@ fun PokemonImageWrapper(
             AsyncImage(
                 model = image,
                 contentDescription = null,
-                modifier = Modifier.size(imageSize),
+                modifier = if (imageSize != null) Modifier.size(imageSize) else Modifier.fillMaxSize(),
             )
         } else {
             NoPokemonImageIcon(
                 tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.size(imageSize / 2),
+                modifier = if (imageSize != null) Modifier.size(imageSize / 2) else Modifier.fillMaxSize(0.5f),
             )
         }
     }
