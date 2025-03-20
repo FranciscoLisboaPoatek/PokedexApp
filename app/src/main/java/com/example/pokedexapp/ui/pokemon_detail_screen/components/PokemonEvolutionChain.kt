@@ -1,5 +1,6 @@
 package com.example.pokedexapp.ui.pokemon_detail_screen.components
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,28 +24,30 @@ import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.data.utils.treatName
 import com.example.pokedexapp.domain.models.ChainModel
 import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
-
-private const val EEVEE_POKEDEX_ID_STRING = "133"
+import com.example.pokedexapp.ui.utils.EEVEE_POKEDEX_ID_STRING
 
 @Composable
 fun PokemonEvolutionChain(
     modifier: Modifier = Modifier,
     evolutionChain: PokemonEvolutionChainModel,
+    currentPokemonDetailId: String? = null,
     onClickPokemon: (String) -> Unit,
 ) {
     evolutionChain.evolutions?.let {
         if (
-            evolutionChain.evolutions.firstOrNull()?.id == EEVEE_POKEDEX_ID_STRING
+            it.firstOrNull()?.id == EEVEE_POKEDEX_ID_STRING
         ) {
             Eeveelutions(
                 modifier = modifier,
                 evolutionChain = evolutionChain,
+                currentPokemonDetailId = currentPokemonDetailId,
                 onClickPokemon = onClickPokemon,
             )
         } else {
             PokemonColumn(
                 modifier = modifier,
                 evolutions = it,
+                currentPokemonDetailId = currentPokemonDetailId,
                 onClickPokemon = onClickPokemon,
             )
         }
@@ -55,6 +58,7 @@ fun PokemonEvolutionChain(
 private fun Eeveelutions(
     modifier: Modifier = Modifier,
     evolutionChain: PokemonEvolutionChainModel,
+    currentPokemonDetailId: String? = null,
     onClickPokemon: (String) -> Unit,
 ) {
     Row(
@@ -64,8 +68,10 @@ private fun Eeveelutions(
         evolutionChain.evolutions?.firstOrNull()?.let { eevee ->
             PokemonEvolution(
                 modifier = Modifier.weight(1f),
-                pokemonName = eevee.name,
+                pokemonEvolutionId = eevee.id,
+                pokemonEvolutionName = eevee.name,
                 spriteUrl = eevee.spriteUrl,
+                currentPokemonDetailId = currentPokemonDetailId,
                 isFirstStage = true,
             ) {
                 onClickPokemon(eevee.id)
@@ -74,13 +80,15 @@ private fun Eeveelutions(
             Column(
                 modifier = Modifier.weight(1f),
             ) {
-                eevee.evolutions?.forEach {
+                eevee.evolutions?.forEach { eeveelution ->
                     PokemonEvolution(
-                        pokemonName = it.name,
-                        spriteUrl = it.spriteUrl,
+                        pokemonEvolutionId = eeveelution.id,
+                        pokemonEvolutionName = eeveelution.name,
+                        spriteUrl = eeveelution.spriteUrl,
+                        currentPokemonDetailId = currentPokemonDetailId,
                         isVertical = false,
                     ) {
-                        onClickPokemon(it.id)
+                        onClickPokemon(eeveelution.id)
                     }
                 }
             }
@@ -92,13 +100,16 @@ private fun Eeveelutions(
 private fun PokemonColumn(
     modifier: Modifier = Modifier,
     evolutions: List<ChainModel>,
+    currentPokemonDetailId: String? = null,
     onClickPokemon: (String) -> Unit,
 ) {
     Column(modifier) {
         evolutions.firstOrNull()?.let { firstStage ->
             PokemonEvolution(
-                pokemonName = firstStage.name,
+                pokemonEvolutionId = firstStage.id,
+                pokemonEvolutionName = firstStage.name,
                 spriteUrl = firstStage.spriteUrl,
+                currentPokemonDetailId = currentPokemonDetailId,
                 isFirstStage = true,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             ) {
@@ -115,9 +126,11 @@ private fun PokemonColumn(
                     ) {
                         PokemonEvolution(
                             modifier = Modifier,
-                            pokemonName = secondStage.name,
+                            pokemonEvolutionId = secondStage.id,
+                            pokemonEvolutionName = secondStage.name,
                             spriteUrl = secondStage.spriteUrl,
-                        ) {
+                            currentPokemonDetailId = currentPokemonDetailId,
+                            ) {
                             onClickPokemon(secondStage.id)
                         }
 
@@ -125,9 +138,11 @@ private fun PokemonColumn(
                             secondStage.evolutions?.forEach { thirdStage ->
                                 PokemonEvolution(
                                     modifier = Modifier.weight(1f),
-                                    pokemonName = thirdStage.name,
+                                    pokemonEvolutionId = thirdStage.id,
+                                    pokemonEvolutionName = thirdStage.name,
                                     spriteUrl = thirdStage.spriteUrl,
-                                ) {
+                                    currentPokemonDetailId = currentPokemonDetailId,
+                                    ) {
                                     onClickPokemon(thirdStage.id)
                                 }
                             }
@@ -142,8 +157,10 @@ private fun PokemonColumn(
 @Composable
 private fun PokemonEvolution(
     modifier: Modifier = Modifier,
-    pokemonName: String,
+    pokemonEvolutionId: String,
+    pokemonEvolutionName: String,
     spriteUrl: String?,
+    currentPokemonDetailId: String? = null,
     isFirstStage: Boolean = false,
     isVertical: Boolean = true,
     onClick: () -> Unit,
@@ -165,8 +182,10 @@ private fun PokemonEvolution(
 
             PokemonWithName(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                pokemonName = pokemonName,
+                pokemonEvolutionId = pokemonEvolutionId,
+                pokemonEvolutionName = pokemonEvolutionName,
                 spriteUrl = spriteUrl,
+                currentPokemonDetailId = currentPokemonDetailId,
                 onClick = onClick,
             )
         }
@@ -188,7 +207,8 @@ private fun PokemonEvolution(
 
             PokemonWithName(
                 modifier = Modifier.align(Alignment.CenterVertically),
-                pokemonName = pokemonName,
+                pokemonEvolutionId = pokemonEvolutionId,
+                pokemonEvolutionName = pokemonEvolutionName,
                 spriteUrl = spriteUrl,
                 onClick = onClick,
             )
@@ -199,15 +219,18 @@ private fun PokemonEvolution(
 @Composable
 private fun PokemonWithName(
     modifier: Modifier = Modifier,
-    pokemonName: String,
+    pokemonEvolutionId: String,
+    pokemonEvolutionName: String,
     spriteUrl: String?,
+    currentPokemonDetailId: String? = null,
     onClick: () -> Unit,
 ) {
+    Log.w("batata", "pokemonEvolutionId: $pokemonEvolutionId | currentPokemonDetailId: $currentPokemonDetailId")
     Column(
         modifier =
             modifier
                 .clip(RoundedCornerShape(16.dp))
-                .clickable { onClick() },
+                .clickable(currentPokemonDetailId != pokemonEvolutionId) { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         PokemonImageWrapper(
@@ -220,7 +243,7 @@ private fun PokemonWithName(
         )
 
         Text(
-            text = pokemonName.treatName(),
+            text = pokemonEvolutionName.treatName(),
             textAlign = TextAlign.Center,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

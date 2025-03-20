@@ -135,9 +135,12 @@ private fun SuccessPokemonInformationSheet(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        PokemonEvolutionChain(evolutionChain = evolutionChain, onClickPokemon = {
-            if (pokemon.id != it) onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it))
-        })
+        PokemonEvolutionChain(
+            evolutionChain = evolutionChain,
+            currentPokemonDetailId = pokemon.id,
+            onClickPokemon = {
+                onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it))
+            })
     }
 }
 
