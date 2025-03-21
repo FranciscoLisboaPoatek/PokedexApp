@@ -13,5 +13,5 @@ sealed class PokemonListScreenOnEvent() {
 
     object RetryLoadingData : PokemonListScreenOnEvent()
 
-    object ChangeToDefaultList: PokemonListScreenOnEvent()
+    object ChangeToDefaultList : PokemonListScreenOnEvent()
 }

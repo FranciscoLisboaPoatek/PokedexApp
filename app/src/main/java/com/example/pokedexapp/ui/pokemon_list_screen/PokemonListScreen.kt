@@ -85,19 +85,18 @@ fun PokemonListScreen(
             Box(
                 Modifier
                     .fillMaxSize()
-                    .background(Color.Transparent)
+                    .background(Color.Transparent),
             ) {
                 PokeballLoadingAnimation(
                     modifier =
                         Modifier
                             .padding(it)
-                            .align(Alignment.Center)
+                            .align(Alignment.Center),
                 )
             }
         }
     }
 }
-
 
 @Composable
 private fun PokemonList(
@@ -136,10 +135,11 @@ private fun PokemonList(
                     onSearchTextChange = {
                         onEvent(
                             PokemonListScreenOnEvent.OnSearchTextValueChange(
-                                it
-                            )
+                                it,
+                            ),
                         )
-                    })
+                    },
+                )
             }
 
             when {
@@ -179,7 +179,7 @@ private fun PokemonList(
                 !uiState.isLoading -> {
                     pokemonListItems(
                         uiState.pokemonList,
-                        onEvent
+                        onEvent,
                     )
 
                     if (if (uiState.isDefaultList) uiState.errorAppendingDefaultList else uiState.errorAppendingSearchList) {

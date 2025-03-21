@@ -18,7 +18,7 @@ fun SearchBar(
     searchText: String,
     modifier: Modifier = Modifier,
     onClearText: () -> Unit,
-    onSearchTextChange: (String) -> Unit
+    onSearchTextChange: (String) -> Unit,
 ) {
     OutlinedTextField(
         value = searchText,
@@ -27,23 +27,24 @@ fun SearchBar(
         },
         modifier = modifier,
         shape = CircleShape,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = TopBarBlueColor
-        ),
+        colors =
+            OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = TopBarBlueColor,
+            ),
         trailingIcon = {
             IconButton({
                 onClearText()
             }) {
                 Icon(
                     Icons.Default.Clear,
-                    null
+                    null,
                 )
             }
         },
         leadingIcon = {
             Icon(
                 Icons.Default.Search,
-                null
+                null,
             )
         },
     )
