@@ -37,6 +37,8 @@ import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.components.PokemonListItem
 import com.example.pokedexapp.ui.components.PokemonTopAppBar
 import com.example.pokedexapp.ui.components.SearchBar
+import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenTestTags.POKEMON_LIST_ITEM_TAG
+import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenTestTags.POKEMON_LIST_SEARCH_BAR_TEST_TAG
 import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenTestTags.POKEMON_LIST_TAG
 import com.example.pokedexapp.ui.pokemon_list_screen.components.ErrorSearching
 import com.example.pokedexapp.ui.pokemon_list_screen.components.NoSearchResultsFound
@@ -45,6 +47,8 @@ import com.example.pokedexapp.ui.utils.REMAINING_LIST_ITEMS_TO_LOAD_MORE
 
 object PokemonListScreenTestTags {
     const val POKEMON_LIST_TAG = "POKEMON_LIST"
+    const val POKEMON_LIST_ITEM_TAG = "POKEMON_LIST_ITEM"
+    const val POKEMON_LIST_SEARCH_BAR_TEST_TAG = "POKEMON_LIST_SEARCH_BAR"
 }
 
 @Composable
@@ -124,6 +128,7 @@ private fun PokemonList(
         ) {
             item(span = { GridItemSpan(gridSpan) }) {
                 SearchBar(
+                    modifier = Modifier.testTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG),
                     searchText = uiState.searchText,
                     onClearText = {
                         onEvent(PokemonListScreenOnEvent.ChangeToDefaultList)
@@ -171,7 +176,7 @@ private fun PokemonList(
                     }
                 }
 
-                else -> {
+                !uiState.isLoading -> {
                     pokemonListItems(
                         uiState.pokemonList,
                         onEvent
@@ -195,7 +200,6 @@ private fun PokemonList(
                     }
                 }
             }
-
         }
     }
 }
@@ -217,7 +221,7 @@ private fun LazyGridScope.pokemonListItems(
             pokemon = pokemon,
             strokeWidthDp = 10.dp,
             onClick = { onEvent(PokemonListScreenOnEvent.OnPokemonCLick(pokemon.id)) },
-            modifier = Modifier.height(210.dp),
+            modifier = Modifier.height(210.dp).testTag(POKEMON_LIST_ITEM_TAG),
         )
     }
 }
@@ -230,7 +234,6 @@ fun PokemonListScreenPreview() {
             isLoading = false,
             isLoadingAppend = false,
             couldLoadInitialData = true,
-            isSearchMode = false,
             isDefaultList = true,
             showNoSearchResultsFound = false,
             searchText = "",
@@ -248,7 +251,6 @@ fun PokemonListScreenSearchPreview() {
             isLoading = false,
             isLoadingAppend = false,
             couldLoadInitialData = true,
-            isSearchMode = true,
             isDefaultList = false,
             showNoSearchResultsFound = false,
             searchText = "",
@@ -266,7 +268,6 @@ fun PokemonListScreenLoadingPreview() {
             isLoading = true,
             isLoadingAppend = false,
             couldLoadInitialData = true,
-            isSearchMode = false,
             isDefaultList = true,
             showNoSearchResultsFound = false,
             searchText = "",
@@ -284,7 +285,6 @@ fun PokemonListScreenLoadingAppendPreview() {
             isLoading = false,
             isLoadingAppend = true,
             couldLoadInitialData = true,
-            isSearchMode = false,
             isDefaultList = true,
             showNoSearchResultsFound = false,
             searchText = "",

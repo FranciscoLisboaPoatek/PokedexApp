@@ -23,9 +23,6 @@ import com.example.pokedexapp.ui.components.PokemonTopAppBarTestTags.SHOW_RANDOM
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
 object PokemonTopAppBarTestTags {
-    const val SEARCH_TEXT_FIELD_TAG = "SEARCH_TEXT_FIELD"
-    const val OPEN_SEARCH_BUTTON_TAG = "OPEN_SEARCH_BUTTON"
-    const val CLOSE_SEARCH_BUTTON_TAG = "CLOSE_SEARCH_BUTTON"
     const val SHOW_RANDOM_POKEMON_NOTIFICATION_BUTTON_TAG =
         "SHOW_RANDOM_POKEMON_NOTIFICATION_BUTTON"
 }
