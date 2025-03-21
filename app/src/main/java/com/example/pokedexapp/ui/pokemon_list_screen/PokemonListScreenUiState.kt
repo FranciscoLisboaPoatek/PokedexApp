@@ -12,7 +12,6 @@ data class PokemonListScreenUiState(
     val errorAppendingSearchList: Boolean = false,
     val errorSearching: Boolean = false,
     val couldLoadInitialData: Boolean = false,
-    val isSearchMode: Boolean = false,
     val isDefaultList: Boolean = true,
     val defaultListEnded: Boolean = false,
     val searchListEnded: Boolean = false,

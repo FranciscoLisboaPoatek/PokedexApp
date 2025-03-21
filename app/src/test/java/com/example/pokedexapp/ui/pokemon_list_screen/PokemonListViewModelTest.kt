@@ -87,14 +87,6 @@ class PokemonListViewModelTest {
         assertEquals(false, viewModel.state.value.isLoading)
     }
 
-    @Test
-    fun changeIsSearchMode() {
-        viewModel.changeIsSearchMode()
-        assertEquals(true, viewModel.state.value.isSearchMode)
-        viewModel.changeIsSearchMode()
-        assertEquals(false, viewModel.state.value.isSearchMode)
-    }
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getPokemonList() =

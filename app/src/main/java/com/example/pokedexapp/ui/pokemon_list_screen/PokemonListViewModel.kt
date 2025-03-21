@@ -50,10 +50,6 @@ class PokemonListViewModel
 
         fun onEvent(event: PokemonListScreenOnEvent) {
             when (event) {
-                is PokemonListScreenOnEvent.OnSearchClick -> {
-                    changeIsSearchMode()
-                }
-
                 is PokemonListScreenOnEvent.OnSearchTextValueChange -> {
                     changeSearchText(event.text)
                 }
@@ -81,6 +77,8 @@ class PokemonListViewModel
                     )
                     navigator.navigateTo(Screen.PokemonDetailScreen.navigateToPokemonDetail(event.pokemonId))
                 }
+
+                is PokemonListScreenOnEvent.ChangeToDefaultList -> changeToDefaultList()
             }
         }
 
@@ -89,7 +87,12 @@ class PokemonListViewModel
             viewModelScope.launch {
                 try {
                     pokemonListUseCase.insertAllPokemon()
-                    defaultPokemonList.addAll(pokemonListUseCase.getPokemonList(offset = 0, limit = LIST_ITEMS_PER_PAGE))
+                    defaultPokemonList.addAll(
+                        pokemonListUseCase.getPokemonList(
+                            offset = 0,
+                            limit = LIST_ITEMS_PER_PAGE,
+                        ),
+                    )
 
                     updateList(
                         _state.value.copy(
@@ -104,16 +107,11 @@ class PokemonListViewModel
             }
         }
 
-        fun changeIsSearchMode() {
-            if (!_state.value.isSearchMode && _state.value.isLoading) return
-            _state.updateState { copy(isSearchMode = !_state.value.isSearchMode) }
-        }
-
         @OptIn(FlowPreview::class)
         private fun observerSearchText() {
             viewModelScope.launch {
                 searchText
-                    .debounce(1000)
+                    .debounce(500)
                     .collect {
                         searchPokemonListByName(it)
                     }
@@ -132,7 +130,11 @@ class PokemonListViewModel
 
             viewModelScope.launch {
                 try {
-                    val appendList = pokemonListUseCase.getPokemonList(offset = defaultPokemonList.size, limit = LIST_ITEMS_PER_PAGE)
+                    val appendList =
+                        pokemonListUseCase.getPokemonList(
+                            offset = defaultPokemonList.size,
+                            limit = LIST_ITEMS_PER_PAGE,
+                        )
 
                     if (appendList.isEmpty()) {
                         _state.updateState { copy(defaultListEnded = true, isLoadingAppend = false) }
@@ -147,32 +149,46 @@ class PokemonListViewModel
                         )
                     }
                 } catch (ex: Exception) {
-                    _state.updateState { copy(isLoadingAppend = false, errorAppendingDefaultList = true) }
+                    _state.updateState {
+                        copy(
+                            isLoadingAppend = false,
+                            errorAppendingDefaultList = true,
+                        )
+                    }
                 }
             }
         }
 
         private fun searchPokemonListByName(pokemonName: String) {
-            if (pokemonName.isBlank()) {
-                updateList(_state.value.copy(isDefaultList = true, showNoSearchResultsFound = false, errorSearching = false))
-                return
-            }
+            if (pokemonName.isEmpty()) return
+
             analyticsLogger.logEvent(
                 FirebaseAnalytics.Event.SEARCH,
                 mapOf(FirebaseAnalytics.Param.SEARCH_TERM to pokemonName),
             )
 
-            _state.updateState { copy(isLoading = true, errorSearching = false, searchListEnded = false, showNoSearchResultsFound = false) }
+            _state.updateState {
+                copy(
+                    isLoading = true,
+                    errorSearching = false,
+                    searchListEnded = false,
+                    showNoSearchResultsFound = false,
+                )
+            }
             searchJob?.cancel()
             searchJob =
                 viewModelScope.launch {
                     try {
                         val tempList =
-                            pokemonListUseCase.getPokemonSearchList(name = pokemonName, offset = 0, limit = LIST_ITEMS_PER_PAGE)
+                            pokemonListUseCase.getPokemonSearchList(
+                                name = pokemonName,
+                                offset = 0,
+                                limit = LIST_ITEMS_PER_PAGE,
+                            )
 
                         if (tempList.isEmpty()) {
                             _state.updateState {
-                                copy(isLoading = false, showNoSearchResultsFound = true)
+                                copy(isLoading = false, showNoSearchResultsFound = true, isDefaultList = false)
                             }
                         } else {
                             val newList = mutableStateListOf<PokemonListItemModel>()
@@ -189,9 +205,20 @@ class PokemonListViewModel
                         }
                     } catch (_: CancellationException) {
                     } catch (ex: Exception) {
-                        _state.updateState { copy(isLoading = false, errorSearching = true) }
+                        _state.updateState { copy(isLoading = false, errorSearching = true, isDefaultList = false) }
                     }
                 }
+        }
+
+        private fun changeToDefaultList() {
+            changeSearchText("")
+            updateList(
+                _state.value.copy(
+                    isDefaultList = true,
+                    showNoSearchResultsFound = false,
+                    errorSearching = false,
+                ),
+            )
         }
 
         fun appendSearchList() {
@@ -220,7 +247,12 @@ class PokemonListViewModel
                         )
                     }
                 } catch (ex: Exception) {
-                    _state.updateState { copy(isLoadingAppend = false, errorAppendingSearchList = true) }
+                    _state.updateState {
+                        copy(
+                            isLoadingAppend = false,
+                            errorAppendingSearchList = true,
+                        )
+                    }
                 }
             }
         }

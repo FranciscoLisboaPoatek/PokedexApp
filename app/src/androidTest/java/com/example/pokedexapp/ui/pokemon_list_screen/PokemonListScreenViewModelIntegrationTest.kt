@@ -18,8 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.pokedexapp.TestActivity
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
-import com.example.pokedexapp.ui.components.PokemonTopAppBarTestTags.OPEN_SEARCH_BUTTON_TAG
-import com.example.pokedexapp.ui.components.PokemonTopAppBarTestTags.SEARCH_TEXT_FIELD_TAG
+import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenTestTags.POKEMON_LIST_SEARCH_BAR_TEST_TAG
 import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenTestTags.POKEMON_LIST_TAG
 import com.example.pokedexapp.ui.pokemon_list_screen.components.NoSearchResultsFoundTestTag.NO_SEARCH_RESULT_FOUND_TAG
 import com.example.pokedexapp.ui.utils.LIST_ITEMS_PER_PAGE
@@ -62,9 +61,7 @@ class PokemonListScreenViewModelIntegrationTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun searchPokemon() {
-        composeTestRule.onNodeWithTag(OPEN_SEARCH_BUTTON_TAG)
-            .performClick()
-        composeTestRule.onNodeWithTag(SEARCH_TEXT_FIELD_TAG)
+        composeTestRule.onNodeWithTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG)
             .performTextInput("Nat")
         composeTestRule.waitUntilExactlyOneExists(matcher = hasTextExactly("Natu"))
     }
@@ -72,8 +69,7 @@ class PokemonListScreenViewModelIntegrationTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun searchPokemon_noResultsFound() {
-        composeTestRule.onNodeWithTag(OPEN_SEARCH_BUTTON_TAG).performClick()
-        composeTestRule.onNodeWithTag(SEARCH_TEXT_FIELD_TAG)
+        composeTestRule.onNodeWithTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG)
             .performTextInput("Potato")
         composeTestRule.waitUntilExactlyOneExists(matcher = hasTestTag(NO_SEARCH_RESULT_FOUND_TAG))
     }
@@ -86,19 +82,19 @@ class PokemonListScreenViewModelIntegrationTest {
         composeTestRule.onNodeWithText("Natu").assertIsNotDisplayed()
 
         // click on search button, but it is still showing default list
-        composeTestRule.onNodeWithTag(OPEN_SEARCH_BUTTON_TAG).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG).assertIsDisplayed()
             .performClick()
         composeTestRule.onNodeWithText(PokemonSampleData.pokemonListSampleData()[0].name).assertIsDisplayed()
         composeTestRule.onNodeWithText("Natu").assertIsNotDisplayed()
 
         // is showing search list
-        composeTestRule.onNodeWithTag(SEARCH_TEXT_FIELD_TAG)
+        composeTestRule.onNodeWithTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG)
             .performTextInput("Nat")
         composeTestRule.waitUntilExactlyOneExists(matcher = hasTextExactly("Natu"))
         composeTestRule.onNodeWithText(PokemonSampleData.pokemonListSampleData()[0].name).assertIsNotDisplayed()
 
         // is showing default list again
-        composeTestRule.onNodeWithTag(SEARCH_TEXT_FIELD_TAG)
+        composeTestRule.onNodeWithTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG)
             .performTextClearance()
         composeTestRule.waitUntilExactlyOneExists(matcher = hasTextExactly(PokemonSampleData.pokemonListSampleData()[0].name))
         composeTestRule.onNodeWithText("Natu").assertIsNotDisplayed()
@@ -116,8 +112,7 @@ class PokemonListScreenViewModelIntegrationTest {
 
     @Test
     fun append_to_search_list() {
-        composeTestRule.onNodeWithTag(OPEN_SEARCH_BUTTON_TAG).performClick()
-        composeTestRule.onNodeWithTag(SEARCH_TEXT_FIELD_TAG)
+        composeTestRule.onNodeWithTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG)
             .performTextInput("a")
         composeTestRule.onNodeWithText("Natu").assertDoesNotExist()
         composeTestRule.onNodeWithTag(POKEMON_LIST_TAG).performScrollToIndex(LIST_ITEMS_PER_PAGE - REMAINING_LIST_ITEMS_TO_LOAD_MORE)
