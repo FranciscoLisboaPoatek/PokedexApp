@@ -1,6 +1,13 @@
 package com.example.pokedexapp.ui.pokemon_list_screen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -15,16 +23,24 @@ import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -43,7 +59,11 @@ import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenTestTags.P
 import com.example.pokedexapp.ui.pokemon_list_screen.components.ErrorSearching
 import com.example.pokedexapp.ui.pokemon_list_screen.components.NoSearchResultsFound
 import com.example.pokedexapp.ui.pokemon_list_screen.components.RetryLoadingData
+import com.example.pokedexapp.ui.theme.SurfaceColorDark
+import com.example.pokedexapp.ui.theme.SurfaceColorLight
+import com.example.pokedexapp.ui.theme.TopBarBlueColor
 import com.example.pokedexapp.ui.utils.REMAINING_LIST_ITEMS_TO_LOAD_MORE
+import kotlinx.coroutines.launch
 
 object PokemonListScreenTestTags {
     const val POKEMON_LIST_TAG = "POKEMON_LIST"
@@ -113,9 +133,10 @@ private fun PokemonList(
 
     val gridSpan = remember { 2 }
 
-    Surface(
-        modifier = modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background,
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(gridSpan),
@@ -201,6 +222,52 @@ private fun PokemonList(
                 }
             }
         }
+
+        AnimatedVisibility (
+            modifier = Modifier.align(Alignment.BottomCenter),
+            visible = lazyGridState.canScrollBackward,
+            enter = slideInVertically(
+                initialOffsetY = { fullHeight -> fullHeight },
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioLowBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            ),
+            exit = slideOutVertically(
+                targetOffsetY = { fullHeight -> fullHeight },
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            )
+        ) {
+            val coroutineScope = rememberCoroutineScope()
+
+            IconButton(
+                modifier = Modifier
+                    .padding(bottom = 24.dp)
+                    .shadow(10.dp, shape = CircleShape)
+                    .border(2.dp, TopBarBlueColor, CircleShape)
+                    .clip(CircleShape)
+                    .size(48.dp),
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = if(isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight
+                ),
+                onClick = {
+                    coroutineScope.launch {
+                        lazyGridState.animateScrollToItem(0)
+                    }
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowUp,
+                    contentDescription = null,
+                    tint = TopBarBlueColor,
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
+            }
+        }
     }
 }
 
@@ -221,7 +288,9 @@ private fun LazyGridScope.pokemonListItems(
             pokemon = pokemon,
             strokeWidthDp = 10.dp,
             onClick = { onEvent(PokemonListScreenOnEvent.OnPokemonCLick(pokemon.id)) },
-            modifier = Modifier.height(210.dp).testTag(POKEMON_LIST_ITEM_TAG),
+            modifier = Modifier
+                .height(210.dp)
+                .testTag(POKEMON_LIST_ITEM_TAG),
         )
     }
 }
