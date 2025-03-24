@@ -27,6 +27,7 @@ fun SearchBar(
         },
         modifier = modifier,
         shape = CircleShape,
+        singleLine = true,
         colors =
             OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = TopBarBlueColor,
