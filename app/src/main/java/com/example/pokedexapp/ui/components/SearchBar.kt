@@ -1,5 +1,6 @@
 package com.example.pokedexapp.ui.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -11,6 +12,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.pokedexapp.ui.theme.SurfaceColorDark
+import com.example.pokedexapp.ui.theme.SurfaceColorLight
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
 @Composable
@@ -31,6 +34,8 @@ fun SearchBar(
         colors =
             OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = TopBarBlueColor,
+                focusedContainerColor = if(isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight,
+                unfocusedContainerColor = if(isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight
             ),
         trailingIcon = {
             IconButton({

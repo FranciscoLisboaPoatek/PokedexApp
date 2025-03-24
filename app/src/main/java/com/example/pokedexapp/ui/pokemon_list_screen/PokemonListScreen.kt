@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
@@ -33,8 +34,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
@@ -42,7 +46,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,6 +76,9 @@ object PokemonListScreenTestTags {
     const val POKEMON_LIST_ITEM_TAG = "POKEMON_LIST_ITEM"
     const val POKEMON_LIST_SEARCH_BAR_TEST_TAG = "POKEMON_LIST_SEARCH_BAR"
 }
+
+private val SEARCH_BAR_TOP_PADDING = 8.dp
+private val SEARCH_BAR_BOTTOM_PADDING = 16.dp
 
 @Composable
 fun PokemonListScreen(
@@ -133,6 +142,12 @@ private fun PokemonList(
 
     val gridSpan = remember { 2 }
 
+    val density = LocalDensity.current
+
+    var topSpacing by remember {
+        mutableIntStateOf(0)
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -142,27 +157,13 @@ private fun PokemonList(
             columns = GridCells.Fixed(gridSpan),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = PaddingValues(top = with(density) { topSpacing.toDp() } + SEARCH_BAR_TOP_PADDING + SEARCH_BAR_BOTTOM_PADDING,
+                bottom = 16.dp,
+                start = 16.dp,
+                end = 16.dp),
             state = lazyGridState,
             modifier = Modifier.testTag(POKEMON_LIST_TAG),
         ) {
-            item(span = { GridItemSpan(gridSpan) }) {
-                SearchBar(
-                    modifier = Modifier.testTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG),
-                    searchText = uiState.searchText,
-                    onClearText = {
-                        onEvent(PokemonListScreenOnEvent.ChangeToDefaultList)
-                    },
-                    onSearchTextChange = {
-                        onEvent(
-                            PokemonListScreenOnEvent.OnSearchTextValueChange(
-                                it,
-                            ),
-                        )
-                    },
-                )
-            }
-
             when {
                 !uiState.couldLoadInitialData && !uiState.isLoading -> {
                     item(span = { GridItemSpan(gridSpan) }) {
@@ -223,7 +224,7 @@ private fun PokemonList(
             }
         }
 
-        AnimatedVisibility (
+        AnimatedVisibility(
             modifier = Modifier.align(Alignment.BottomCenter),
             visible = lazyGridState.canScrollBackward,
             enter = slideInVertically(
@@ -251,7 +252,7 @@ private fun PokemonList(
                     .clip(CircleShape)
                     .size(48.dp),
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if(isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight
+                    containerColor = if (isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight
                 ),
                 onClick = {
                     coroutineScope.launch {
@@ -268,6 +269,29 @@ private fun PokemonList(
                 )
             }
         }
+
+        SearchBar(
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, bottom = SEARCH_BAR_BOTTOM_PADDING)
+                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(0,0,50,50))
+                .padding(top = SEARCH_BAR_TOP_PADDING)
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+                .testTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG)
+                .onGloballyPositioned { topSpacing = it.size.height }
+                .shadow(10.dp, shape = CircleShape),
+            searchText = uiState.searchText,
+            onClearText = {
+                onEvent(PokemonListScreenOnEvent.ChangeToDefaultList)
+            },
+            onSearchTextChange = {
+                onEvent(
+                    PokemonListScreenOnEvent.OnSearchTextValueChange(
+                        it,
+                    ),
+                )
+            },
+        )
     }
 }
 
