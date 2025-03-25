@@ -11,9 +11,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.ui.components.PokeballLoadingAnimationTestTags.POKEBALL_LOADING_ANIMATION_TAG
-import com.example.pokedexapp.ui.components.PokemonTopAppBarTestTags
-import com.example.pokedexapp.ui.components.PokemonTopAppBarTestTags.OPEN_SEARCH_BUTTON_TAG
 import com.example.pokedexapp.ui.components.PokemonTopAppBarTestTags.SHOW_RANDOM_POKEMON_NOTIFICATION_BUTTON_TAG
+import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenTestTags.POKEMON_LIST_ITEM_TAG
 import com.example.pokedexapp.ui.pokemon_list_screen.PokemonListScreenTestTags.POKEMON_LIST_TAG
 import com.example.pokedexapp.ui.pokemon_list_screen.components.ErrorSearchingTestTags.ERROR_SEARCHING_TAG
 import com.example.pokedexapp.ui.pokemon_list_screen.components.NoSearchResultsFoundTestTag.NO_SEARCH_RESULT_FOUND_TAG
@@ -39,10 +38,9 @@ class PokemonListScreenTest {
 
         composeTestRule.onNodeWithTag(RETRY_LOADING_DATA_TAG)
             .assertExists()
-        composeTestRule.onNodeWithTag(OPEN_SEARCH_BUTTON_TAG).assertIsNotEnabled()
         composeTestRule.onNodeWithTag(SHOW_RANDOM_POKEMON_NOTIFICATION_BUTTON_TAG)
             .assertIsNotEnabled()
-        composeTestRule.onNodeWithTag(POKEMON_LIST_TAG).assertDoesNotExist()
+        composeTestRule.onNodeWithTag(POKEMON_LIST_ITEM_TAG).assertDoesNotExist()
     }
 
     @Test
@@ -59,10 +57,9 @@ class PokemonListScreenTest {
 
         composeTestRule.onNodeWithTag(POKEBALL_LOADING_ANIMATION_TAG)
             .assertExists()
-        composeTestRule.onNodeWithTag(OPEN_SEARCH_BUTTON_TAG).assertIsNotEnabled()
         composeTestRule.onNodeWithTag(SHOW_RANDOM_POKEMON_NOTIFICATION_BUTTON_TAG)
             .assertIsNotEnabled()
-        composeTestRule.onNodeWithTag(POKEMON_LIST_TAG).assertDoesNotExist()
+        composeTestRule.onNodeWithTag(POKEMON_LIST_ITEM_TAG).assertDoesNotExist()
     }
 
     @Test
@@ -80,7 +77,6 @@ class PokemonListScreenTest {
 
         composeTestRule.onNodeWithTag(POKEMON_LIST_TAG).assertExists()
         composeTestRule.onNodeWithText(PokemonSampleData.pokemonListSampleData()[0].name).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(OPEN_SEARCH_BUTTON_TAG).assertIsEnabled()
         composeTestRule.onNodeWithTag(SHOW_RANDOM_POKEMON_NOTIFICATION_BUTTON_TAG)
             .assertIsEnabled()
     }
@@ -124,31 +120,13 @@ class PokemonListScreenTest {
     }
 
     @Test
-    fun searchMode() {
-        composeTestRule.setContent {
-            PokemonListScreen(
-                state =
-                    PokemonListScreenUiState(
-                        isSearchMode = true,
-                        couldLoadInitialData = true,
-                        pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList(),
-                    ),
-                onEvent = { },
-            )
-        }
-
-        composeTestRule.onNodeWithTag(PokemonTopAppBarTestTags.SEARCH_TEXT_FIELD_TAG).assertIsDisplayed()
-        composeTestRule.onNodeWithTag(PokemonTopAppBarTestTags.CLOSE_SEARCH_BUTTON_TAG).assertIsEnabled()
-    }
-
-    @Test
     fun search_isShowing_error() {
         composeTestRule.setContent {
             PokemonListScreen(
                 state =
                     PokemonListScreenUiState(
                         errorSearching = true,
-                        isSearchMode = true,
+                        isDefaultList = false,
                         couldLoadInitialData = true,
                         pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList(),
                     ),
@@ -165,7 +143,7 @@ class PokemonListScreenTest {
             PokemonListScreen(
                 state =
                     PokemonListScreenUiState(
-                        isSearchMode = true,
+                        isDefaultList = false,
                         couldLoadInitialData = true,
                         showNoSearchResultsFound = true,
                         pokemonList = PokemonSampleData.pokemonListSampleData().toMutableStateList(),

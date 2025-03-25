@@ -3,8 +3,6 @@ package com.example.pokedexapp.ui.pokemon_list_screen
 import android.content.Context
 
 sealed class PokemonListScreenOnEvent() {
-    object OnSearchClick : PokemonListScreenOnEvent()
-
     data class OnSendNotificationClick(val context: Context) : PokemonListScreenOnEvent()
 
     data class OnSearchTextValueChange(val text: String) : PokemonListScreenOnEvent()
@@ -14,4 +12,6 @@ sealed class PokemonListScreenOnEvent() {
     object AppendToList : PokemonListScreenOnEvent()
 
     object RetryLoadingData : PokemonListScreenOnEvent()
+
+    object ChangeToDefaultList : PokemonListScreenOnEvent()
 }

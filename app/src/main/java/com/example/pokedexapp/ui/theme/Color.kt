@@ -11,6 +11,8 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val TopBarBlueColor = Color(0xFF235FC4)
+val SurfaceColorLight = Color(0xFFFFEFDC)
+val SurfaceColorDark = Color(0xFF313131)
 
 val HpStatColor = Color.Red
 val AttackStatColor = Color(0xFFF08030)
