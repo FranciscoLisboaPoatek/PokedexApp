@@ -88,6 +88,7 @@ fun PokemonListScreen(
 ) {
     val defaultListState = rememberLazyGridState()
     val context = LocalContext.current
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -134,16 +135,6 @@ private fun PokemonList(
     onEvent: (PokemonListScreenOnEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val controller = LocalSoftwareKeyboardController.current
-
-    LaunchedEffect(key1 = lazyGridState.isScrollInProgress) {
-        if (lazyGridState.isScrollInProgress) controller?.hide()
-    }
-
-    val gridSpan = remember { 2 }
-
-    val density = LocalDensity.current
-
     var topSpacing by remember {
         mutableIntStateOf(0)
     }
@@ -153,77 +144,14 @@ private fun PokemonList(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(gridSpan),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(top = with(density) { topSpacing.toDp() } + SEARCH_BAR_TOP_PADDING + SEARCH_BAR_BOTTOM_PADDING,
-                bottom = 16.dp,
-                start = 16.dp,
-                end = 16.dp),
-            state = lazyGridState,
-            modifier = Modifier.testTag(POKEMON_LIST_TAG),
-        ) {
-            when {
-                !uiState.couldLoadInitialData && !uiState.isLoading -> {
-                    item(span = { GridItemSpan(gridSpan) }) {
-                        RetryLoadingData(
-                            reloadData = { onEvent(PokemonListScreenOnEvent.RetryLoadingData) },
-                            modifier =
-                                Modifier
-                                    .fillMaxSize(),
-                        )
-                    }
-                }
-
-                !uiState.isDefaultList && uiState.showNoSearchResultsFound -> {
-                    item(span = { GridItemSpan(gridSpan) }) {
-                        NoSearchResultsFound(
-                            modifier =
-                                Modifier
-                                    .padding(top = 24.dp)
-                                    .fillMaxWidth(),
-                        )
-                    }
-                }
-
-                !uiState.isDefaultList && uiState.errorSearching -> {
-                    item(span = { GridItemSpan(gridSpan) }) {
-                        ErrorSearching(
-                            modifier =
-                                Modifier
-                                    .padding(top = 24.dp)
-                                    .fillMaxWidth(),
-                        )
-                    }
-                }
-
-                !uiState.isLoading -> {
-                    pokemonListItems(
-                        uiState.pokemonList,
-                        onEvent,
-                    )
-
-                    if (if (uiState.isDefaultList) uiState.errorAppendingDefaultList else uiState.errorAppendingSearchList) {
-                        item(span = { GridItemSpan(gridSpan) }) {
-                            RetryLoadingData(
-                                reloadData = {
-                                    onEvent(PokemonListScreenOnEvent.AppendToList)
-                                },
-                                modifier = Modifier.wrapContentSize(),
-                            )
-                        }
-                    } else {
-                        if (uiState.isLoadingAppend) {
-                            item(span = { GridItemSpan(gridSpan) }) {
-                                PokeballLoadingAnimation(Modifier.height(100.dp))
-                            }
-                        }
-                    }
-                }
-            }
+        if (!uiState.isLoading) {
+            PokemonGridWrapper(
+                uiState = uiState,
+                lazyGridState = lazyGridState,
+                topSpacing = topSpacing,
+                onEvent = onEvent
+            )
         }
-
         AnimatedVisibility(
             modifier = Modifier.align(Alignment.BottomCenter),
             visible = lazyGridState.canScrollBackward,
@@ -242,38 +170,15 @@ private fun PokemonList(
                 )
             )
         ) {
-            val coroutineScope = rememberCoroutineScope()
-
-            IconButton(
-                modifier = Modifier
-                    .padding(bottom = 24.dp)
-                    .shadow(10.dp, shape = CircleShape)
-                    .border(2.dp, TopBarBlueColor, CircleShape)
-                    .clip(CircleShape)
-                    .size(48.dp),
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight
-                ),
-                onClick = {
-                    coroutineScope.launch {
-                        lazyGridState.animateScrollToItem(0)
-                    }
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowUp,
-                    contentDescription = null,
-                    tint = TopBarBlueColor,
-                    modifier = Modifier
-                        .fillMaxSize()
-                )
+            ScrollToTopButton {
+                lazyGridState.animateScrollToItem(0)
             }
         }
 
         SearchBar(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, bottom = SEARCH_BAR_BOTTOM_PADDING)
-                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(0,0,50,50))
+                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(0, 0, 50, 50))
                 .padding(top = SEARCH_BAR_TOP_PADDING)
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
@@ -292,6 +197,96 @@ private fun PokemonList(
                 )
             },
         )
+    }
+}
+
+@Composable
+private fun PokemonGridWrapper(
+    uiState: PokemonListScreenUiState,
+    lazyGridState: LazyGridState,
+    topSpacing: Int,
+    onEvent: (PokemonListScreenOnEvent) -> Unit,
+) {
+    val controller = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(key1 = lazyGridState.isScrollInProgress) {
+        if (lazyGridState.isScrollInProgress) controller?.hide()
+    }
+
+    val gridSpan = remember { 2 }
+
+    val density = LocalDensity.current
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(gridSpan),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(
+            top = with(density) { topSpacing.toDp() } + SEARCH_BAR_TOP_PADDING + SEARCH_BAR_BOTTOM_PADDING,
+            bottom = 16.dp,
+            start = 16.dp,
+            end = 16.dp),
+        state = lazyGridState,
+        modifier = Modifier.testTag(POKEMON_LIST_TAG),
+    ) {
+        when {
+            !uiState.couldLoadInitialData && !uiState.isLoading -> {
+                item(span = { GridItemSpan(gridSpan) }) {
+                    RetryLoadingData(
+                        reloadData = { onEvent(PokemonListScreenOnEvent.RetryLoadingData) },
+                        modifier =
+                            Modifier
+                                .fillMaxSize(),
+                    )
+                }
+            }
+
+            !uiState.isDefaultList && uiState.showNoSearchResultsFound -> {
+                item(span = { GridItemSpan(gridSpan) }) {
+                    NoSearchResultsFound(
+                        modifier =
+                            Modifier
+                                .padding(top = 24.dp)
+                                .fillMaxWidth(),
+                    )
+                }
+            }
+
+            !uiState.isDefaultList && uiState.errorSearching -> {
+                item(span = { GridItemSpan(gridSpan) }) {
+                    ErrorSearching(
+                        modifier =
+                            Modifier
+                                .padding(top = 24.dp)
+                                .fillMaxWidth(),
+                    )
+                }
+            }
+
+            else -> {
+                pokemonListItems(
+                    uiState.pokemonList,
+                    onEvent,
+                )
+
+                if (if (uiState.isDefaultList) uiState.errorAppendingDefaultList else uiState.errorAppendingSearchList) {
+                    item(span = { GridItemSpan(gridSpan) }) {
+                        RetryLoadingData(
+                            reloadData = {
+                                onEvent(PokemonListScreenOnEvent.AppendToList)
+                            },
+                            modifier = Modifier.wrapContentSize(),
+                        )
+                    }
+                } else {
+                    if (uiState.isLoadingAppend) {
+                        item(span = { GridItemSpan(gridSpan) }) {
+                            PokeballLoadingAnimation(Modifier.height(100.dp))
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -315,6 +310,39 @@ private fun LazyGridScope.pokemonListItems(
             modifier = Modifier
                 .height(210.dp)
                 .testTag(POKEMON_LIST_ITEM_TAG),
+        )
+    }
+}
+
+@Composable
+private fun ScrollToTopButton(
+    modifier: Modifier = Modifier,
+    scrollToTop: suspend () -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+
+    IconButton(
+        modifier = modifier
+            .padding(bottom = 24.dp)
+            .shadow(10.dp, shape = CircleShape)
+            .border(2.dp, TopBarBlueColor, CircleShape)
+            .clip(CircleShape)
+            .size(48.dp),
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = if (isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight
+        ),
+        onClick = {
+            coroutineScope.launch {
+                scrollToTop()
+            }
+        }
+    ) {
+        Icon(
+            imageVector = Icons.Default.KeyboardArrowUp,
+            contentDescription = null,
+            tint = TopBarBlueColor,
+            modifier = Modifier
+                .fillMaxSize()
         )
     }
 }
