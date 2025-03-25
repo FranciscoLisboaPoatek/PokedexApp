@@ -140,35 +140,40 @@ private fun PokemonList(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
     ) {
         if (!uiState.isLoading) {
             PokemonGridWrapper(
                 uiState = uiState,
                 lazyGridState = lazyGridState,
                 topSpacing = topSpacing,
-                onEvent = onEvent
+                onEvent = onEvent,
             )
         }
         AnimatedVisibility(
             modifier = Modifier.align(Alignment.BottomCenter),
             visible = lazyGridState.canScrollBackward,
-            enter = slideInVertically(
-                initialOffsetY = { fullHeight -> fullHeight },
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioLowBouncy,
-                    stiffness = Spring.StiffnessLow
-                )
-            ),
-            exit = slideOutVertically(
-                targetOffsetY = { fullHeight -> fullHeight },
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioNoBouncy,
-                    stiffness = Spring.StiffnessMedium
-                )
-            )
+            enter =
+                slideInVertically(
+                    initialOffsetY = { fullHeight -> fullHeight },
+                    animationSpec =
+                        spring(
+                            dampingRatio = Spring.DampingRatioLowBouncy,
+                            stiffness = Spring.StiffnessLow,
+                        ),
+                ),
+            exit =
+                slideOutVertically(
+                    targetOffsetY = { fullHeight -> fullHeight },
+                    animationSpec =
+                        spring(
+                            dampingRatio = Spring.DampingRatioNoBouncy,
+                            stiffness = Spring.StiffnessMedium,
+                        ),
+                ),
         ) {
             ScrollToTopButton {
                 lazyGridState.animateScrollToItem(0)
@@ -176,15 +181,16 @@ private fun PokemonList(
         }
 
         SearchBar(
-            modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, bottom = SEARCH_BAR_BOTTOM_PADDING)
-                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(0, 0, 50, 50))
-                .padding(top = SEARCH_BAR_TOP_PADDING)
-                .fillMaxWidth()
-                .align(Alignment.TopCenter)
-                .testTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG)
-                .onGloballyPositioned { topSpacing = it.size.height }
-                .shadow(10.dp, shape = CircleShape),
+            modifier =
+                Modifier
+                    .padding(start = 16.dp, end = 16.dp, bottom = SEARCH_BAR_BOTTOM_PADDING)
+                    .background(MaterialTheme.colorScheme.background, RoundedCornerShape(0, 0, 50, 50))
+                    .padding(top = SEARCH_BAR_TOP_PADDING)
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+                    .testTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG)
+                    .onGloballyPositioned { topSpacing = it.size.height }
+                    .shadow(10.dp, shape = CircleShape),
             searchText = uiState.searchText,
             onClearText = {
                 onEvent(PokemonListScreenOnEvent.ChangeToDefaultList)
@@ -221,11 +227,13 @@ private fun PokemonGridWrapper(
         columns = GridCells.Fixed(gridSpan),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(
-            top = with(density) { topSpacing.toDp() } + SEARCH_BAR_TOP_PADDING + SEARCH_BAR_BOTTOM_PADDING,
-            bottom = 16.dp,
-            start = 16.dp,
-            end = 16.dp),
+        contentPadding =
+            PaddingValues(
+                top = with(density) { topSpacing.toDp() } + SEARCH_BAR_TOP_PADDING + SEARCH_BAR_BOTTOM_PADDING,
+                bottom = 16.dp,
+                start = 16.dp,
+                end = 16.dp,
+            ),
         state = lazyGridState,
         modifier = Modifier.testTag(POKEMON_LIST_TAG),
     ) {
@@ -307,9 +315,10 @@ private fun LazyGridScope.pokemonListItems(
             pokemon = pokemon,
             strokeWidthDp = 10.dp,
             onClick = { onEvent(PokemonListScreenOnEvent.OnPokemonCLick(pokemon.id)) },
-            modifier = Modifier
-                .height(210.dp)
-                .testTag(POKEMON_LIST_ITEM_TAG),
+            modifier =
+                Modifier
+                    .height(210.dp)
+                    .testTag(POKEMON_LIST_ITEM_TAG),
         )
     }
 }
@@ -317,32 +326,35 @@ private fun LazyGridScope.pokemonListItems(
 @Composable
 private fun ScrollToTopButton(
     modifier: Modifier = Modifier,
-    scrollToTop: suspend () -> Unit
+    scrollToTop: suspend () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     IconButton(
-        modifier = modifier
-            .padding(bottom = 24.dp)
-            .shadow(10.dp, shape = CircleShape)
-            .border(2.dp, TopBarBlueColor, CircleShape)
-            .clip(CircleShape)
-            .size(48.dp),
-        colors = IconButtonDefaults.iconButtonColors(
-            containerColor = if (isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight
-        ),
+        modifier =
+            modifier
+                .padding(bottom = 24.dp)
+                .shadow(10.dp, shape = CircleShape)
+                .border(2.dp, TopBarBlueColor, CircleShape)
+                .clip(CircleShape)
+                .size(48.dp),
+        colors =
+            IconButtonDefaults.iconButtonColors(
+                containerColor = if (isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight,
+            ),
         onClick = {
             coroutineScope.launch {
                 scrollToTop()
             }
-        }
+        },
     ) {
         Icon(
             imageVector = Icons.Default.KeyboardArrowUp,
             contentDescription = null,
             tint = TopBarBlueColor,
-            modifier = Modifier
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .fillMaxSize(),
         )
     }
 }

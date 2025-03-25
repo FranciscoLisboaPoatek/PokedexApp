@@ -34,8 +34,8 @@ fun SearchBar(
         colors =
             OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = TopBarBlueColor,
-                focusedContainerColor = if(isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight,
-                unfocusedContainerColor = if(isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight
+                focusedContainerColor = if (isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight,
+                unfocusedContainerColor = if (isSystemInDarkTheme()) SurfaceColorDark else SurfaceColorLight,
             ),
         trailingIcon = {
             IconButton({
