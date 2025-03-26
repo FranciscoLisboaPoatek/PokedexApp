@@ -51,7 +51,7 @@ class PokemonRepositoryImpl
 
                 evolutionChainList.add(evolutionChain.chain.recursiveToChainModel())
 
-                //TODO Implement better error handling
+                // TODO Implement better error handling
                 return@withContext evolutionChain.toPokemonEvolutionChainModel(evolutionChainList.first())
             }
 
