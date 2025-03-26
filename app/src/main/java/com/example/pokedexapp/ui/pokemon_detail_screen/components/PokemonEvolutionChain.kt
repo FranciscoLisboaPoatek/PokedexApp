@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.data.utils.treatName
-import com.example.pokedexapp.domain.models.ChainModel
 import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.ui.utils.EEVEE_POKEDEX_ID_STRING
 
@@ -32,9 +31,9 @@ fun PokemonEvolutionChain(
     currentPokemonDetailId: String? = null,
     onClickPokemon: (String) -> Unit,
 ) {
-    evolutionChain.evolutions?.let {
+    evolutionChain.basePokemon?.let {
         if (
-            it.firstOrNull()?.id == EEVEE_POKEDEX_ID_STRING
+            it.id == EEVEE_POKEDEX_ID_STRING
         ) {
             Eeveelutions(
                 modifier = modifier,
@@ -45,7 +44,7 @@ fun PokemonEvolutionChain(
         } else {
             PokemonColumn(
                 modifier = modifier,
-                evolutions = it,
+                evolutionChain = evolutionChain,
                 currentPokemonDetailId = currentPokemonDetailId,
                 onClickPokemon = onClickPokemon,
             )
@@ -64,7 +63,7 @@ private fun Eeveelutions(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        evolutionChain.evolutions?.firstOrNull()?.let { eevee ->
+        evolutionChain.basePokemon?.let { eevee ->
             PokemonEvolution(
                 modifier = Modifier.weight(1f),
                 pokemonEvolutionId = eevee.id,
@@ -98,12 +97,12 @@ private fun Eeveelutions(
 @Composable
 private fun PokemonColumn(
     modifier: Modifier = Modifier,
-    evolutions: List<ChainModel>,
+    evolutionChain: PokemonEvolutionChainModel,
     currentPokemonDetailId: String? = null,
     onClickPokemon: (String) -> Unit,
 ) {
     Column(modifier) {
-        evolutions.firstOrNull()?.let { firstStage ->
+        evolutionChain.basePokemon?.let { firstStage ->
             PokemonEvolution(
                 pokemonEvolutionId = firstStage.id,
                 pokemonEvolutionName = firstStage.name,

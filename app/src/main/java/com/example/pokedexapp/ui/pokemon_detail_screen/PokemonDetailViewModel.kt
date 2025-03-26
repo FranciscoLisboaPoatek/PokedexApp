@@ -125,7 +125,8 @@ class PokemonDetailViewModel
                     val responsePokemonDetailModel =
                         pokemonDetailUseCase.getPokemonById(pokemonId = pokemonId)
                             ?: throw NoSuchElementException()
-                    val responseEvolutionChain = getEvolutionChain(speciesId = responsePokemonDetailModel.speciesId)
+                    val responseEvolutionChain =
+                        getEvolutionChain(speciesId = responsePokemonDetailModel.speciesId)
 
                     _state.updateState {
                         copy(
@@ -133,7 +134,12 @@ class PokemonDetailViewModel
                             isError = false,
                             pokemonDetailModel = responsePokemonDetailModel,
                             pokemonSprite = responsePokemonDetailModel.frontDefaultSprite,
-                            evolutionChain = responseEvolutionChain,
+                            evolutionChain =
+                                if (responseEvolutionChain.basePokemon?.evolutions?.isEmpty() == true) {
+                                    null
+                                } else {
+                                    responseEvolutionChain
+                                },
                         )
                     }
                 } catch (ex: Exception) {

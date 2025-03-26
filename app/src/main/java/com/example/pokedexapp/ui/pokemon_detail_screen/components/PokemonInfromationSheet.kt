@@ -32,7 +32,7 @@ fun PokemonInformationSheet(
     isLoading: Boolean,
     isError: Boolean,
     pokemon: PokemonDetailModel?,
-    evolutionChain: PokemonEvolutionChainModel,
+    evolutionChain: PokemonEvolutionChainModel?,
     contentTopSpace: Dp,
     onEvent: (PokemonDetailScreenOnEvent) -> Unit,
     modifier: Modifier = Modifier,
@@ -92,7 +92,7 @@ private fun ErrorPokemonInformationSheet(modifier: Modifier = Modifier) {
 @Composable
 private fun SuccessPokemonInformationSheet(
     pokemon: PokemonDetailModel,
-    evolutionChain: PokemonEvolutionChainModel,
+    evolutionChain: PokemonEvolutionChainModel?,
     onEvent: (PokemonDetailScreenOnEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -135,13 +135,15 @@ private fun SuccessPokemonInformationSheet(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        PokemonEvolutionChain(
-            evolutionChain = evolutionChain,
-            currentPokemonDetailId = pokemon.id,
-            onClickPokemon = {
-                onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it))
-            },
-        )
+        evolutionChain?.let {
+            PokemonEvolutionChain(
+                evolutionChain = it,
+                currentPokemonDetailId = pokemon.id,
+                onClickPokemon = {
+                    onEvent(PokemonDetailScreenOnEvent.NavigateToDetails(it))
+                },
+            )
+        }
     }
 }
 

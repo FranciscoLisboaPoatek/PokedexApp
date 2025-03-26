@@ -51,7 +51,8 @@ class PokemonRepositoryImpl
 
                 evolutionChainList.add(evolutionChain.chain.recursiveToChainModel())
 
-                return@withContext evolutionChain.toPokemonEvolutionChainModel(evolutionChainList)
+                // TODO Implement better error handling
+                return@withContext evolutionChain.toPokemonEvolutionChainModel(evolutionChainList.first())
             }
 
         override suspend fun savePokemonList() {
