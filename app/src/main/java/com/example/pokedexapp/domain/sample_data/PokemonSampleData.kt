@@ -302,33 +302,31 @@ class PokemonSampleData {
         fun evolutionChainSampleData(): PokemonEvolutionChainModel =
             PokemonEvolutionChainModel(
                 id = "1",
-                evolutions =
-                    listOf(
-                        ChainModel(
-                            id = "1",
-                            name = "Bulbasaur",
-                            isBaby = false,
-                            spriteUrl = "",
-                            evolutions =
-                                listOf(
-                                    ChainModel(
-                                        id = "2",
-                                        name = "Ivysaur",
-                                        isBaby = false,
-                                        spriteUrl = "",
-                                        evolutions =
-                                            listOf(
-                                                ChainModel(
-                                                    id = "3",
-                                                    name = "Venusaur",
-                                                    isBaby = false,
-                                                    spriteUrl = "",
-                                                    evolutions = listOf(),
-                                                ),
+                basePokemon =
+                    ChainModel(
+                        id = "1",
+                        name = "Bulbasaur",
+                        isBaby = false,
+                        spriteUrl = "",
+                        evolutions =
+                            listOf(
+                                ChainModel(
+                                    id = "2",
+                                    name = "Ivysaur",
+                                    isBaby = false,
+                                    spriteUrl = "",
+                                    evolutions =
+                                        listOf(
+                                            ChainModel(
+                                                id = "3",
+                                                name = "Venusaur",
+                                                isBaby = false,
+                                                spriteUrl = "",
+                                                evolutions = listOf(),
                                             ),
-                                    ),
+                                        ),
                                 ),
-                        ),
+                            ),
                     ),
             )
     }

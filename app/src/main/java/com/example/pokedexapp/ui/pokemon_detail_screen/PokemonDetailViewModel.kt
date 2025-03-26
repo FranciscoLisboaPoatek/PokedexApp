@@ -133,7 +133,7 @@ class PokemonDetailViewModel
                             isError = false,
                             pokemonDetailModel = responsePokemonDetailModel,
                             pokemonSprite = responsePokemonDetailModel.frontDefaultSprite,
-                            evolutionChain = responseEvolutionChain,
+                            evolutionChain = if (responseEvolutionChain.basePokemon?.evolutions?.isEmpty() == true) null else responseEvolutionChain,
                         )
                     }
                 } catch (ex: Exception) {

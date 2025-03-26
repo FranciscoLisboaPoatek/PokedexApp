@@ -9,7 +9,7 @@ data class PokemonDetailScreenUiState(
     val isError: Boolean = false,
     val pokemonDetailModel: PokemonDetailModel? = null,
     val pokemonSprite: PokemonSprite? = pokemonDetailModel?.frontDefaultSprite,
-    val evolutionChain: PokemonEvolutionChainModel = PokemonEvolutionChainModel(),
+    val evolutionChain: PokemonEvolutionChainModel? = null,
     val receiverToken: String = "",
     val isSharingPokemonToReceiver: Boolean = false,
     val isErrorSharingPokemonToReceiver: Boolean = false,

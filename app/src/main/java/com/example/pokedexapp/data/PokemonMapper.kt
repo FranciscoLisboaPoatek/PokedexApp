@@ -73,10 +73,10 @@ object PokemonMapper {
         )
     }
 
-    fun PokemonEvolutionChainDto.toPokemonEvolutionChainModel(chain: List<ChainModel>): PokemonEvolutionChainModel {
+    fun PokemonEvolutionChainDto.toPokemonEvolutionChainModel(chain: ChainModel): PokemonEvolutionChainModel {
         return PokemonEvolutionChainModel(
             id = this.id.toString(),
-            evolutions = chain,
+            basePokemon = chain,
         )
     }
 }
