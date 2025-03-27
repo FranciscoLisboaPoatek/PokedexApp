@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
+import com.example.pokedexapp.domain.utils.Response
 import com.example.pokedexapp.ui.analytics.AnalyticsLogger
 import com.example.pokedexapp.ui.navigation.Navigator
 import io.mockk.Runs
@@ -29,7 +30,7 @@ class PokemonListViewModelTest {
 
     private val dispatcher = StandardTestDispatcher()
 
-    private val pokemonListUseCaseMock = mockk<PokemonListUseCase>()
+    private val pokemonListUseCaseMock = mockk<PokemonListUseCase>(relaxed = true)
 
     private val randomPokemonUseCaseMock = mockk<RandomPokemonUseCase>()
 
@@ -60,9 +61,9 @@ class PokemonListViewModelTest {
                 any(),
                 any(),
             )
-        } returns listOf()
+        } returns Response.Success(listOf())
 
-        coEvery { pokemonListUseCaseMock.insertAllPokemon() } returns Unit
+        coEvery { pokemonListUseCaseMock.insertAllPokemon() } returns Response.Success(Unit)
 
         viewModel.loadInitialData()
         dispatcher.scheduler.advanceUntilIdle()
@@ -78,7 +79,7 @@ class PokemonListViewModelTest {
                 any(),
                 any(),
             )
-        } throws Exception()
+        } returns Response.Error(Exception())
 
         viewModel.loadInitialData()
         dispatcher.scheduler.advanceUntilIdle()
@@ -105,7 +106,7 @@ class PokemonListViewModelTest {
                     any(),
                     any(),
                 )
-            } returns PokemonSampleData.pokemonListSampleData()
+            } returns Response.Success(PokemonSampleData.pokemonListSampleData())
 
             viewModel.getPokemonList()
             dispatcher.scheduler.advanceUntilIdle()
@@ -143,7 +144,7 @@ class PokemonListViewModelTest {
                 any(),
                 any(),
             )
-        } returns listOf()
+        } returns Response.Success(listOf())
 
         viewModel.getPokemonList()
 
@@ -162,7 +163,7 @@ class PokemonListViewModelTest {
                 any(),
                 any(),
             )
-        } throws Exception()
+        } returns Response.Error(Exception())
 
         viewModel.getPokemonList()
         dispatcher.scheduler.advanceUntilIdle()
@@ -185,9 +186,7 @@ class PokemonListViewModelTest {
                 }
 
             coEvery { pokemonListUseCaseMock.getPokemonSearchList("Bulbasaur", any(), any()) } returns
-                listOf(
-                    PokemonSampleData.singlePokemonListItemSampleData(),
-                )
+                Response.Success(listOf(PokemonSampleData.singlePokemonListItemSampleData()))
 
             coEvery { analyticsLoggerMock.logEvent(any(), any()) } just Runs
 
@@ -213,7 +212,7 @@ class PokemonListViewModelTest {
 
     @Test
     fun searchPokemonListByName_noResultsFound() {
-        coEvery { pokemonListUseCaseMock.getPokemonSearchList(any(), any(), any()) } returns emptyList()
+        coEvery { pokemonListUseCaseMock.getPokemonSearchList(any(), any(), any()) } returns Response.Success(emptyList())
 
         coEvery { analyticsLoggerMock.logEvent(any(), any()) } just Runs
 
@@ -232,7 +231,7 @@ class PokemonListViewModelTest {
                 any(),
                 any(),
             )
-        } throws Exception()
+        } returns Response.Error(Exception())
 
         coEvery { analyticsLoggerMock.logEvent(any(), any()) } just Runs
 
@@ -250,9 +249,7 @@ class PokemonListViewModelTest {
             val stateList = mutableListOf<PokemonListScreenUiState>()
 
             coEvery { pokemonListUseCaseMock.getPokemonSearchList("Pikachu", any(), any()) } returns
-                listOf(
-                    PokemonSampleData.singlePokemonListItemSampleData(),
-                )
+                Response.Success(listOf(PokemonSampleData.singlePokemonListItemSampleData()))
 
             coEvery { analyticsLoggerMock.logEvent(any(), any()) } just Runs
 
@@ -290,7 +287,7 @@ class PokemonListViewModelTest {
                 any(),
                 any(),
             )
-        } returns emptyList()
+        } returns Response.Success(emptyList())
 
         viewModel.appendSearchList()
         dispatcher.scheduler.advanceUntilIdle()
@@ -307,7 +304,7 @@ class PokemonListViewModelTest {
                 any(),
                 any(),
             )
-        } throws Exception()
+        } returns Response.Error(Exception())
 
         coEvery { analyticsLoggerMock.logEvent(any(), any()) } just Runs
 

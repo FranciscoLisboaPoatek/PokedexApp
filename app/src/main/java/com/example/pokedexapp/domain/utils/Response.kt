@@ -4,8 +4,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 sealed class Response<out T> {
-    class Success<T>(data: T) : Response<T>()
-    class Error(ex: Exception) : Response<Nothing>()
+    class Success<T>(val data: T) : Response<T>()
+    class Error(val ex: Exception) : Response<Nothing>()
 }
 
 suspend fun <T> response(dispatcher: CoroutineDispatcher, block: suspend () -> T): Response<T> =

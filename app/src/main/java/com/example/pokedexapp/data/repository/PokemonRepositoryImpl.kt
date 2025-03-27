@@ -18,6 +18,8 @@ import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.models.PokemonMinimalInfo
 import com.example.pokedexapp.domain.models.SharePokemonModel
 import com.example.pokedexapp.domain.repository.PokemonRepository
+import com.example.pokedexapp.domain.utils.Response
+import com.example.pokedexapp.domain.utils.response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -55,8 +57,8 @@ class PokemonRepositoryImpl
                 return@withContext evolutionChain.toPokemonEvolutionChainModel(evolutionChainList.first())
             }
 
-        override suspend fun savePokemonList() {
-            withContext(Dispatchers.IO) {
+        override suspend fun savePokemonList(): Response<Unit> =
+            response(Dispatchers.IO) {
                 pokemonDao.deleteAllPokemon()
                 val pokemonApiList = pokemonApi.getPokemonEntireList().results
                 val pokemonDaoList =
@@ -64,13 +66,13 @@ class PokemonRepositoryImpl
 
                 pokemonDao.insertAllPokemon(pokemonDaoList)
             }
-        }
+
 
         override suspend fun getPokemonList(
             offset: Int,
             limit: Int,
-        ): List<PokemonListItemModel> =
-            withContext(Dispatchers.IO) {
+        ): Response<List<PokemonListItemModel>> =
+            response(Dispatchers.IO) {
                 val pokemonModelList = mutableListOf<PokemonListItemModel>()
                 val pokemonDaoDtoList = pokemonDao.pokemonPagination(offset, limit)
                 pokemonDaoDtoList.forEach {
@@ -80,15 +82,15 @@ class PokemonRepositoryImpl
                         )
                     }
                 }
-                return@withContext pokemonModelList
+                pokemonModelList
             }
 
         override suspend fun getPokemonSearchList(
             name: String,
             offset: Int,
             limit: Int,
-        ): List<PokemonListItemModel> =
-            withContext(Dispatchers.IO) {
+        ): Response<List<PokemonListItemModel>> =
+            response(Dispatchers.IO) {
                 val searchName = "%$name%"
                 val pokemonModelList = mutableListOf<PokemonListItemModel>()
                 val pokemonDaoDtoList = pokemonDao.searchPokemonByName(searchName, offset, limit)
@@ -99,7 +101,7 @@ class PokemonRepositoryImpl
                         )
                     }
                 }
-                return@withContext pokemonModelList
+                pokemonModelList
             }
 
         override suspend fun getPokemonListItem(pokemonId: String): PokemonListItemModel? =
