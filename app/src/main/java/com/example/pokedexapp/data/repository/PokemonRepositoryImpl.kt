@@ -31,10 +31,11 @@ class PokemonRepositoryImpl
         private val pokemonDao: PokemonDao,
         private val pokedexServerApi: PokedexServerApi,
     ) : PokemonRepository {
-        override suspend fun getPokemonDetailById(pokemonId: String): PokemonDetailModel? =
-            withContext(Dispatchers.IO) {
-                val pokemonApiDto = pokemonApi.getPokemonById(pokemonId.toInt())
-                return@withContext pokemonApiDto?.toPokemonModel()
+        override suspend fun getPokemonDetailById(pokemonId: String): Response<PokemonDetailModel> =
+            response(Dispatchers.IO) {
+                val pokemonApiDto =
+                    pokemonApi.getPokemonById(pokemonId.toInt()) ?: throw NoSuchElementException()
+                pokemonApiDto.toPokemonModel()
             }
 
         override suspend fun getPokemonDetailByName(name: String): PokemonDetailModel? =
@@ -42,8 +43,8 @@ class PokemonRepositoryImpl
                 return@withContext pokemonApi.getPokemonByName(name)?.toPokemonModel()
             }
 
-        override suspend fun getPokemonEvolutionChain(speciesId: String): PokemonEvolutionChainModel =
-            withContext(Dispatchers.IO) {
+        override suspend fun getPokemonEvolutionChain(speciesId: String): Response<PokemonEvolutionChainModel> =
+            response(Dispatchers.IO) {
                 val species = pokemonApi.getPokemonSpeciesById(speciesId.toInt())
 
                 val evolutionChain =
@@ -53,8 +54,8 @@ class PokemonRepositoryImpl
 
                 evolutionChainList.add(evolutionChain.chain.recursiveToChainModel())
 
-                // TODO Implement better error handling
-                return@withContext evolutionChain.toPokemonEvolutionChainModel(evolutionChainList.first())
+                // The Evolution Chain must have a base pokemon, so .first() throwing an exception if there isn't is the intended behaviour
+                evolutionChain.toPokemonEvolutionChainModel(evolutionChainList.first())
             }
 
         override suspend fun savePokemonList(): Response<Unit> =
@@ -66,7 +67,6 @@ class PokemonRepositoryImpl
 
                 pokemonDao.insertAllPokemon(pokemonDaoList)
             }
-
 
         override suspend fun getPokemonList(
             offset: Int,
@@ -110,11 +110,11 @@ class PokemonRepositoryImpl
                 return@withContext pokemonApiDto?.toPokemonListItemModel()
             }
 
-        override suspend fun getRandomPokemonMinimalInfo(): PokemonMinimalInfo =
-            withContext(Dispatchers.IO) {
+        override suspend fun getRandomPokemonMinimalInfo(): Response<PokemonMinimalInfo> =
+            response(Dispatchers.IO) {
                 val pokemonTableCount = pokemonDao.getPokemonTableCount()
                 val randomPokemonDaoDto = pokemonDao.getRandomPokemon((0..<pokemonTableCount).random())
-                return@withContext randomPokemonDaoDto.toPokemonMinimalInfo()
+                randomPokemonDaoDto.toPokemonMinimalInfo()
             }
 
         override suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel) {

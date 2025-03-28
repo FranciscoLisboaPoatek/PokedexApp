@@ -8,11 +8,11 @@ import com.example.pokedexapp.domain.models.SharePokemonModel
 import com.example.pokedexapp.domain.utils.Response
 
 interface PokemonRepository {
-    suspend fun getPokemonDetailById(pokemonId: String): PokemonDetailModel?
+    suspend fun getPokemonDetailById(pokemonId: String): Response<PokemonDetailModel>
 
     suspend fun getPokemonDetailByName(name: String): PokemonDetailModel?
 
-    suspend fun getPokemonEvolutionChain(speciesId: String): PokemonEvolutionChainModel
+    suspend fun getPokemonEvolutionChain(speciesId: String): Response<PokemonEvolutionChainModel>
 
     suspend fun savePokemonList(): Response<Unit>
 
@@ -29,7 +29,7 @@ interface PokemonRepository {
 
     suspend fun getPokemonListItem(pokemonId: String): PokemonListItemModel?
 
-    suspend fun getRandomPokemonMinimalInfo(): PokemonMinimalInfo
+    suspend fun getRandomPokemonMinimalInfo(): Response<PokemonMinimalInfo>
 
     suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel)
 }
