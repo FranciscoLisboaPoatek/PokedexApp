@@ -31,5 +31,5 @@ interface PokemonRepository {
 
     suspend fun getRandomPokemonMinimalInfo(): Response<PokemonMinimalInfo>
 
-    suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel)
+    suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel): Response<Unit>
 }

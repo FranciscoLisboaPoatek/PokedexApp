@@ -117,14 +117,13 @@ class PokemonRepositoryImpl
                 randomPokemonDaoDto.toPokemonMinimalInfo()
             }
 
-        override suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel) {
-            withContext(Dispatchers.IO) {
+        override suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel) =
+            response(Dispatchers.IO) {
                 val response =
                     pokedexServerApi.sharePokemon(body = sharePokemonModel.toSharePokemonNotificationDto())
                         .execute()
                 if (response.code() == 400) throw IllegalArgumentException()
             }
-        }
 
         private suspend fun Chain.recursiveToChainModel(): ChainModel {
             val pokemonSpecies =

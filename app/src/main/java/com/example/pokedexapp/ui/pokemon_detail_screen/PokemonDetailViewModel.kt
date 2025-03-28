@@ -102,8 +102,8 @@ class PokemonDetailViewModel
             _state.updateState { copy(isErrorSharingPokemonToReceiver = false) }
 
             viewModelScope.launch {
-                try {
-                    _state.value.pokemonDetailModel?.let {
+                _state.value.pokemonDetailModel?.let {
+                    val sharePokemonResponse =
                         sharePokemonUseCase.sharePokemonTo(
                             SharePokemonModel(
                                 receiver = _state.value.receiverToken,
@@ -111,9 +111,10 @@ class PokemonDetailViewModel
                                 pokemonName = it.name,
                             ),
                         )
+
+                    if (sharePokemonResponse is Response.Error) {
+                        _state.updateState { copy(isErrorSharingPokemonToReceiver = true) }
                     }
-                } catch (ex: Exception) {
-                    _state.updateState { copy(isErrorSharingPokemonToReceiver = true) }
                 }
             }
         }
