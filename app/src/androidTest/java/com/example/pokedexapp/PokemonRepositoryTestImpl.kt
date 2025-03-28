@@ -33,34 +33,28 @@ class PokemonRepositoryTestImpl
         override suspend fun getPokemonList(
             offset: Int,
             limit: Int,
-        ): Response<List<PokemonListItemModel>> {
-            return try {
+        ): Response<List<PokemonListItemModel>> =
+            response {
                 val pokemonList = PokemonSampleData.pokemonListSampleData()
                 val maxIndex = offset + limit
                 val toIndex = if (maxIndex > pokemonList.size) pokemonList.size else maxIndex
-                Response.Success(pokemonList.subList(offset, toIndex))
-            } catch (ex: Exception) {
-                Response.Error(ex)
+                pokemonList.subList(offset, toIndex)
             }
-        }
 
         override suspend fun getPokemonSearchList(
             name: String,
             offset: Int,
             limit: Int,
-        ): Response<List<PokemonListItemModel>> {
-            return try {
+        ): Response<List<PokemonListItemModel>> =
+            response {
                 val searchPokemonList =
                     PokemonSampleData.pokemonListSampleData()
                         .filter { it.name.contains(other = name, ignoreCase = true) }
                 val maxIndex = offset + limit
                 val toIndex =
                     if (maxIndex > searchPokemonList.size) searchPokemonList.size else maxIndex
-                Response.Success(searchPokemonList.subList(offset, toIndex))
-            } catch (ex: Exception) {
-                Response.Error(ex)
+                searchPokemonList.subList(offset, toIndex)
             }
-        }
 
         override suspend fun getPokemonListItem(pokemonId: String): PokemonListItemModel? {
             return PokemonSampleData.pokemonListSampleData().find { it.id == pokemonId }
