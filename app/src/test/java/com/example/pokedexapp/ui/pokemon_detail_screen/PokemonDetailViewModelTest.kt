@@ -8,11 +8,10 @@ import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
+import com.example.pokedexapp.domain.utils.Response
 import com.example.pokedexapp.ui.navigation.Navigator
 import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
-import io.mockk.Runs
 import io.mockk.coEvery
-import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -52,11 +51,11 @@ class PokemonDetailViewModelTest {
 
         coEvery {
             pokemonDetailUseCaseMock.getPokemonById("1")
-        } returns PokemonSampleData.singlePokemonDetailSampleData()
+        } returns Response.Success(PokemonSampleData.singlePokemonDetailSampleData())
 
         coEvery {
             pokemonEvolutionChainUseCaseMock.getPokemonChain("1")
-        } returns PokemonEvolutionChainModel()
+        } returns Response.Success(PokemonEvolutionChainModel())
 
         savedStateHandleMock[POKEMON_ID_KEY] = "1"
 
@@ -163,11 +162,11 @@ class PokemonDetailViewModelTest {
 
             coEvery {
                 pokemonDetailUseCaseMock.getPokemonById("2")
-            } returns pokemon
+            } returns Response.Success(pokemon)
 
             coEvery {
                 pokemonEvolutionChainUseCaseMock.getPokemonChain(any())
-            } returns PokemonEvolutionChainModel()
+            } returns Response.Success(PokemonEvolutionChainModel())
 
             viewModel.updatePokemon("2")
             dispatcher.scheduler.advanceUntilIdle()
@@ -182,11 +181,11 @@ class PokemonDetailViewModelTest {
     fun updatePokemon_error() {
         coEvery {
             pokemonDetailUseCaseMock.getPokemonById(any())
-        } throws Exception()
+        } returns Response.Error(Exception())
 
         coEvery {
             pokemonEvolutionChainUseCaseMock.getPokemonChain(any())
-        } returns PokemonEvolutionChainModel()
+        } returns Response.Success(PokemonEvolutionChainModel())
 
         viewModel.updatePokemon("2")
         dispatcher.scheduler.advanceUntilIdle()
@@ -199,7 +198,7 @@ class PokemonDetailViewModelTest {
     fun sharePokemonToReceiver() {
         coEvery {
             sharePokemonUseCaseMock.sharePokemonTo(any())
-        } just Runs
+        } returns Response.Success(Unit)
 
         assertEquals(false, viewModel.state.value.isErrorSharingPokemonToReceiver)
     }
@@ -208,7 +207,7 @@ class PokemonDetailViewModelTest {
     fun sharePokemonToReceiver_error() {
         coEvery {
             sharePokemonUseCaseMock.sharePokemonTo(any())
-        } throws Exception()
+        } returns Response.Error(Exception())
 
         viewModel.sharePokemonToReceiver()
         dispatcher.scheduler.advanceUntilIdle()

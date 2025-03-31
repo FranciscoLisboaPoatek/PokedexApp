@@ -3,12 +3,12 @@ package com.example.pokedexapp.ui.pokemon_detail_screen
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.domain.models.SharePokemonModel
 import com.example.pokedexapp.domain.models.SpriteType
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
+import com.example.pokedexapp.domain.utils.Response
 import com.example.pokedexapp.ui.navigation.Navigator
 import com.example.pokedexapp.ui.navigation.Screen
 import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
@@ -102,8 +102,8 @@ class PokemonDetailViewModel
             _state.updateState { copy(isErrorSharingPokemonToReceiver = false) }
 
             viewModelScope.launch {
-                try {
-                    _state.value.pokemonDetailModel?.let {
+                _state.value.pokemonDetailModel?.let {
+                    val sharePokemonResponse =
                         sharePokemonUseCase.sharePokemonTo(
                             SharePokemonModel(
                                 receiver = _state.value.receiverToken,
@@ -111,9 +111,10 @@ class PokemonDetailViewModel
                                 pokemonName = it.name,
                             ),
                         )
+
+                    if (sharePokemonResponse is Response.Error) {
+                        _state.updateState { copy(isErrorSharingPokemonToReceiver = true) }
                     }
-                } catch (ex: Exception) {
-                    _state.updateState { copy(isErrorSharingPokemonToReceiver = true) }
                 }
             }
         }
@@ -121,34 +122,42 @@ class PokemonDetailViewModel
         fun updatePokemon(pokemonId: String) {
             _state.updateState { copy(isLoading = true) }
             viewModelScope.launch {
-                try {
-                    val responsePokemonDetailModel =
-                        pokemonDetailUseCase.getPokemonById(pokemonId = pokemonId)
-                            ?: throw NoSuchElementException()
-                    val responseEvolutionChain =
-                        getEvolutionChain(speciesId = responsePokemonDetailModel.speciesId)
+                val pokemonDetailModelResponse =
+                    pokemonDetailUseCase.getPokemonById(pokemonId = pokemonId)
 
-                    _state.updateState {
-                        copy(
-                            isLoading = false,
-                            isError = false,
-                            pokemonDetailModel = responsePokemonDetailModel,
-                            pokemonSprite = responsePokemonDetailModel.frontDefaultSprite,
-                            evolutionChain =
-                                if (responseEvolutionChain.basePokemon?.evolutions?.isEmpty() == true) {
-                                    null
-                                } else {
-                                    responseEvolutionChain
-                                },
-                        )
+                when (pokemonDetailModelResponse) {
+                    is Response.Error -> {
+                        _state.updateState { copy(isError = true, isLoading = false) }
                     }
-                } catch (ex: Exception) {
-                    _state.updateState { copy(isError = true, isLoading = false) }
+
+                    is Response.Success -> {
+                        val evolutionChainResponse =
+                            pokemonEvolutionChainUseCase.getPokemonChain(speciesId = pokemonDetailModelResponse.data.speciesId)
+
+                        when (evolutionChainResponse) {
+                            is Response.Error -> {
+                                _state.updateState { copy(isError = true, isLoading = false) }
+                            }
+
+                            is Response.Success -> {
+                                _state.updateState {
+                                    copy(
+                                        isLoading = false,
+                                        isError = false,
+                                        pokemonDetailModel = pokemonDetailModelResponse.data,
+                                        pokemonSprite = pokemonDetailModelResponse.data.frontDefaultSprite,
+                                        evolutionChain =
+                                            if (evolutionChainResponse.data.basePokemon?.evolutions?.isEmpty() == true) {
+                                                null
+                                            } else {
+                                                evolutionChainResponse.data
+                                            },
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        }
-
-        private suspend fun getEvolutionChain(speciesId: String): PokemonEvolutionChainModel {
-            return pokemonEvolutionChainUseCase.getPokemonChain(speciesId = speciesId)
         }
     }

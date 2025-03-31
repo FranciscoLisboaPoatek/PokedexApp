@@ -5,6 +5,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
+import com.example.pokedexapp.domain.utils.Response
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
@@ -19,16 +20,20 @@ class DailyNotificationWorker
         private val randomPokemonUseCase: RandomPokemonUseCase,
     ) : CoroutineWorker(appContext, params) {
         override suspend fun doWork(): Result {
-            return try {
-                val notificationPokemon = randomPokemonUseCase.getRandomPokemonMinimalInfo()
+            val notificationPokemonResponse = randomPokemonUseCase.getRandomPokemonMinimalInfo()
 
-                DailyPokemonNotification(appContext).showNotification(
-                    pokemonId = notificationPokemon.id,
-                    pokemonName = notificationPokemon.name,
-                )
-                return Result.success()
-            } catch (ex: Exception) {
-                Result.failure()
+            when (notificationPokemonResponse) {
+                is Response.Error -> {
+                    return Result.failure()
+                }
+
+                is Response.Success -> {
+                    DailyPokemonNotification(appContext).showNotification(
+                        pokemonId = notificationPokemonResponse.data.id,
+                        pokemonName = notificationPokemonResponse.data.name,
+                    )
+                    return Result.success()
+                }
             }
         }
     }

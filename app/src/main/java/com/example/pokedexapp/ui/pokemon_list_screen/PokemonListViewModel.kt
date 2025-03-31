@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.use_cases.PokemonListUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
+import com.example.pokedexapp.domain.utils.Response
 import com.example.pokedexapp.ui.analytics.AnalyticsLogger
 import com.example.pokedexapp.ui.navigation.Navigator
 import com.example.pokedexapp.ui.navigation.Screen
@@ -85,24 +86,36 @@ class PokemonListViewModel
         fun loadInitialData() {
             _state.updateState { copy(isLoading = true) }
             viewModelScope.launch {
-                try {
-                    pokemonListUseCase.insertAllPokemon()
-                    defaultPokemonList.addAll(
-                        pokemonListUseCase.getPokemonList(
-                            offset = 0,
-                            limit = LIST_ITEMS_PER_PAGE,
-                        ),
+                val insertResponse = pokemonListUseCase.insertAllPokemon()
+
+                if (insertResponse is Response.Error) {
+                    _state.updateState { copy(isLoading = false) }
+                    return@launch
+                }
+
+                val pokemonListResponse =
+                    pokemonListUseCase.getPokemonList(
+                        offset = 0,
+                        limit = LIST_ITEMS_PER_PAGE,
                     )
 
-                    updateList(
-                        _state.value.copy(
-                            pokemonList = defaultPokemonList,
-                            isLoading = false,
-                            couldLoadInitialData = true,
-                        ),
-                    )
-                } catch (ex: Exception) {
-                    _state.updateState { copy(isLoading = false) }
+                when (pokemonListResponse) {
+                    is Response.Error -> {
+                        _state.updateState { copy(isLoading = false) }
+                        return@launch
+                    }
+
+                    is Response.Success -> {
+                        defaultPokemonList.addAll(pokemonListResponse.data)
+
+                        updateList(
+                            _state.value.copy(
+                                pokemonList = defaultPokemonList,
+                                isLoading = false,
+                                couldLoadInitialData = true,
+                            ),
+                        )
+                    }
                 }
             }
         }
@@ -129,31 +142,40 @@ class PokemonListViewModel
             _state.updateState { copy(isLoadingAppend = true, errorAppendingDefaultList = false) }
 
             viewModelScope.launch {
-                try {
-                    val appendList =
-                        pokemonListUseCase.getPokemonList(
-                            offset = defaultPokemonList.size,
-                            limit = LIST_ITEMS_PER_PAGE,
-                        )
+                val appendListResponse =
+                    pokemonListUseCase.getPokemonList(
+                        offset = defaultPokemonList.size,
+                        limit = LIST_ITEMS_PER_PAGE,
+                    )
 
-                    if (appendList.isEmpty()) {
-                        _state.updateState { copy(defaultListEnded = true, isLoadingAppend = false) }
-                    } else {
-                        defaultPokemonList.addAll(appendList)
-                        updateList(
-                            _state.value.copy(
+                when (appendListResponse) {
+                    is Response.Error -> {
+                        _state.updateState {
+                            copy(
                                 isLoadingAppend = false,
-                                errorAppendingDefaultList = false,
-                                isDefaultList = true,
-                            ),
-                        )
+                                errorAppendingDefaultList = true,
+                            )
+                        }
                     }
-                } catch (ex: Exception) {
-                    _state.updateState {
-                        copy(
-                            isLoadingAppend = false,
-                            errorAppendingDefaultList = true,
-                        )
+
+                    is Response.Success -> {
+                        if (appendListResponse.data.isEmpty()) {
+                            _state.updateState {
+                                copy(
+                                    defaultListEnded = true,
+                                    isLoadingAppend = false,
+                                )
+                            }
+                        } else {
+                            defaultPokemonList.addAll(appendListResponse.data)
+                            updateList(
+                                _state.value.copy(
+                                    isLoadingAppend = false,
+                                    errorAppendingDefaultList = false,
+                                    isDefaultList = true,
+                                ),
+                            )
+                        }
                     }
                 }
             }
@@ -179,33 +201,49 @@ class PokemonListViewModel
             searchJob =
                 viewModelScope.launch {
                     try {
-                        val tempList =
+                        val tempListResponse =
                             pokemonListUseCase.getPokemonSearchList(
                                 name = pokemonName,
                                 offset = 0,
                                 limit = LIST_ITEMS_PER_PAGE,
                             )
 
-                        if (tempList.isEmpty()) {
-                            _state.updateState {
-                                copy(isLoading = false, showNoSearchResultsFound = true, isDefaultList = false)
+                        when (tempListResponse) {
+                            is Response.Error -> {
+                                _state.updateState {
+                                    copy(
+                                        isLoading = false,
+                                        errorSearching = true,
+                                        isDefaultList = false,
+                                    )
+                                }
                             }
-                        } else {
-                            val newList = mutableStateListOf<PokemonListItemModel>()
-                            newList.addAll(tempList)
-                            searchPokemonList = newList
 
-                            updateList(
-                                _state.value.copy(
-                                    isLoading = false,
-                                    errorSearching = false,
-                                    isDefaultList = false,
-                                ),
-                            )
+                            is Response.Success -> {
+                                if (tempListResponse.data.isEmpty()) {
+                                    _state.updateState {
+                                        copy(
+                                            isLoading = false,
+                                            showNoSearchResultsFound = true,
+                                            isDefaultList = false,
+                                        )
+                                    }
+                                } else {
+                                    val newList = mutableStateListOf<PokemonListItemModel>()
+                                    newList.addAll(tempListResponse.data)
+                                    searchPokemonList = newList
+
+                                    updateList(
+                                        _state.value.copy(
+                                            isLoading = false,
+                                            errorSearching = false,
+                                            isDefaultList = false,
+                                        ),
+                                    )
+                                }
+                            }
                         }
                     } catch (_: CancellationException) {
-                    } catch (ex: Exception) {
-                        _state.updateState { copy(isLoading = false, errorSearching = true, isDefaultList = false) }
                     }
                 }
         }
@@ -227,31 +265,35 @@ class PokemonListViewModel
             _state.updateState { copy(isLoadingAppend = true, errorAppendingSearchList = false) }
 
             viewModelScope.launch {
-                try {
-                    val appendList =
-                        pokemonListUseCase.getPokemonSearchList(
-                            name = searchText.value,
-                            offset = searchPokemonList.size,
-                            limit = LIST_ITEMS_PER_PAGE,
-                        )
-                    if (appendList.isEmpty()) {
-                        _state.updateState { copy(searchListEnded = true, isLoadingAppend = false) }
-                    } else {
-                        searchPokemonList.addAll(appendList)
-                        updateList(
-                            _state.value.copy(
+                val appendListResponse =
+                    pokemonListUseCase.getPokemonSearchList(
+                        name = searchText.value,
+                        offset = searchPokemonList.size,
+                        limit = LIST_ITEMS_PER_PAGE,
+                    )
+                when (appendListResponse) {
+                    is Response.Error -> {
+                        _state.updateState {
+                            copy(
                                 isLoadingAppend = false,
-                                errorAppendingSearchList = false,
-                                isDefaultList = false,
-                            ),
-                        )
+                                errorAppendingSearchList = true,
+                            )
+                        }
                     }
-                } catch (ex: Exception) {
-                    _state.updateState {
-                        copy(
-                            isLoadingAppend = false,
-                            errorAppendingSearchList = true,
-                        )
+
+                    is Response.Success -> {
+                        if (appendListResponse.data.isEmpty()) {
+                            _state.updateState { copy(searchListEnded = true, isLoadingAppend = false) }
+                        } else {
+                            searchPokemonList.addAll(appendListResponse.data)
+                            updateList(
+                                _state.value.copy(
+                                    isLoadingAppend = false,
+                                    errorAppendingSearchList = false,
+                                    isDefaultList = false,
+                                ),
+                            )
+                        }
                     }
                 }
             }
@@ -259,11 +301,18 @@ class PokemonListViewModel
 
         fun sendNotification(context: Context) {
             viewModelScope.launch {
-                val randomPokemon = randomPokemonUseCase.getRandomPokemonMinimalInfo()
-                DailyPokemonNotification(context = context).showNotification(
-                    pokemonId = randomPokemon.id,
-                    pokemonName = randomPokemon.name,
-                )
+                val randomPokemonResponse = randomPokemonUseCase.getRandomPokemonMinimalInfo()
+
+                when (randomPokemonResponse) {
+                    is Response.Error -> {}
+
+                    is Response.Success -> {
+                        DailyPokemonNotification(context = context).showNotification(
+                            pokemonId = randomPokemonResponse.data.id,
+                            pokemonName = randomPokemonResponse.data.name,
+                        )
+                    }
+                }
             }
         }
 

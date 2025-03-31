@@ -18,6 +18,8 @@ import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.models.PokemonMinimalInfo
 import com.example.pokedexapp.domain.models.SharePokemonModel
 import com.example.pokedexapp.domain.repository.PokemonRepository
+import com.example.pokedexapp.domain.utils.Response
+import com.example.pokedexapp.domain.utils.response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -29,19 +31,15 @@ class PokemonRepositoryImpl
         private val pokemonDao: PokemonDao,
         private val pokedexServerApi: PokedexServerApi,
     ) : PokemonRepository {
-        override suspend fun getPokemonDetailById(pokemonId: String): PokemonDetailModel? =
-            withContext(Dispatchers.IO) {
-                val pokemonApiDto = pokemonApi.getPokemonById(pokemonId.toInt())
-                return@withContext pokemonApiDto?.toPokemonModel()
+        override suspend fun getPokemonDetailById(pokemonId: String): Response<PokemonDetailModel> =
+            response(Dispatchers.IO) {
+                val pokemonApiDto =
+                    pokemonApi.getPokemonById(pokemonId.toInt()) ?: throw NoSuchElementException()
+                pokemonApiDto.toPokemonModel()
             }
 
-        override suspend fun getPokemonDetailByName(name: String): PokemonDetailModel? =
-            withContext(Dispatchers.IO) {
-                return@withContext pokemonApi.getPokemonByName(name)?.toPokemonModel()
-            }
-
-        override suspend fun getPokemonEvolutionChain(speciesId: String): PokemonEvolutionChainModel =
-            withContext(Dispatchers.IO) {
+        override suspend fun getPokemonEvolutionChain(speciesId: String): Response<PokemonEvolutionChainModel> =
+            response(Dispatchers.IO) {
                 val species = pokemonApi.getPokemonSpeciesById(speciesId.toInt())
 
                 val evolutionChain =
@@ -51,12 +49,12 @@ class PokemonRepositoryImpl
 
                 evolutionChainList.add(evolutionChain.chain.recursiveToChainModel())
 
-                // TODO Implement better error handling
-                return@withContext evolutionChain.toPokemonEvolutionChainModel(evolutionChainList.first())
+                // The Evolution Chain must have a base pokemon, so .first() throwing an exception if there isn't is the intended behaviour
+                evolutionChain.toPokemonEvolutionChainModel(evolutionChainList.first())
             }
 
-        override suspend fun savePokemonList() {
-            withContext(Dispatchers.IO) {
+        override suspend fun savePokemonList(): Response<Unit> =
+            response(Dispatchers.IO) {
                 pokemonDao.deleteAllPokemon()
                 val pokemonApiList = pokemonApi.getPokemonEntireList().results
                 val pokemonDaoList =
@@ -64,13 +62,12 @@ class PokemonRepositoryImpl
 
                 pokemonDao.insertAllPokemon(pokemonDaoList)
             }
-        }
 
         override suspend fun getPokemonList(
             offset: Int,
             limit: Int,
-        ): List<PokemonListItemModel> =
-            withContext(Dispatchers.IO) {
+        ): Response<List<PokemonListItemModel>> =
+            response(Dispatchers.IO) {
                 val pokemonModelList = mutableListOf<PokemonListItemModel>()
                 val pokemonDaoDtoList = pokemonDao.pokemonPagination(offset, limit)
                 pokemonDaoDtoList.forEach {
@@ -80,15 +77,15 @@ class PokemonRepositoryImpl
                         )
                     }
                 }
-                return@withContext pokemonModelList
+                pokemonModelList
             }
 
         override suspend fun getPokemonSearchList(
             name: String,
             offset: Int,
             limit: Int,
-        ): List<PokemonListItemModel> =
-            withContext(Dispatchers.IO) {
+        ): Response<List<PokemonListItemModel>> =
+            response(Dispatchers.IO) {
                 val searchName = "%$name%"
                 val pokemonModelList = mutableListOf<PokemonListItemModel>()
                 val pokemonDaoDtoList = pokemonDao.searchPokemonByName(searchName, offset, limit)
@@ -99,7 +96,7 @@ class PokemonRepositoryImpl
                         )
                     }
                 }
-                return@withContext pokemonModelList
+                pokemonModelList
             }
 
         override suspend fun getPokemonListItem(pokemonId: String): PokemonListItemModel? =
@@ -108,21 +105,20 @@ class PokemonRepositoryImpl
                 return@withContext pokemonApiDto?.toPokemonListItemModel()
             }
 
-        override suspend fun getRandomPokemonMinimalInfo(): PokemonMinimalInfo =
-            withContext(Dispatchers.IO) {
+        override suspend fun getRandomPokemonMinimalInfo(): Response<PokemonMinimalInfo> =
+            response(Dispatchers.IO) {
                 val pokemonTableCount = pokemonDao.getPokemonTableCount()
                 val randomPokemonDaoDto = pokemonDao.getRandomPokemon((0..<pokemonTableCount).random())
-                return@withContext randomPokemonDaoDto.toPokemonMinimalInfo()
+                randomPokemonDaoDto.toPokemonMinimalInfo()
             }
 
-        override suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel) {
-            withContext(Dispatchers.IO) {
+        override suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel) =
+            response(Dispatchers.IO) {
                 val response =
                     pokedexServerApi.sharePokemon(body = sharePokemonModel.toSharePokemonNotificationDto())
                         .execute()
                 if (response.code() == 400) throw IllegalArgumentException()
             }
-        }
 
         private suspend fun Chain.recursiveToChainModel(): ChainModel {
             val pokemonSpecies =
