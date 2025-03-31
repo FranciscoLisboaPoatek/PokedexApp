@@ -20,6 +20,7 @@ import com.example.pokedexapp.ui.theme.TopBarBlueColor
 fun SearchBar(
     searchText: String,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     onClearText: () -> Unit,
     onSearchTextChange: (String) -> Unit,
 ) {
@@ -31,6 +32,7 @@ fun SearchBar(
         modifier = modifier,
         shape = CircleShape,
         singleLine = true,
+        enabled = enabled,
         colors =
             OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = TopBarBlueColor,
