@@ -2,6 +2,7 @@ package com.example.pokedexapp.ui.pokemon_list_screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -146,16 +147,25 @@ private fun PokemonList(
                 .background(MaterialTheme.colorScheme.background),
     ) {
         if (!uiState.isLoading) {
-            PokemonGridWrapper(
-                uiState = uiState,
-                lazyGridState = lazyGridState,
-                topSpacing = topSpacing,
-                onEvent = onEvent,
-            )
+            if (!uiState.couldLoadInitialData) {
+                RetryLoadingData(
+                    reloadData = { onEvent(PokemonListScreenOnEvent.RetryLoadingData) },
+                    modifier =
+                        Modifier
+                            .fillMaxSize(),
+                )
+            } else {
+                PokemonGridWrapper(
+                    uiState = uiState,
+                    lazyGridState = lazyGridState,
+                    topSpacing = topSpacing,
+                    onEvent = onEvent,
+                )
+            }
         }
         AnimatedVisibility(
             modifier = Modifier.align(Alignment.BottomCenter),
-            visible = lazyGridState.canScrollBackward,
+            visible = lazyGridState.canScrollBackward && (!uiState.errorAppendingSearchList && lazyGridState.canScrollForward),
             enter =
                 slideInVertically(
                     initialOffsetY = { fullHeight -> fullHeight },
@@ -180,18 +190,24 @@ private fun PokemonList(
             }
         }
 
+        val shadowSize by animateDpAsState(if (uiState.couldLoadInitialData)10.dp else 0.dp)
+
         SearchBar(
             modifier =
                 Modifier
                     .padding(start = 16.dp, end = 16.dp, bottom = SEARCH_BAR_BOTTOM_PADDING)
-                    .background(MaterialTheme.colorScheme.background, RoundedCornerShape(0, 0, 50, 50))
+                    .background(
+                        MaterialTheme.colorScheme.background,
+                        RoundedCornerShape(0, 0, 50, 50),
+                    )
                     .padding(top = SEARCH_BAR_TOP_PADDING)
                     .fillMaxWidth()
                     .align(Alignment.TopCenter)
                     .testTag(POKEMON_LIST_SEARCH_BAR_TEST_TAG)
                     .onGloballyPositioned { topSpacing = it.size.height }
-                    .shadow(10.dp, shape = CircleShape),
+                    .shadow(shadowSize, shape = CircleShape),
             searchText = uiState.searchText,
+            enabled = uiState.couldLoadInitialData,
             onClearText = {
                 onEvent(PokemonListScreenOnEvent.ChangeToDefaultList)
             },
@@ -238,17 +254,6 @@ private fun PokemonGridWrapper(
         modifier = Modifier.testTag(POKEMON_LIST_TAG),
     ) {
         when {
-            !uiState.couldLoadInitialData && !uiState.isLoading -> {
-                item(span = { GridItemSpan(gridSpan) }) {
-                    RetryLoadingData(
-                        reloadData = { onEvent(PokemonListScreenOnEvent.RetryLoadingData) },
-                        modifier =
-                            Modifier
-                                .fillMaxSize(),
-                    )
-                }
-            }
-
             !uiState.isDefaultList && uiState.showNoSearchResultsFound -> {
                 item(span = { GridItemSpan(gridSpan) }) {
                     NoSearchResultsFound(
