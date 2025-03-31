@@ -29,4 +29,6 @@
     <string name="copy_my_token_button">Copy my token</string>
     <string name="send_button">Send</string>
     <string name="error_sharing_pokemon">Error sharing pokemon</string>
+    <string name="pokemons_bottom_navigation">Pokemons</string>
+    <string name="map_bottom_navigation">Map</string>
 </resources>
