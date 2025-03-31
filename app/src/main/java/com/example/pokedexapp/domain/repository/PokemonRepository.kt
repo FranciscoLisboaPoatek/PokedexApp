@@ -10,8 +10,6 @@ import com.example.pokedexapp.domain.utils.Response
 interface PokemonRepository {
     suspend fun getPokemonDetailById(pokemonId: String): Response<PokemonDetailModel>
 
-    suspend fun getPokemonDetailByName(name: String): PokemonDetailModel?
-
     suspend fun getPokemonEvolutionChain(speciesId: String): Response<PokemonEvolutionChainModel>
 
     suspend fun savePokemonList(): Response<Unit>

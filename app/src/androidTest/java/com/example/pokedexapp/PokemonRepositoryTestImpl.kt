@@ -19,10 +19,6 @@ class PokemonRepositoryTestImpl
                 PokemonSampleData.pokemonDetailListSampleData().find { it.id == pokemonId } ?: throw NoSuchElementException()
             }
 
-        override suspend fun getPokemonDetailByName(name: String): PokemonDetailModel? {
-            return PokemonSampleData.pokemonDetailListSampleData().find { it.name == name }
-        }
-
         override suspend fun getPokemonEvolutionChain(speciesId: String): Response<PokemonEvolutionChainModel> =
             response {
                 PokemonEvolutionChainModel()
@@ -65,6 +61,5 @@ class PokemonRepositoryTestImpl
                 PokemonMinimalInfo(id = "94", name = "Gengar")
             }
 
-        override suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel) {
-        }
+        override suspend fun sharePokemonToReceiver(sharePokemonModel: SharePokemonModel) = Response.Success(Unit)
     }

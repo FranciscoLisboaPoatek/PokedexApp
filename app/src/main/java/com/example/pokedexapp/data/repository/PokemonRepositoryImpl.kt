@@ -38,11 +38,6 @@ class PokemonRepositoryImpl
                 pokemonApiDto.toPokemonModel()
             }
 
-        override suspend fun getPokemonDetailByName(name: String): PokemonDetailModel? =
-            withContext(Dispatchers.IO) {
-                return@withContext pokemonApi.getPokemonByName(name)?.toPokemonModel()
-            }
-
         override suspend fun getPokemonEvolutionChain(speciesId: String): Response<PokemonEvolutionChainModel> =
             response(Dispatchers.IO) {
                 val species = pokemonApi.getPokemonSpeciesById(speciesId.toInt())
