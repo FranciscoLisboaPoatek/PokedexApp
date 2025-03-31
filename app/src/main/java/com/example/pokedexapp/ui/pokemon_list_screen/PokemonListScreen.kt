@@ -190,7 +190,7 @@ private fun PokemonList(
             }
         }
 
-        val shadowSize by animateDpAsState(if(uiState.couldLoadInitialData)10.dp else 0.dp)
+        val shadowSize by animateDpAsState(if (uiState.couldLoadInitialData)10.dp else 0.dp)
 
         SearchBar(
             modifier =
@@ -198,7 +198,7 @@ private fun PokemonList(
                     .padding(start = 16.dp, end = 16.dp, bottom = SEARCH_BAR_BOTTOM_PADDING)
                     .background(
                         MaterialTheme.colorScheme.background,
-                        RoundedCornerShape(0, 0, 50, 50)
+                        RoundedCornerShape(0, 0, 50, 50),
                     )
                     .padding(top = SEARCH_BAR_TOP_PADDING)
                     .fillMaxWidth()
