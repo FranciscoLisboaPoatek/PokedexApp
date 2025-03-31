@@ -136,7 +136,6 @@ private fun PokemonList(
     onEvent: (PokemonListScreenOnEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     var topSpacing by remember {
         mutableIntStateOf(0)
     }
