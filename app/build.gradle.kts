@@ -124,6 +124,9 @@ dependencies {
 
     implementation(libs.hilt.work)
     kapt(libs.hilt.compiler)
+
+    implementation(libs.androidx.glance)
+    implementation(libs.androidx.glance.material3)
 }
 
 kapt {

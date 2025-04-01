@@ -28,6 +28,7 @@ androidxCoreTesting = "2.2.0"
 lifecycleRuntimeCompose = "2.7.0"
 androidxWorkRuntimeKtx = "2.9.0"
 androidxTestRunner = "1.1.0"
+glance = "1.1.1"
 
 #Plugins
 androidGradlePlugin = "8.2.0"
@@ -94,6 +95,9 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+
+androidx-glance = {group = "androidx.glance", name = "glance-appwidget", version.ref = "glance"}
+androidx-glance-material3 = {group = "androidx.glance", name = "glance-material3", version.ref = "glance"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
