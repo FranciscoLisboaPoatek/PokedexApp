@@ -65,6 +65,10 @@ class PokemonDetailViewModel
                 is PokemonDetailScreenOnEvent.SwitchIsSharingPokemonToReceiver -> {
                     switchSharePokemonToReceiverDialog()
                 }
+
+                is PokemonDetailScreenOnEvent.PlayPokemonCry -> {
+                    //TODO
+                }
             }
         }
 

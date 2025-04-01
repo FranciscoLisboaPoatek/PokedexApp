@@ -233,6 +233,7 @@ class PokemonSampleData {
                     frontShinySprite = PokemonSprite.FrontShinySprite(""),
                     backDefaultSprite = PokemonSprite.BackDefaultSprite(""),
                     backShinySprite = PokemonSprite.BackShinySprite(""),
+                    latestCry = null
                 )
             }
 
@@ -297,6 +298,7 @@ class PokemonSampleData {
                     PokemonSprite.BackShinySprite(
                         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/1.png",
                     ),
+                latestCry = null
             )
 
         fun evolutionChainSampleData(): PokemonEvolutionChainModel =

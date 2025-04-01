@@ -134,6 +134,7 @@ private fun PokemonDetailTopAppBarWrapper(
             rotateSprite = { onEvent(PokemonDetailScreenOnEvent.RotateSprite(currentSprite.spriteType)) },
             changeShinySprite = { onEvent(PokemonDetailScreenOnEvent.ChangeShinySprite(currentSprite.spriteType)) },
             openSharePokemonToReceiverDialog = { onEvent(PokemonDetailScreenOnEvent.SwitchIsSharingPokemonToReceiver) },
+            playCry = { onEvent(PokemonDetailScreenOnEvent.PlayPokemonCry) },
             navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) },
         )
     } else {
@@ -142,6 +143,7 @@ private fun PokemonDetailTopAppBarWrapper(
             rotateSprite = { },
             changeShinySprite = { },
             openSharePokemonToReceiverDialog = { },
+            playCry = { },
             navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) },
         )
     }

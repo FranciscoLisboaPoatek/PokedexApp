@@ -16,4 +16,6 @@ sealed class PokemonDetailScreenOnEvent() {
     object SwitchIsSharingPokemonToReceiver : PokemonDetailScreenOnEvent()
 
     object SharePokemonToReceiver : PokemonDetailScreenOnEvent()
+
+    object PlayPokemonCry: PokemonDetailScreenOnEvent()
 }
