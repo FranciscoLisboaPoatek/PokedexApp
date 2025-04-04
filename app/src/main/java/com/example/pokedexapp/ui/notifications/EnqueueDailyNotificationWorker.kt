@@ -23,12 +23,12 @@ object EnqueueDailyNotificationWorker {
 
         val periodicWorkRequest =
             PeriodicWorkRequestBuilder<DailyNotificationWorker>(24, TimeUnit.HOURS)
-                .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+                .setNextScheduleTimeOverride(timeDiff)
                 .build()
 
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             DAILY_NOTIFICATION_WORKER_ID_KEY,
-            ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+            ExistingPeriodicWorkPolicy.UPDATE,
             periodicWorkRequest,
         )
     }
