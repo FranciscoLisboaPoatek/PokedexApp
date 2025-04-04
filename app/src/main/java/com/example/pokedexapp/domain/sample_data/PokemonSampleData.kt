@@ -7,6 +7,7 @@ import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.domain.models.PokemonListItemModel
 import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.models.PokemonTypes
+import com.example.pokedexapp.ui.widgets.daily_pokemon.DailyPokemonWidgetState
 
 class PokemonSampleData {
     companion object {
@@ -331,5 +332,13 @@ class PokemonSampleData {
                             ),
                     ),
             )
+
+        fun pokemonWidgetDataSample() = DailyPokemonWidgetState(
+            id = singlePokemonDetailSampleData().id,
+            name = singlePokemonDetailSampleData().name,
+            imageUrl = singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
+            primaryType = singlePokemonDetailSampleData().primaryType,
+            secondaryType = singlePokemonDetailSampleData().secondaryType,
+        )
     }
 }
