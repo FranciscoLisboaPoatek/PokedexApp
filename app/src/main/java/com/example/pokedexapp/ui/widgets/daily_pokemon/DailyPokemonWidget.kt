@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -16,71 +17,59 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Alignment
-import androidx.glance.layout.Column
+import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.size
 import coil.imageLoader
 import coil.request.CachePolicy
 import coil.request.ErrorResult
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.example.pokedexapp.R
-import com.example.pokedexapp.domain.models.PokemonTypes
-import com.example.pokedexapp.domain.sample_data.PokemonSampleData
+import com.example.pokedexapp.domain.use_cases.DailyPokemonWidgetUseCase
+import dagger.hilt.EntryPoint
+import dagger.hilt.EntryPoints
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
 
 class DailyPokemonWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val dailyPokemonState = DailyPokemonWidgetStateManager.state
-        val state = dailyPokemonState ?: PokemonSampleData.pokemonWidgetDataSample()
+
+        val dailyPokemonWidgetUseCase: DailyPokemonWidgetUseCase = DailyPokemonWidgetUseCaseEntrypoint.get(context)
+
+        val dailyPokemonState =  dailyPokemonWidgetUseCase.getDailyPokemon()
 
         provideContent {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalAlignment = Alignment.CenterVertically,
+            Box (
+                contentAlignment = Alignment.Center,
                 modifier = GlanceModifier.fillMaxSize()
-                    .background(state.primaryType.color)
+                    .background(dailyPokemonState.primaryType.color)
             ) {
                 var imageBitmap by remember {
                     mutableStateOf<Bitmap?>(null)
                 }
 
-                LaunchedEffect(state.imageUrl) {
-                    imageBitmap = getImageBitmap(context, state.imageUrl)
+                LaunchedEffect(dailyPokemonState.imageUrl) {
+                    imageBitmap = getImageBitmap(context, dailyPokemonState.imageUrl)
                 }
 
                 imageBitmap?.let {
                     Image(
                         modifier = GlanceModifier
-                            .fillMaxWidth()
-                            .defaultWeight(),
+                            .fillMaxWidth(),
                         provider = ImageProvider(it),
                         contentDescription = null
                     )
                 } ?: run {
                     Image(
-                        modifier = GlanceModifier.fillMaxSize(),
+                        modifier = GlanceModifier.size(48.dp),
                         provider = ImageProvider(R.drawable.baseline_no_photography_24),
                         contentDescription = null
                     )
                 }
-//
-//                    Text(
-//                        modifier = GlanceModifier.padding(
-//                            start = 8.dp,
-//                            end = 8.dp,
-//                            top = 8.dp,
-//                            bottom = 32.dp
-//                        ),
-//                        style = TextStyle(
-//                            fontWeight = FontWeight.Medium,
-//                            fontSize = MaterialTheme.typography.titleMedium.fontSize,
-//                            textAlign = TextAlign.Center
-//                        ),
-//
-//                        text = state.name,
-//                    )
             }
         }
     }
@@ -98,14 +87,13 @@ private suspend fun getImageBitmap(context: Context, url: String?): Bitmap? {
     }
 }
 
-object DailyPokemonWidgetStateManager {
-    var state: DailyPokemonWidgetState? = null
-}
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+internal interface DailyPokemonWidgetUseCaseEntrypoint {
+    fun getDailyPokemonWidgetUseCase(): DailyPokemonWidgetUseCase
 
-data class DailyPokemonWidgetState(
-    val id: String,
-    val name: String,
-    val imageUrl: String?,
-    val primaryType: PokemonTypes,
-    val secondaryType: PokemonTypes?
-)
+    companion object {
+        fun get(context: Context): DailyPokemonWidgetUseCase =
+            EntryPoints.get(context, DailyPokemonWidgetUseCaseEntrypoint::class.java).getDailyPokemonWidgetUseCase()
+    }
+}

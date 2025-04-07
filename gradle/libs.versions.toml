@@ -29,6 +29,7 @@ lifecycleRuntimeCompose = "2.7.0"
 androidxWorkRuntimeKtx = "2.9.0"
 androidxTestRunner = "1.1.0"
 glance = "1.1.1"
+datastore = "1.1.4"
 
 #Plugins
 androidGradlePlugin = "8.2.0"
@@ -37,6 +38,7 @@ daggerHiltPlugin = "2.50"
 googleServicesPlugin = "4.4.1"
 firebaseCrashlyticsPlugin = "2.9.9"
 ktlintPlugin = "12.1.0"
+kotlinSerializationPlugin = "1.9.0"
 
 
 [libraries]
@@ -96,8 +98,10 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 
-androidx-glance = {group = "androidx.glance", name = "glance-appwidget", version.ref = "glance"}
-androidx-glance-material3 = {group = "androidx.glance", name = "glance-material3", version.ref = "glance"}
+androidx-glance = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
+androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
+
+proto-datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -106,3 +110,4 @@ dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServicesPlugin" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPlugin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerializationPlugin" }

@@ -5,12 +5,12 @@ import androidx.glance.appwidget.updateAll
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.example.pokedexapp.domain.repository.PokemonRepository
+import com.example.pokedexapp.domain.models.DailyPokemonWidgetModel
+import com.example.pokedexapp.domain.use_cases.DailyPokemonWidgetUseCase
+import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.domain.utils.Response
 import com.example.pokedexapp.ui.widgets.daily_pokemon.DailyPokemonWidget
-import com.example.pokedexapp.ui.widgets.daily_pokemon.DailyPokemonWidgetState
-import com.example.pokedexapp.ui.widgets.daily_pokemon.DailyPokemonWidgetStateManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +25,8 @@ constructor(
     @Assisted
     private val params: WorkerParameters,
     private val randomPokemonUseCase: RandomPokemonUseCase,
-    private val pokemonRepository: PokemonRepository
+    private val pokemonDetailUseCase: PokemonDetailUseCase,
+    private val pokemonWidgetUseCase: DailyPokemonWidgetUseCase
 ) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
         val notificationPokemonResponse = randomPokemonUseCase.getRandomPokemonMinimalInfo()
@@ -38,17 +39,15 @@ constructor(
             is Response.Success -> {
                 withContext(Dispatchers.IO) {
                     val pokemonDetails =
-                        pokemonRepository.getPokemonDetailById(notificationPokemonResponse.data.id)
+                        pokemonDetailUseCase.getPokemonById(notificationPokemonResponse.data.id)
 
                     if (pokemonDetails is Response.Success) {
 
-                        DailyPokemonWidgetStateManager.state = DailyPokemonWidgetState(
-                            pokemonDetails.data.id,
-                            pokemonDetails.data.name,
-                            pokemonDetails.data.frontDefaultSprite.spriteUrl,
-                            pokemonDetails.data.primaryType,
-                            pokemonDetails.data.secondaryType,
-                        )
+                        pokemonWidgetUseCase.saveDailyPokemon(DailyPokemonWidgetModel(
+                            id = pokemonDetails.data.id,
+                            imageUrl = pokemonDetails.data.frontDefaultSprite.spriteUrl,
+                            primaryType = pokemonDetails.data.primaryType,
+                        ))
 
                         DailyPokemonWidget().updateAll(appContext)
                     }

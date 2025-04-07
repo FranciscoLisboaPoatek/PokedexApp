@@ -3,4 +3,5 @@
     android:minHeight="120dp"
     android:minWidth="120dp"
     android:previewImage="@drawable/bulbasaur_front_default_sprite"
+    android:updatePeriodMillis="0"
     />

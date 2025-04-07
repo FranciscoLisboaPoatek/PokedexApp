@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.kotlin.serialization)
     kotlin("kapt")
 }
 
@@ -57,6 +58,25 @@ android {
         }
     }
 }
+//
+//protobuf {
+//    protoc {
+//        artifact = "com.google.protobuf:protoc:21.7"
+//    }
+//
+//    // Generates the java Protobuf-lite code for the Protobufs in this project. See
+//    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
+//    // for more information.
+//    generateProtoTasks {
+//        all().each { task ->
+//            task.builtins {
+//                java {
+//                    option 'lite'
+//                }
+//            }
+//        }
+//    }
+//}
 
 dependencies {
 
@@ -127,6 +147,9 @@ dependencies {
 
     implementation(libs.androidx.glance)
     implementation(libs.androidx.glance.material3)
+
+    implementation(libs.proto.datastore)
+//    implementation(libs.javalite)
 }
 
 kapt {
