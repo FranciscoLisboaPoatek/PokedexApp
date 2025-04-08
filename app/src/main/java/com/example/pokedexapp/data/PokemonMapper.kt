@@ -36,7 +36,7 @@ object PokemonMapper {
             frontShinySprite = PokemonSprite.FrontShinySprite(sprites.frontShiny),
             backDefaultSprite = PokemonSprite.BackDefaultSprite(sprites.backDefault),
             backShinySprite = PokemonSprite.BackShinySprite(sprites.backShiny),
-            latestCry = cries.latest
+            latestCry = cries.latest,
         )
     }
 

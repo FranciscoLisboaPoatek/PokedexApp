@@ -2,7 +2,7 @@ package com.example.pokedexapp.domain.models
 
 import androidx.compose.runtime.Immutable
 
-//todo remove annotation
+// todo remove annotation
 @Immutable
 data class PokemonDetailModel(
     val id: String,
@@ -17,5 +17,5 @@ data class PokemonDetailModel(
     val frontShinySprite: PokemonSprite.FrontShinySprite,
     val backDefaultSprite: PokemonSprite.BackDefaultSprite,
     val backShinySprite: PokemonSprite.BackShinySprite,
-    val latestCry: String?
+    val latestCry: String?,
 )
