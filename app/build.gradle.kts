@@ -55,28 +55,11 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            merges += "META-INF/LICENSE.md"
+            merges += "META-INF/LICENSE-notice.md"
         }
     }
 }
-//
-//protobuf {
-//    protoc {
-//        artifact = "com.google.protobuf:protoc:21.7"
-//    }
-//
-//    // Generates the java Protobuf-lite code for the Protobufs in this project. See
-//    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
-//    // for more information.
-//    generateProtoTasks {
-//        all().each { task ->
-//            task.builtins {
-//                java {
-//                    option 'lite'
-//                }
-//            }
-//        }
-//    }
-//}
 
 dependencies {
 
@@ -88,6 +71,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.work.testing)
+    implementation(libs.androidx.junit.ktx)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.tooling)
@@ -132,6 +117,7 @@ dependencies {
     implementation(libs.retrofit.kotlinx.serialization)
 
     testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.core.testing)
@@ -149,7 +135,6 @@ dependencies {
     implementation(libs.androidx.glance.material3)
 
     implementation(libs.proto.datastore)
-//    implementation(libs.javalite)
 }
 
 kapt {

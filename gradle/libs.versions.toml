@@ -30,6 +30,8 @@ androidxWorkRuntimeKtx = "2.9.0"
 androidxTestRunner = "1.1.0"
 glance = "1.1.1"
 datastore = "1.1.4"
+workTesting = "2.9.0"
+junitKtx = "1.2.1"
 
 #Plugins
 androidGradlePlugin = "8.2.0"
@@ -63,8 +65,11 @@ androidx-core-testing = { group = "androidx.arch.core", name = "core-testing", v
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitAndroid" }
 androidx-junit-ui = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "workTesting" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
