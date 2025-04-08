@@ -1,11 +1,10 @@
 package com.example.pokedexapp.data.network
 
-// todo change from model to dto
-data class BasicApiModel(
+data class BasicApiModelDto(
     val name: String,
     val url: String,
 )
 
-data class UrlModel(
+data class UrlModelDto(
     val url: String,
 )

@@ -2,7 +2,6 @@ package com.example.pokedexapp.domain.models
 
 import androidx.compose.runtime.Immutable
 
-// todo remove annotation
 @Immutable
 data class PokemonDetailModel(
     val id: String,
