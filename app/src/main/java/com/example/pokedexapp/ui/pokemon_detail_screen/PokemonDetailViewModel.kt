@@ -11,6 +11,7 @@ import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
 import com.example.pokedexapp.domain.utils.Response
 import com.example.pokedexapp.ui.navigation.Navigator
 import com.example.pokedexapp.ui.navigation.Screen
+import com.example.pokedexapp.ui.utils.AudioPlayer
 import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
 import com.example.pokedexapp.ui.utils.updateState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -64,6 +65,14 @@ class PokemonDetailViewModel
 
                 is PokemonDetailScreenOnEvent.SwitchIsSharingPokemonToReceiver -> {
                     switchSharePokemonToReceiverDialog()
+                }
+
+                is PokemonDetailScreenOnEvent.PlayPokemonCry -> {
+                    _state.value.pokemonDetailModel?.latestCry?.let {
+                        AudioPlayer(context = event.context).play(
+                            it,
+                        )
+                    }
                 }
             }
         }

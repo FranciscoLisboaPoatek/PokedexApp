@@ -1,5 +1,6 @@
 package com.example.pokedexapp.ui.pokemon_detail_screen
 
+import android.content.Context
 import com.example.pokedexapp.domain.models.SpriteType
 
 sealed class PokemonDetailScreenOnEvent() {
@@ -16,4 +17,6 @@ sealed class PokemonDetailScreenOnEvent() {
     object SwitchIsSharingPokemonToReceiver : PokemonDetailScreenOnEvent()
 
     object SharePokemonToReceiver : PokemonDetailScreenOnEvent()
+
+    data class PlayPokemonCry(val context: Context) : PokemonDetailScreenOnEvent()
 }

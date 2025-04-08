@@ -1,10 +1,10 @@
 package com.example.pokedexapp.data.network
 
-data class BasicApiModel(
+data class BasicApiModelDto(
     val name: String,
     val url: String,
 )
 
-data class UrlModel(
+data class UrlModelDto(
     val url: String,
 )

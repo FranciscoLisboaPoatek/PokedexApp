@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.domain.models.PokemonDetailModel
@@ -38,6 +39,7 @@ fun PokemonDetailScreen(
             topBar = {
                 PokemonDetailTopAppBarWrapper(
                     currentSprite = state.pokemonSprite,
+                    pokemonHasCry = !state.pokemonDetailModel?.latestCry.isNullOrBlank(),
                     onEvent = onEvent,
                 )
             },
@@ -126,22 +128,29 @@ private fun PokemonTypesColorBackground(
 @Composable
 private fun PokemonDetailTopAppBarWrapper(
     currentSprite: PokemonSprite?,
+    pokemonHasCry: Boolean,
     onEvent: (PokemonDetailScreenOnEvent) -> Unit,
 ) {
     if (currentSprite != null) {
+        val context = LocalContext.current
+
         PokemonDetailTopAppBar(
             isShinySprite = currentSprite.spriteType.isShiny,
+            showCryAction = pokemonHasCry,
             rotateSprite = { onEvent(PokemonDetailScreenOnEvent.RotateSprite(currentSprite.spriteType)) },
             changeShinySprite = { onEvent(PokemonDetailScreenOnEvent.ChangeShinySprite(currentSprite.spriteType)) },
             openSharePokemonToReceiverDialog = { onEvent(PokemonDetailScreenOnEvent.SwitchIsSharingPokemonToReceiver) },
+            playCry = { onEvent(PokemonDetailScreenOnEvent.PlayPokemonCry(context)) },
             navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) },
         )
     } else {
         PokemonDetailTopAppBar(
             isShinySprite = false,
+            showCryAction = pokemonHasCry,
             rotateSprite = { },
             changeShinySprite = { },
             openSharePokemonToReceiverDialog = { },
+            playCry = { },
             navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) },
         )
     }

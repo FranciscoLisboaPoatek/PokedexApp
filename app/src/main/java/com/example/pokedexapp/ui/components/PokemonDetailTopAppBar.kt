@@ -18,15 +18,20 @@ import com.example.pokedexapp.R
 @Composable
 fun PokemonDetailTopAppBar(
     isShinySprite: Boolean,
+    showCryAction: Boolean,
     navigateUp: () -> Unit,
     rotateSprite: () -> Unit,
     changeShinySprite: () -> Unit,
     openSharePokemonToReceiverDialog: () -> Unit,
+    playCry: () -> Unit,
 ) {
     TopAppBar(
         title = @Composable {},
         navigationIcon = { NavigateUpIconButton(navigateUp) },
         actions = {
+            if (showCryAction) {
+                PlayCry(playCry)
+            }
             SharePokemonToReceiverIcon(openSharePokemonToReceiverDialog)
             RotateIconButton(rotateSprite)
             ShinyIconButton(isShinySprite, changeShinySprite)
@@ -98,15 +103,30 @@ private fun SharePokemonToReceiverIcon(openSharePokemonToReceiverDialog: () -> U
     }
 }
 
+@Composable
+fun PlayCry(play: () -> Unit) {
+    IconButton(
+        onClick = { play() },
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.baseline_music_note_24),
+            stringResource(R.string.play_pokemon_cry),
+            tint = Color.Black,
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun PokemonDetailTopAppBarPreview() {
     PokemonDetailTopAppBar(
         isShinySprite = false,
+        showCryAction = true,
         navigateUp = {},
         rotateSprite = {},
         changeShinySprite = {},
         openSharePokemonToReceiverDialog = {},
+        playCry = {},
     )
 }
 
@@ -115,9 +135,11 @@ private fun PokemonDetailTopAppBarPreview() {
 private fun PokemonDetailTopAppBarShinyPreview() {
     PokemonDetailTopAppBar(
         isShinySprite = true,
+        showCryAction = true,
         navigateUp = {},
         rotateSprite = {},
         changeShinySprite = {},
         openSharePokemonToReceiverDialog = {},
+        playCry = {},
     )
 }

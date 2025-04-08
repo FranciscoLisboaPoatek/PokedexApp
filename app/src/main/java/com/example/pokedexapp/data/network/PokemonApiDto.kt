@@ -7,10 +7,11 @@ data class PokemonApiDto(
     val name: String,
     val height: Int,
     val weight: Int,
-    val species: BasicApiModel,
+    val species: BasicApiModelDto,
     val sprites: SpritesDto,
     val stats: List<StatListItem>,
     val types: List<TypeListItem>,
+    val cries: CriesDto,
 )
 
 data class SpritesDto(
@@ -40,4 +41,9 @@ data class TypeListItem(
 
 data class Type(
     val name: String,
+)
+
+data class CriesDto(
+    val latest: String?,
+    val legacy: String?,
 )
