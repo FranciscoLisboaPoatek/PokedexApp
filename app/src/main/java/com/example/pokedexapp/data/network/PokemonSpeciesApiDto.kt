@@ -4,14 +4,14 @@ import com.squareup.moshi.Json
 
 data class PokemonSpeciesApiDto(
     @Json(name = "evolves_from_species")
-    val evolvesFromSpecies: BasicApiModel?,
+    val evolvesFromSpecies: BasicApiModelDto?,
     @Json(name = "evolution_chain")
-    val evolutionChain: UrlModel,
+    val evolutionChain: UrlModelDto,
     val varieties: List<PokemonVariety>,
 )
 
 data class PokemonVariety(
     @Json(name = "is_default")
     val isDefault: Boolean,
-    val pokemon: BasicApiModel,
+    val pokemon: BasicApiModelDto,
 )

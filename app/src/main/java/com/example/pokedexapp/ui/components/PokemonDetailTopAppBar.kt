@@ -23,7 +23,7 @@ fun PokemonDetailTopAppBar(
     rotateSprite: () -> Unit,
     changeShinySprite: () -> Unit,
     openSharePokemonToReceiverDialog: () -> Unit,
-    playCry: () -> Unit
+    playCry: () -> Unit,
 ) {
     TopAppBar(
         title = @Composable {},
@@ -106,7 +106,7 @@ private fun SharePokemonToReceiverIcon(openSharePokemonToReceiverDialog: () -> U
 @Composable
 fun PlayCry(play: () -> Unit) {
     IconButton(
-        onClick = { play() }
+        onClick = { play() },
     ) {
         Icon(
             painter = painterResource(R.drawable.baseline_music_note_24),
@@ -126,7 +126,7 @@ private fun PokemonDetailTopAppBarPreview() {
         rotateSprite = {},
         changeShinySprite = {},
         openSharePokemonToReceiverDialog = {},
-        playCry = {}
+        playCry = {},
     )
 }
 
@@ -140,6 +140,6 @@ private fun PokemonDetailTopAppBarShinyPreview() {
         rotateSprite = {},
         changeShinySprite = {},
         openSharePokemonToReceiverDialog = {},
-        playCry = {}
+        playCry = {},
     )
 }

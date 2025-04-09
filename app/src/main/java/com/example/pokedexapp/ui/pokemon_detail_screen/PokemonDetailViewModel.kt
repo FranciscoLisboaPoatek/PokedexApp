@@ -70,7 +70,7 @@ class PokemonDetailViewModel
                 is PokemonDetailScreenOnEvent.PlayPokemonCry -> {
                     _state.value.pokemonDetailModel?.latestCry?.let {
                         AudioPlayer(context = event.context).play(
-                            it
+                            it,
                         )
                     }
                 }

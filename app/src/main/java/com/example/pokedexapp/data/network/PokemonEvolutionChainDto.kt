@@ -14,9 +14,9 @@ data class Chain(
     val evolvesTo: List<Chain>,
     @Json(name = "is_baby")
     val isBaby: Boolean,
-    val species: BasicApiModel,
+    val species: BasicApiModelDto,
 )
 
 data class EvolutionDetails(
-    val trigger: BasicApiModel,
+    val trigger: BasicApiModelDto,
 )

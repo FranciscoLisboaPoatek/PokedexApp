@@ -1,7 +1,7 @@
 package com.example.pokedexapp.data
 
 import com.example.pokedexapp.data.local_database.PokemonDaoDto
-import com.example.pokedexapp.data.network.BasicApiModel
+import com.example.pokedexapp.data.network.BasicApiModelDto
 import com.example.pokedexapp.data.network.PokemonApiDto
 import com.example.pokedexapp.data.network.PokemonEvolutionChainDto
 import com.example.pokedexapp.data.network.StatListItem
@@ -36,7 +36,7 @@ object PokemonMapper {
             frontShinySprite = PokemonSprite.FrontShinySprite(sprites.frontShiny),
             backDefaultSprite = PokemonSprite.BackDefaultSprite(sprites.backDefault),
             backShinySprite = PokemonSprite.BackShinySprite(sprites.backShiny),
-            latestCry = cries.latest
+            latestCry = cries.latest,
         )
     }
 
@@ -58,7 +58,7 @@ object PokemonMapper {
         )
     }
 
-    fun BasicApiModel.toPokemonDaoDto(): PokemonDaoDto {
+    fun BasicApiModelDto.toPokemonDaoDto(): PokemonDaoDto {
         return PokemonDaoDto(id = url.extractPokemonIdFromUrl(), name = name.treatName(), url = url)
     }
 
