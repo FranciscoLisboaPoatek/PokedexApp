@@ -333,10 +333,11 @@ class PokemonSampleData {
                     ),
             )
 
-        fun pokemonWidgetDataSample() = DailyPokemonWidgetModel(
-            id = singlePokemonDetailSampleData().id,
-            imageUrl = singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
-            primaryType = singlePokemonDetailSampleData().primaryType,
-        )
+        fun pokemonWidgetDataSample() =
+            DailyPokemonWidgetModel(
+                id = singlePokemonDetailSampleData().id,
+                imageUrl = singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
+                primaryType = singlePokemonDetailSampleData().primaryType,
+            )
     }
 }

@@ -33,20 +33,21 @@ import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
-
 class DailyPokemonWidget : GlanceAppWidget() {
-
-    override suspend fun provideGlance(context: Context, id: GlanceId) {
-
+    override suspend fun provideGlance(
+        context: Context,
+        id: GlanceId,
+    ) {
         val dailyPokemonWidgetUseCase: DailyPokemonWidgetUseCase = DailyPokemonWidgetUseCaseEntrypoint.get(context)
 
-        val dailyPokemonState =  dailyPokemonWidgetUseCase.getDailyPokemon()
+        val dailyPokemonState = dailyPokemonWidgetUseCase.getDailyPokemon()
 
         provideContent {
-            Box (
+            Box(
                 contentAlignment = Alignment.Center,
-                modifier = GlanceModifier.fillMaxSize()
-                    .background(dailyPokemonState.primaryType.color)
+                modifier =
+                    GlanceModifier.fillMaxSize()
+                        .background(dailyPokemonState.primaryType.color),
             ) {
                 var imageBitmap by remember {
                     mutableStateOf<Bitmap?>(null)
@@ -58,16 +59,17 @@ class DailyPokemonWidget : GlanceAppWidget() {
 
                 imageBitmap?.let {
                     Image(
-                        modifier = GlanceModifier
-                            .fillMaxWidth(),
+                        modifier =
+                            GlanceModifier
+                                .fillMaxWidth(),
                         provider = ImageProvider(it),
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 } ?: run {
                     Image(
                         modifier = GlanceModifier.size(48.dp),
                         provider = ImageProvider(R.drawable.baseline_no_photography_24),
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             }
@@ -75,11 +77,15 @@ class DailyPokemonWidget : GlanceAppWidget() {
     }
 }
 
-private suspend fun getImageBitmap(context: Context, url: String?): Bitmap? {
-    val request = ImageRequest.Builder(context).data(url).apply {
-        memoryCachePolicy(CachePolicy.DISABLED)
-        diskCachePolicy(CachePolicy.DISABLED)
-    }.build()
+private suspend fun getImageBitmap(
+    context: Context,
+    url: String?,
+): Bitmap? {
+    val request =
+        ImageRequest.Builder(context).data(url).apply {
+            memoryCachePolicy(CachePolicy.DISABLED)
+            diskCachePolicy(CachePolicy.DISABLED)
+        }.build()
 
     return when (val result = context.imageLoader.execute(request)) {
         is ErrorResult -> null

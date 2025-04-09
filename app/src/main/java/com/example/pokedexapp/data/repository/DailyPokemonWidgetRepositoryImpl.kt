@@ -8,14 +8,14 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class DailyPokemonWidgetRepositoryImpl @Inject constructor(
- @ApplicationContext private val context: Context
-): DailyPokemonWidgetRepository {
-    override suspend fun saveDailyPokemon(pokemon: DailyPokemonWidgetModel) {
-        context.dailyPokemonDataStore.updateData { pokemon }
+class DailyPokemonWidgetRepositoryImpl
+    @Inject
+    constructor(
+        @ApplicationContext private val context: Context,
+    ) : DailyPokemonWidgetRepository {
+        override suspend fun saveDailyPokemon(pokemon: DailyPokemonWidgetModel) {
+            context.dailyPokemonDataStore.updateData { pokemon }
+        }
+
+        override suspend fun getDailyPokemon() = context.dailyPokemonDataStore.data.first()
     }
-
-    override suspend fun getDailyPokemon() =
-        context.dailyPokemonDataStore.data.first()
-
-}

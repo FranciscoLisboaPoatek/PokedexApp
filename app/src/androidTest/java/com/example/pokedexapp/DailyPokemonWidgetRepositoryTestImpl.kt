@@ -5,13 +5,11 @@ import com.example.pokedexapp.domain.repository.DailyPokemonWidgetRepository
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import javax.inject.Inject
 
-class DailyPokemonWidgetRepositoryTestImpl @Inject
-constructor() : DailyPokemonWidgetRepository {
-    override suspend fun saveDailyPokemon(pokemon: DailyPokemonWidgetModel) {
+class DailyPokemonWidgetRepositoryTestImpl
+    @Inject
+    constructor() : DailyPokemonWidgetRepository {
+        override suspend fun saveDailyPokemon(pokemon: DailyPokemonWidgetModel) {
+        }
 
+        override suspend fun getDailyPokemon(): DailyPokemonWidgetModel = PokemonSampleData.pokemonWidgetDataSample()
     }
-
-    override suspend fun getDailyPokemon(): DailyPokemonWidgetModel =
-        PokemonSampleData.pokemonWidgetDataSample()
-
-}

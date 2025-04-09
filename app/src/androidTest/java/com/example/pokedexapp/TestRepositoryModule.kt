@@ -21,5 +21,7 @@ abstract class TestRepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindDailyPokemonWidgetRepository(dailyPokemonWidgetRepositoryTestImpl: DailyPokemonWidgetRepositoryTestImpl): DailyPokemonWidgetRepository
+    abstract fun bindDailyPokemonWidgetRepository(
+        dailyPokemonWidgetRepositoryTestImpl: DailyPokemonWidgetRepositoryTestImpl,
+    ): DailyPokemonWidgetRepository
 }

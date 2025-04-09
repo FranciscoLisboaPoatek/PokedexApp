@@ -34,189 +34,205 @@ class DailyNotificationWorkerTest {
     private var context: Context = ApplicationProvider.getApplicationContext()
 
     @Test
-    fun when_error_on_all_requests_should_return_default_pokemon() = runTest {
-        val worker = TestListenableWorkerBuilder<DailyNotificationWorker>(context)
-            .setWorkerFactory(
-                ExampleWorkerFactory(
-                    randomPokemonUseCase,
-                    pokemonDetailUseCase,
-                    pokemonWidgetUseCase
-                )
-            )
-            .build()
-
-        coEvery {
-            pokemonDetailUseCase.getPokemonById(any())
-        } returns
-                Response.Success(
-                    PokemonSampleData.singlePokemonDetailSampleData().copy(
-                        frontDefaultSprite = PokemonSprite.FrontDefaultSprite(
-                            null,
+    fun when_error_on_all_requests_should_return_default_pokemon() =
+        runTest {
+            val worker =
+                TestListenableWorkerBuilder<DailyNotificationWorker>(context)
+                    .setWorkerFactory(
+                        ExampleWorkerFactory(
+                            randomPokemonUseCase,
+                            pokemonDetailUseCase,
+                            pokemonWidgetUseCase,
                         ),
                     )
+                    .build()
+
+            coEvery {
+                pokemonDetailUseCase.getPokemonById(any())
+            } returns
+                Response.Success(
+                    PokemonSampleData.singlePokemonDetailSampleData().copy(
+                        frontDefaultSprite =
+                            PokemonSprite.FrontDefaultSprite(
+                                null,
+                            ),
+                    ),
                 )
 
-        coEvery {
-            randomPokemonUseCase.getRandomPokemonMinimalInfo()
-        } returns Response.Success(
-            PokemonMinimalInfo(
-                id = "9999",
-                name = "Any"
-            )
-        )
+            coEvery {
+                randomPokemonUseCase.getRandomPokemonMinimalInfo()
+            } returns
+                Response.Success(
+                    PokemonMinimalInfo(
+                        id = "9999",
+                        name = "Any",
+                    ),
+                )
 
-        val result = worker.doWork()
+            val result = worker.doWork()
 
-        val pokemonDetailImageUrl = result.outputData.keyValueMap[POKEMON_IMAGE_URL_OUTPUT_KEY]
+            val pokemonDetailImageUrl = result.outputData.keyValueMap[POKEMON_IMAGE_URL_OUTPUT_KEY]
 
-        coVerify(exactly = MAX_DAILY_NOTIFICATION_WORKER_REQUESTS) {
-            pokemonDetailUseCase.getPokemonById(any())
+            coVerify(exactly = MAX_DAILY_NOTIFICATION_WORKER_REQUESTS) {
+                pokemonDetailUseCase.getPokemonById(any())
+            }
+
+            assertEquals(PokemonSampleData.pokemonWidgetDataSample().imageUrl, pokemonDetailImageUrl)
         }
-
-        assertEquals(PokemonSampleData.pokemonWidgetDataSample().imageUrl, pokemonDetailImageUrl)
-    }
 
     @Test
-    fun when_success_on_all_requests_should_make_one_request_only() = runTest {
-        val worker = TestListenableWorkerBuilder<DailyNotificationWorker>(context)
-            .setWorkerFactory(
-                ExampleWorkerFactory(
-                    randomPokemonUseCase,
-                    pokemonDetailUseCase,
-                    pokemonWidgetUseCase
-                )
-            )
-            .build()
+    fun when_success_on_all_requests_should_make_one_request_only() =
+        runTest {
+            val worker =
+                TestListenableWorkerBuilder<DailyNotificationWorker>(context)
+                    .setWorkerFactory(
+                        ExampleWorkerFactory(
+                            randomPokemonUseCase,
+                            pokemonDetailUseCase,
+                            pokemonWidgetUseCase,
+                        ),
+                    )
+                    .build()
 
-        coEvery {
-            pokemonDetailUseCase.getPokemonById(any())
-        } returnsMany listOf(
-            Response.Success(
-                PokemonSampleData.singlePokemonDetailSampleData().copy(
-                    id = "1",
-                    frontDefaultSprite = PokemonSprite.FrontDefaultSprite(
-                        "url/1",
+            coEvery {
+                pokemonDetailUseCase.getPokemonById(any())
+            } returnsMany
+                listOf(
+                    Response.Success(
+                        PokemonSampleData.singlePokemonDetailSampleData().copy(
+                            id = "1",
+                            frontDefaultSprite =
+                                PokemonSprite.FrontDefaultSprite(
+                                    "url/1",
+                                ),
+                        ),
+                    ),
+                    Response.Success(
+                        PokemonSampleData.singlePokemonDetailSampleData().copy(
+                            id = "2",
+                            frontDefaultSprite =
+                                PokemonSprite.FrontDefaultSprite(
+                                    "url/2",
+                                ),
+                        ),
+                    ),
+                    Response.Success(
+                        PokemonSampleData.singlePokemonDetailSampleData().copy(
+                            id = "3",
+                            frontDefaultSprite =
+                                PokemonSprite.FrontDefaultSprite(
+                                    "url/3",
+                                ),
+                        ),
                     ),
                 )
-            ),
-            Response.Success(
-                PokemonSampleData.singlePokemonDetailSampleData().copy(
-                    id = "2",
-                    frontDefaultSprite = PokemonSprite.FrontDefaultSprite(
-                        "url/2",
+
+            coEvery {
+                randomPokemonUseCase.getRandomPokemonMinimalInfo()
+            } returns
+                Response.Success(
+                    PokemonMinimalInfo(
+                        id = "9999",
+                        name = "Any",
                     ),
                 )
-            ),
-            Response.Success(
-                PokemonSampleData.singlePokemonDetailSampleData().copy(
-                    id = "3",
-                    frontDefaultSprite = PokemonSprite.FrontDefaultSprite(
-                        "url/3",
-                    ),
-                )
-            ),
-        )
 
-        coEvery {
-            randomPokemonUseCase.getRandomPokemonMinimalInfo()
-        } returns Response.Success(
-            PokemonMinimalInfo(
-                id = "9999",
-                name = "Any"
-            )
-        )
+            val result = worker.doWork()
 
-        val result = worker.doWork()
+            val pokemonDetailImageUrl = result.outputData.keyValueMap[POKEMON_IMAGE_URL_OUTPUT_KEY]
 
-        val pokemonDetailImageUrl = result.outputData.keyValueMap[POKEMON_IMAGE_URL_OUTPUT_KEY]
+            coVerify(exactly = 1) {
+                pokemonDetailUseCase.getPokemonById(any())
+            }
 
-        coVerify(exactly = 1) {
-            pokemonDetailUseCase.getPokemonById(any())
+            assertEquals("url/1", pokemonDetailImageUrl)
         }
-
-        assertEquals("url/1", pokemonDetailImageUrl)
-
-    }
 
     @Test
-    fun when_error_on_request_should_return_the_next_successful_one()  = runTest {
-        val worker = TestListenableWorkerBuilder<DailyNotificationWorker>(context)
-            .setWorkerFactory(
-                ExampleWorkerFactory(
-                    randomPokemonUseCase,
-                    pokemonDetailUseCase,
-                    pokemonWidgetUseCase
-                )
-            )
-            .build()
+    fun when_error_on_request_should_return_the_next_successful_one() =
+        runTest {
+            val worker =
+                TestListenableWorkerBuilder<DailyNotificationWorker>(context)
+                    .setWorkerFactory(
+                        ExampleWorkerFactory(
+                            randomPokemonUseCase,
+                            pokemonDetailUseCase,
+                            pokemonWidgetUseCase,
+                        ),
+                    )
+                    .build()
 
-        coEvery {
-            pokemonDetailUseCase.getPokemonById(any())
-        } returnsMany listOf(
-            Response.Success(
-                PokemonSampleData.singlePokemonDetailSampleData().copy(
-                    id = "1",
-                    frontDefaultSprite = PokemonSprite.FrontDefaultSprite(
-                        null,
+            coEvery {
+                pokemonDetailUseCase.getPokemonById(any())
+            } returnsMany
+                listOf(
+                    Response.Success(
+                        PokemonSampleData.singlePokemonDetailSampleData().copy(
+                            id = "1",
+                            frontDefaultSprite =
+                                PokemonSprite.FrontDefaultSprite(
+                                    null,
+                                ),
+                        ),
+                    ),
+                    Response.Success(
+                        PokemonSampleData.singlePokemonDetailSampleData().copy(
+                            id = "2",
+                            frontDefaultSprite =
+                                PokemonSprite.FrontDefaultSprite(
+                                    "url/2",
+                                ),
+                        ),
+                    ),
+                    Response.Success(
+                        PokemonSampleData.singlePokemonDetailSampleData().copy(
+                            id = "3",
+                            frontDefaultSprite =
+                                PokemonSprite.FrontDefaultSprite(
+                                    "url/3",
+                                ),
+                        ),
                     ),
                 )
-            ),
-            Response.Success(
-                PokemonSampleData.singlePokemonDetailSampleData().copy(
-                    id = "2",
-                    frontDefaultSprite = PokemonSprite.FrontDefaultSprite(
-                        "url/2",
+
+            coEvery {
+                randomPokemonUseCase.getRandomPokemonMinimalInfo()
+            } returns
+                Response.Success(
+                    PokemonMinimalInfo(
+                        id = "9999",
+                        name = "Any",
                     ),
                 )
-            ),
-            Response.Success(
-                PokemonSampleData.singlePokemonDetailSampleData().copy(
-                    id = "3",
-                    frontDefaultSprite = PokemonSprite.FrontDefaultSprite(
-                        "url/3",
-                    ),
-                )
-            ),
-        )
 
-        coEvery {
-            randomPokemonUseCase.getRandomPokemonMinimalInfo()
-        } returns Response.Success(
-            PokemonMinimalInfo(
-                id = "9999",
-                name = "Any"
-            )
-        )
+            val result = worker.doWork()
 
-        val result = worker.doWork()
+            val pokemonDetailImageUrl = result.outputData.keyValueMap[POKEMON_IMAGE_URL_OUTPUT_KEY]
 
-        val pokemonDetailImageUrl = result.outputData.keyValueMap[POKEMON_IMAGE_URL_OUTPUT_KEY]
+            coVerify(exactly = 2) {
+                pokemonDetailUseCase.getPokemonById(any())
+            }
 
-        coVerify(exactly = 2) {
-            pokemonDetailUseCase.getPokemonById(any())
+            assertEquals("url/2", pokemonDetailImageUrl)
         }
-
-        assertEquals("url/2", pokemonDetailImageUrl)
-
-    }
 }
 
 class ExampleWorkerFactory(
     private val randomPokemonUseCase: RandomPokemonUseCase,
     private val pokemonDetailUseCase: PokemonDetailUseCase,
-    private val pokemonWidgetUseCase: DailyPokemonWidgetUseCase
+    private val pokemonWidgetUseCase: DailyPokemonWidgetUseCase,
 ) : WorkerFactory() {
     override fun createWorker(
         appContext: Context,
         workerClassName: String,
-        workerParameters: WorkerParameters
+        workerParameters: WorkerParameters,
     ): ListenableWorker {
         return DailyNotificationWorker(
             appContext,
             workerParameters,
             randomPokemonUseCase,
             pokemonDetailUseCase,
-            pokemonWidgetUseCase
+            pokemonWidgetUseCase,
         )
     }
 }
