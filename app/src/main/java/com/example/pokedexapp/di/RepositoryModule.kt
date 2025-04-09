@@ -1,7 +1,9 @@
 package com.example.pokedexapp.di
 
+import com.example.pokedexapp.data.repository.ChoosePokemonWidgetRepositoryImpl
 import com.example.pokedexapp.data.repository.DailyPokemonWidgetRepositoryImpl
 import com.example.pokedexapp.data.repository.PokemonRepositoryImpl
+import com.example.pokedexapp.domain.repository.ChoosePokemonWidgetRepository
 import com.example.pokedexapp.domain.repository.DailyPokemonWidgetRepository
 import com.example.pokedexapp.domain.repository.PokemonRepository
 import dagger.Binds
@@ -22,4 +24,10 @@ abstract class RepositoryModule {
     abstract fun bindDailyPokemonWidgetRepository(
         dailyPokemonWidgetRepositoryImpl: DailyPokemonWidgetRepositoryImpl,
     ): DailyPokemonWidgetRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindChoosePokemonWidgetRepository(
+        choosePokemonWidgetRepositoryImpl: ChoosePokemonWidgetRepositoryImpl,
+    ): ChoosePokemonWidgetRepository
 }

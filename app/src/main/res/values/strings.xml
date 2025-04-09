@@ -31,4 +31,6 @@
     <string name="error_sharing_pokemon">Error sharing pokemon</string>
     <string name="play_pokemon_cry">Play pokemon cry</string>
     <string name="set_pokemon_as_widget">Set pokemon as widget</string>
+    <string name="daily_pokemon_widget_description">The daily Pokemon you get</string>
+    <string name="choose_pokemon_widget_description">Choose a pokemon to be here!</string>
 </resources>

@@ -4,5 +4,5 @@
     android:minWidth="120dp"
     android:previewImage="@drawable/bulbasaur_front_default_sprite"
     android:updatePeriodMillis="0"
-    android:description="@string/daily_pokemon_widget_description"
+    android:description="@string/choose_pokemon_widget_description"
     />
