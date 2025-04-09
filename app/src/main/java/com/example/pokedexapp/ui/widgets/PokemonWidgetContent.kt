@@ -26,7 +26,7 @@ fun PokemonWidgetContent(
     modifier: GlanceModifier,
     pokemonId: String,
     pokemonImage: Bitmap?,
-    pokemonPrimaryType: PokemonTypes
+    pokemonPrimaryType: PokemonTypes,
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -35,12 +35,14 @@ fun PokemonWidgetContent(
                 .background(pokemonPrimaryType.color)
                 .clickable(
                     actionStartActivity<MainActivity>(
-                        parameters = actionParametersOf(
-                            ActionParameters.Key<String>(INTENT_EXTRA_DEEPLINK_KEY) to Screen.PokemonDetailScreen.makeDeeplink(
-                                pokemonId = pokemonId
-                            )
-                        )
-                    )
+                        parameters =
+                            actionParametersOf(
+                                ActionParameters.Key<String>(INTENT_EXTRA_DEEPLINK_KEY) to
+                                    Screen.PokemonDetailScreen.makeDeeplink(
+                                        pokemonId = pokemonId,
+                                    ),
+                            ),
+                    ),
                 ),
     ) {
         pokemonImage?.let {

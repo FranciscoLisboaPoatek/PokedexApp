@@ -117,7 +117,7 @@ object PokemonModule {
 
     @Provides
     @Singleton
-    fun provideDailyPokemonWidgetUseCase(dailyPokemonRepository: DailyPokemonWidgetRepository): DailyPokemonWidgetUseCase  {
+    fun provideDailyPokemonWidgetUseCase(dailyPokemonRepository: DailyPokemonWidgetRepository): DailyPokemonWidgetUseCase {
         return DailyPokemonWidgetUseCase(dailyPokemonRepository)
     }
 
