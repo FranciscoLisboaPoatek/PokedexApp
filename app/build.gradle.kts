@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.kotlin.serialization)
     kotlin("kapt")
 }
 
@@ -54,6 +55,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            merges += "META-INF/LICENSE.md"
+            merges += "META-INF/LICENSE-notice.md"
         }
     }
 }
@@ -68,6 +71,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.work.testing)
+    implementation(libs.androidx.junit.ktx)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.tooling)
@@ -112,6 +117,7 @@ dependencies {
     implementation(libs.retrofit.kotlinx.serialization)
 
     testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.core.testing)
@@ -124,6 +130,11 @@ dependencies {
 
     implementation(libs.hilt.work)
     kapt(libs.hilt.compiler)
+
+    implementation(libs.androidx.glance)
+    implementation(libs.androidx.glance.material3)
+
+    implementation(libs.proto.datastore)
 }
 
 kapt {

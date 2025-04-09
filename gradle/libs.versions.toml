@@ -28,6 +28,10 @@ androidxCoreTesting = "2.2.0"
 lifecycleRuntimeCompose = "2.7.0"
 androidxWorkRuntimeKtx = "2.9.0"
 androidxTestRunner = "1.1.0"
+glance = "1.1.1"
+datastore = "1.1.4"
+workTesting = "2.9.0"
+junitKtx = "1.2.1"
 
 #Plugins
 androidGradlePlugin = "8.2.0"
@@ -36,6 +40,7 @@ daggerHiltPlugin = "2.50"
 googleServicesPlugin = "4.4.1"
 firebaseCrashlyticsPlugin = "2.9.9"
 ktlintPlugin = "12.1.0"
+kotlinSerializationPlugin = "1.9.0"
 
 
 [libraries]
@@ -60,8 +65,11 @@ androidx-core-testing = { group = "androidx.arch.core", name = "core-testing", v
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitAndroid" }
 androidx-junit-ui = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "workTesting" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
@@ -95,6 +103,11 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 
+androidx-glance = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
+androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
+
+proto-datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin" }
@@ -102,3 +115,4 @@ dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServicesPlugin" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintPlugin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerializationPlugin" }

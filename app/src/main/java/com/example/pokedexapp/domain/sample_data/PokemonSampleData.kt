@@ -1,6 +1,7 @@
 package com.example.pokedexapp.domain.sample_data
 
 import com.example.pokedexapp.domain.models.ChainModel
+import com.example.pokedexapp.domain.models.DailyPokemonWidgetModel
 import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonDetailModel
 import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
@@ -330,6 +331,13 @@ class PokemonSampleData {
                                 ),
                             ),
                     ),
+            )
+
+        fun pokemonWidgetDataSample() =
+            DailyPokemonWidgetModel(
+                id = singlePokemonDetailSampleData().id,
+                imageUrl = singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
+                primaryType = singlePokemonDetailSampleData().primaryType,
             )
     }
 }
