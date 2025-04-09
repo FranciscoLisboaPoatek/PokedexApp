@@ -74,11 +74,19 @@ class PokemonDetailViewModel
                         )
                     }
                 }
+
+                is PokemonDetailScreenOnEvent.SwitchIsSettingPokemonAsWidget -> {
+                    switchSetPokemonAsWidgetDialog()
+                }
             }
         }
 
         fun switchSharePokemonToReceiverDialog() {
             _state.updateState { copy(isSharingPokemonToReceiver = !isSharingPokemonToReceiver) }
+        }
+
+        fun switchSetPokemonAsWidgetDialog() {
+            _state.updateState { copy(isSettingPokemonAsWidget = !isSettingPokemonAsWidget) }
         }
 
         fun updateReceiverToken(newToken: String) {

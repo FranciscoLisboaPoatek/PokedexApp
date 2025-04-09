@@ -22,6 +22,7 @@ import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.ui.components.PokemonDetailTopAppBar
 import com.example.pokedexapp.ui.pokemon_detail_screen.components.PokemonImageWrapper
 import com.example.pokedexapp.ui.pokemon_detail_screen.components.PokemonInformationSheet
+import com.example.pokedexapp.ui.pokemon_detail_screen.components.SetPokemonAsWidgetDialog
 import com.example.pokedexapp.ui.pokemon_detail_screen.components.SharePokemonToReceiverDialog
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
@@ -94,6 +95,17 @@ fun PokemonDetailScreen(
                         },
                     )
                 }
+
+                if (state.isSettingPokemonAsWidget) {
+                    state.pokemonDetailModel?.primaryType?.let {
+                        SetPokemonAsWidgetDialog(
+                            pokemonImageUrl = state.pokemonDetailModel.frontDefaultSprite.spriteUrl,
+                            pokemonPrimaryType = it,
+                        ) {
+                            onEvent(PokemonDetailScreenOnEvent.SwitchIsSettingPokemonAsWidget)
+                        }
+                    }
+                }
             }
         }
     }
@@ -141,6 +153,7 @@ private fun PokemonDetailTopAppBarWrapper(
             changeShinySprite = { onEvent(PokemonDetailScreenOnEvent.ChangeShinySprite(currentSprite.spriteType)) },
             openSharePokemonToReceiverDialog = { onEvent(PokemonDetailScreenOnEvent.SwitchIsSharingPokemonToReceiver) },
             playCry = { onEvent(PokemonDetailScreenOnEvent.PlayPokemonCry(context)) },
+            setPokemonAsWidget = { onEvent(PokemonDetailScreenOnEvent.SwitchIsSettingPokemonAsWidget) },
             navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) },
         )
     } else {
@@ -151,6 +164,7 @@ private fun PokemonDetailTopAppBarWrapper(
             changeShinySprite = { },
             openSharePokemonToReceiverDialog = { },
             playCry = { },
+            setPokemonAsWidget = {},
             navigateUp = { onEvent(PokemonDetailScreenOnEvent.NavigateUp) },
         )
     }

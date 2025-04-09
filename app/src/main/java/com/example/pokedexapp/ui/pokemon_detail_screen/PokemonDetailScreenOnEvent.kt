@@ -19,4 +19,6 @@ sealed class PokemonDetailScreenOnEvent() {
     object SharePokemonToReceiver : PokemonDetailScreenOnEvent()
 
     data class PlayPokemonCry(val context: Context) : PokemonDetailScreenOnEvent()
+
+    object SwitchIsSettingPokemonAsWidget : PokemonDetailScreenOnEvent()
 }

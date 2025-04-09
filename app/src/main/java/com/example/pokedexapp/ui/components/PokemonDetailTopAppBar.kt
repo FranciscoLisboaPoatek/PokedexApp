@@ -2,6 +2,7 @@ package com.example.pokedexapp.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,6 +25,7 @@ fun PokemonDetailTopAppBar(
     changeShinySprite: () -> Unit,
     openSharePokemonToReceiverDialog: () -> Unit,
     playCry: () -> Unit,
+    setPokemonAsWidget: () -> Unit,
 ) {
     TopAppBar(
         title = @Composable {},
@@ -32,6 +34,7 @@ fun PokemonDetailTopAppBar(
             if (showCryAction) {
                 PlayCry(playCry)
             }
+            SetPokemonAsWidget(setPokemonAsWidget)
             SharePokemonToReceiverIcon(openSharePokemonToReceiverDialog)
             RotateIconButton(rotateSprite)
             ShinyIconButton(isShinySprite, changeShinySprite)
@@ -116,6 +119,19 @@ fun PlayCry(play: () -> Unit) {
     }
 }
 
+@Composable
+fun SetPokemonAsWidget(onClick: () -> Unit) {
+    IconButton(
+        onClick,
+    ) {
+        Icon(
+            Icons.Default.Settings,
+            stringResource(R.string.set_pokemon_as_widget),
+            tint = Color.Black,
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun PokemonDetailTopAppBarPreview() {
@@ -127,6 +143,7 @@ private fun PokemonDetailTopAppBarPreview() {
         changeShinySprite = {},
         openSharePokemonToReceiverDialog = {},
         playCry = {},
+        setPokemonAsWidget = {},
     )
 }
 
@@ -141,5 +158,6 @@ private fun PokemonDetailTopAppBarShinyPreview() {
         changeShinySprite = {},
         openSharePokemonToReceiverDialog = {},
         playCry = {},
+        setPokemonAsWidget = {},
     )
 }
