@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class ChoosePokemonWidgetModel(
     val id: String,
     val imageUrl: String?,
-    val primaryType: PokemonTypes,
+    val color: Int,
 )

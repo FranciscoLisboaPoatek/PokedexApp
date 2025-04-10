@@ -22,7 +22,7 @@ import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import com.example.pokedexapp.ui.components.PokemonDetailTopAppBar
 import com.example.pokedexapp.ui.pokemon_detail_screen.components.PokemonImageWrapper
 import com.example.pokedexapp.ui.pokemon_detail_screen.components.PokemonInformationSheet
-import com.example.pokedexapp.ui.pokemon_detail_screen.components.SetPokemonAsWidgetDialog
+import com.example.pokedexapp.ui.pokemon_detail_screen.components.ChoosePokemonAsWidgetDialog
 import com.example.pokedexapp.ui.pokemon_detail_screen.components.SharePokemonToReceiverDialog
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
@@ -45,6 +45,9 @@ fun PokemonDetailScreen(
                 )
             },
         ) { scaffoldPadding ->
+
+            val context = LocalContext.current
+
             Box(
                 modifier =
                     Modifier
@@ -98,12 +101,19 @@ fun PokemonDetailScreen(
 
                 if (state.isSettingPokemonAsWidget) {
                     state.pokemonDetailModel?.primaryType?.let {
-                        SetPokemonAsWidgetDialog(
-                            pokemonImageUrl = state.pokemonDetailModel.frontDefaultSprite.spriteUrl,
+                        ChoosePokemonAsWidgetDialog(
+                            pokemonId = state.pokemonDetailModel.id,
+                            pokemonFrontSpriteImageUrl = state.pokemonDetailModel.frontDefaultSprite.spriteUrl,
+                            pokemonFrontShinySpriteImageUrl = state.pokemonDetailModel.frontShinySprite.spriteUrl,
+                            pokemonBackSpriteImageUrl = state.pokemonDetailModel.backDefaultSprite.spriteUrl,
+                            pokemonBackShinySpriteImageUrl = state.pokemonDetailModel.backShinySprite.spriteUrl,
                             pokemonPrimaryType = it,
-                        ) {
-                            onEvent(PokemonDetailScreenOnEvent.SwitchIsSettingPokemonAsWidget)
-                        }
+                            onDismiss = { onEvent(PokemonDetailScreenOnEvent.SwitchIsSettingPokemonAsWidget) },
+                            onConfirm = { choosePokemonWidgetModel ->
+                                onEvent(PokemonDetailScreenOnEvent.SwitchIsSettingPokemonAsWidget)
+                                onEvent(PokemonDetailScreenOnEvent.SetChoosePokemonWidgetModel(choosePokemonWidgetModel, context))
+                            },
+                        )
                     }
                 }
             }

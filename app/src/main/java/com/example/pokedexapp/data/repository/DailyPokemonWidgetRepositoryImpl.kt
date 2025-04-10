@@ -8,6 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
+// TODO make hilt module to provide data store
 class DailyPokemonWidgetRepositoryImpl
     @Inject
     constructor(

@@ -1,6 +1,7 @@
 package com.example.pokedexapp.data.data_store
 
 import android.content.Context
+import androidx.compose.ui.graphics.toArgb
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
@@ -21,7 +22,7 @@ object ChoosePokemonWidgetModelSerializer : Serializer<ChoosePokemonWidgetModel>
             ChoosePokemonWidgetModel(
                 PokemonSampleData.pokemonWidgetDataSample().id,
                 PokemonSampleData.pokemonWidgetDataSample().imageUrl,
-                PokemonSampleData.pokemonWidgetDataSample().primaryType,
+                PokemonSampleData.pokemonWidgetDataSample().primaryType.color.toArgb(),
             )
 
     override suspend fun readFrom(input: InputStream): ChoosePokemonWidgetModel {

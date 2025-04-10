@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.GlanceAppWidget
@@ -38,10 +39,10 @@ class ChoosePokemonWidget : GlanceAppWidget() {
             }
 
             PokemonWidgetContent(
-                GlanceModifier,
-                choosePokemonState.id,
-                imageBitmap,
-                choosePokemonState.primaryType,
+                modifier = GlanceModifier,
+                pokemonId = choosePokemonState.id,
+                pokemonImage = imageBitmap,
+                backgroundColor = Color(choosePokemonState.color),
             )
         }
     }

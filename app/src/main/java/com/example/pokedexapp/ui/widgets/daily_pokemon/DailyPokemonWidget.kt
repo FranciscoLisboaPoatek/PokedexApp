@@ -39,10 +39,10 @@ class DailyPokemonWidget : GlanceAppWidget() {
             }
 
             PokemonWidgetContent(
-                GlanceModifier,
-                dailyPokemonState.id,
-                imageBitmap,
-                dailyPokemonState.primaryType,
+                modifier = GlanceModifier,
+                pokemonId = dailyPokemonState.id,
+                pokemonImage = imageBitmap,
+                backgroundColor = dailyPokemonState.primaryType.color,
             )
         }
     }
