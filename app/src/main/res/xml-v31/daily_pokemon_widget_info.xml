@@ -5,4 +5,5 @@
     android:previewLayout="@layout/daily_pokemon_widget_preview"
     android:updatePeriodMillis="0"
     android:description="@string/daily_pokemon_widget_description"
+    android:resizeMode="horizontal | vertical"
     />
