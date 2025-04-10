@@ -30,5 +30,12 @@ fun NavHostComposable(navController: NavHostController) {
         ) {
             PokemonDetailScreenNavGraphComposable()
         }
+
+        composable(
+            route = Screen.ChoosePokemonWidgetScreen.routeWithArgs,
+            arguments = Screen.ChoosePokemonWidgetScreen.arguments
+        ) {
+            ChoosePokemonWidgetScreenNavGraphComposable()
+        }
     }
 }

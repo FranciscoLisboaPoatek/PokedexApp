@@ -236,7 +236,6 @@ private fun PokemonWithName(
                     .sizeIn(maxHeight = 120.dp, maxWidth = 120.dp)
                     .aspectRatio(1f),
             image = spriteUrl,
-            imageSize = null,
         )
 
         Text(
