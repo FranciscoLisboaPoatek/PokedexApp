@@ -12,14 +12,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -34,13 +35,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.pokedexapp.domain.models.ChoosePokemonWidgetModel
 import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.models.PokemonTypes
+import com.example.pokedexapp.ui.components.BasicAppBar
+import com.example.pokedexapp.ui.components.NavigateUpIconButton
+import com.example.pokedexapp.ui.components.PokeballLoadingAnimation
 import com.example.pokedexapp.ui.pokemon_detail_screen.components.PokemonImageWrapper
 import com.example.pokedexapp.ui.theme.TopBarBlueColor
 
@@ -50,9 +55,18 @@ fun ChoosePokemonWidgetScreen(
     state: ChoosePokemonAsWidgetUiState,
     onEvent: (ChoosePokemonAsWidgetScreenOnEvent) -> Unit
 ) {
-
     if (state.isLoading) {
-        //todo
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(Color.Transparent),
+        ) {
+            PokeballLoadingAnimation(
+                modifier =
+                    Modifier
+                        .align(Alignment.Center),
+            )
+        }
     } else {
         state.choosePokemonAsWidgetScreenModel?.let {
             Content(
@@ -85,19 +99,32 @@ private fun Content(
 
     val context = LocalContext.current
 
-    Scaffold {
+    Scaffold(
+        topBar = {
+            BasicAppBar(
+                title = {
+                    Text(
+                        text = "Configure Widget",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                    )
+                },
+                navigateUpIcon = {
+                    NavigateUpIconButton(
+                        { onEvent(ChoosePokemonAsWidgetScreenOnEvent.onCancel) },
+                        Color.White
+                    )
+                }
+            )
+        }
+    ) {
         Column(
             modifier = modifier
                 .padding(it)
-                .padding(24.dp),
+                .padding(horizontal = 24.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Set this Pokemon to be in your Widget",
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center,
-            )
 
             Spacer(Modifier.height(24.dp))
 
@@ -240,6 +267,9 @@ private fun Content(
                     Text("Confirm")
                 }
             }
+
+            Spacer(Modifier.height(12.dp))
+
         }
     }
 }
