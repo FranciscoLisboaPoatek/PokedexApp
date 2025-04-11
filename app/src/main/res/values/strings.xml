@@ -33,4 +33,7 @@
     <string name="set_pokemon_as_widget">Set pokemon as widget</string>
     <string name="daily_pokemon_widget_description">The daily Pokemon you get</string>
     <string name="choose_pokemon_widget_description">Choose a pokemon to be here!</string>
+    <string name="topbar_configure_widget">Configure Widget</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 </resources>

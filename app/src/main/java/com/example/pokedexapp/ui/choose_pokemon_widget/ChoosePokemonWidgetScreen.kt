@@ -38,8 +38,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.pokedexapp.R
 import com.example.pokedexapp.domain.models.ChoosePokemonWidgetModel
 import com.example.pokedexapp.domain.models.PokemonSprite
 import com.example.pokedexapp.domain.models.PokemonTypes
@@ -104,7 +106,7 @@ private fun Content(
             BasicAppBar(
                 title = {
                     Text(
-                        text = "Configure Widget",
+                        text = stringResource(R.string.topbar_configure_widget),
                         color = Color.White,
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                     )
@@ -240,7 +242,7 @@ private fun Content(
                         )
                     },
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
 
                 Spacer(Modifier.width(12.dp))
@@ -264,7 +266,7 @@ private fun Content(
                         )
                     },
                 ) {
-                    Text("Confirm")
+                    Text(stringResource(R.string.confirm))
                 }
             }
 
