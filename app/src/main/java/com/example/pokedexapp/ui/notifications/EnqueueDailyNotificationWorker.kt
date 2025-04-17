@@ -28,7 +28,7 @@ object EnqueueDailyNotificationWorker {
 
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             DAILY_NOTIFICATION_WORKER_ID_KEY,
-            ExistingPeriodicWorkPolicy.UPDATE,
+            ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
             periodicWorkRequest,
         )
     }

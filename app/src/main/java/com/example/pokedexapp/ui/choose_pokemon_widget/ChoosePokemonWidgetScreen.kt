@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -38,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -93,10 +95,6 @@ private fun Content(
 
     var selectedColor by remember {
         mutableStateOf(pokemonAsWidgetScreenModel.pokemonPrimaryType.color)
-    }
-
-    var selectedType by remember {
-        mutableStateOf(pokemonAsWidgetScreenModel.pokemonPrimaryType)
     }
 
     val context = LocalContext.current
@@ -198,26 +196,40 @@ private fun Content(
                 PokemonTypes.entries.forEachIndexed { index, type ->
                     Box(
                         modifier =
-                            Modifier
-                                .clip(CircleShape)
-                                .size(36.dp)
-                                .background(type.color)
-                                .clickable {
-                                    selectedColor = type.color
-                                    selectedType = type
-                                }
-                                .conditional(
-                                    selectedType == type,
-                                    {
-                                        border(
-                                            2.dp,
-                                            MaterialTheme.colorScheme.onSurface,
-                                            CircleShape,
-                                        )
-                                    },
-                                ),
+                            Modifier.colorPick(
+                                selectedColor,
+                                type.color,
+                            ) {
+                                selectedColor = type.color
+                            }
                     )
                 }
+                Box(
+                    modifier =
+                        Modifier
+                            .colorPick(selectedColor, Color.White, Color.Black) {
+                                selectedColor = Color.White
+                            }
+                )
+
+                Box(
+                    modifier =
+                        Modifier
+                            .colorPick(selectedColor, Color.Black, Color.White) {
+                                selectedColor = Color.Black
+                            }
+                )
+
+                Icon(
+                    modifier =
+                        Modifier
+                            .colorPick(selectedColor, Color.Transparent) {
+                                selectedColor = Color.Transparent
+                            },
+                    painter = painterResource(R.drawable.ic_baseline_format_color_reset_24),
+                    tint = Color.Gray,
+                    contentDescription = null
+                )
             }
 
             Spacer(Modifier.height(24.dp))
@@ -254,7 +266,7 @@ private fun Content(
                             containerColor = TopBarBlueColor,
                         ),
                     onClick = {
-                        onEvent(
+                        onEvent( 
                             ChoosePokemonAsWidgetScreenOnEvent.onChoosePokemonWidgetModel(
                                 ChoosePokemonWidgetModel(
                                     id = pokemonAsWidgetScreenModel.pokemonId,
@@ -314,3 +326,27 @@ inline fun Modifier.conditional(
     } else {
         then(ifFalse(Modifier))
     }
+
+@Composable
+private inline fun Modifier.colorPick(
+    selectedColor: Color,
+    color: Color,
+    selectedBorderColor: Color = MaterialTheme.colorScheme.onSurface,
+    crossinline onClick: () -> Unit
+) =
+    clip(CircleShape)
+        .size(36.dp)
+        .background(color)
+        .clickable {
+            onClick()
+        }
+        .conditional(
+            selectedColor == color,
+            {
+                border(
+                    2.dp,
+                    selectedBorderColor,
+                    CircleShape,
+                )
+            },
+        )
