@@ -1,5 +1,6 @@
 package com.example.pokedexapp.domain.models
 
+// TODO make this a val from the sealed class
 enum class SpriteType(val isShiny: Boolean) {
     FRONT_DEFAULT(false),
     FRONT_SHINY_DEFAULT(true),

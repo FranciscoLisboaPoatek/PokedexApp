@@ -2,6 +2,7 @@ package com.example.pokedexapp.ui.widgets
 
 import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
@@ -17,7 +18,6 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.size
 import com.example.pokedexapp.MainActivity
 import com.example.pokedexapp.R
-import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.ui.navigation.Screen
 import com.example.pokedexapp.ui.utils.INTENT_EXTRA_DEEPLINK_KEY
 
@@ -26,13 +26,13 @@ fun PokemonWidgetContent(
     modifier: GlanceModifier,
     pokemonId: String,
     pokemonImage: Bitmap?,
-    pokemonPrimaryType: PokemonTypes,
+    backgroundColor: Color,
 ) {
     Box(
         contentAlignment = Alignment.Center,
         modifier =
             modifier.fillMaxSize()
-                .background(pokemonPrimaryType.color)
+                .background(backgroundColor)
                 .clickable(
                     actionStartActivity<MainActivity>(
                         parameters =

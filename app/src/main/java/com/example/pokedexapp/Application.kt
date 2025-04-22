@@ -21,7 +21,7 @@ class Application : Application(), Configuration.Provider {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         createNotificationChannels(notificationManager)
 
-        EnqueueDailyNotificationWorker.enqueue(this)
+        EnqueueDailyNotificationWorker().enqueue(this)
     }
 
     override val workManagerConfiguration: Configuration

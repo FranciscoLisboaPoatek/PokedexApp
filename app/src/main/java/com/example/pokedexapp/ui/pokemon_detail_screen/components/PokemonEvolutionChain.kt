@@ -3,13 +3,13 @@ package com.example.pokedexapp.ui.pokemon_detail_screen.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,9 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.pokedexapp.R
 import com.example.pokedexapp.data.utils.treatName
 import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.ui.utils.EEVEE_POKEDEX_ID_STRING
@@ -167,14 +170,15 @@ private fun PokemonEvolution(
         Column(
             modifier = modifier,
         ) {
+            Spacer(Modifier.height(8.dp))
+
             if (!isFirstStage) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = null,
+                EvolvesToIcon(
                     modifier =
                         Modifier
                             .size(48.dp)
-                            .align(Alignment.CenterHorizontally),
+                            .align(Alignment.CenterHorizontally)
+                            .rotate(90f),
                 )
             }
 
@@ -192,14 +196,11 @@ private fun PokemonEvolution(
             modifier = modifier,
         ) {
             if (!isFirstStage) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = null,
+                EvolvesToIcon(
                     modifier =
                         Modifier
                             .size(48.dp)
-                            .align(Alignment.CenterVertically)
-                            .rotate(-90f),
+                            .align(Alignment.CenterVertically),
                 )
             }
 
@@ -212,6 +213,21 @@ private fun PokemonEvolution(
             )
         }
     }
+}
+
+@Composable
+private fun EvolvesToIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Gray,
+    contentDescription: String? = null,
+) {
+    Icon(
+        painter = painterResource(R.drawable.ic_baseline_arrow_right_alt_24),
+        contentDescription = contentDescription,
+        modifier =
+        modifier,
+        tint = tint,
+    )
 }
 
 @Composable
@@ -236,7 +252,6 @@ private fun PokemonWithName(
                     .sizeIn(maxHeight = 120.dp, maxWidth = 120.dp)
                     .aspectRatio(1f),
             image = spriteUrl,
-            imageSize = null,
         )
 
         Text(

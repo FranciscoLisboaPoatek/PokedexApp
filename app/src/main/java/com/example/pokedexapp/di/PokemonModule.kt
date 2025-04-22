@@ -6,8 +6,10 @@ import com.example.pokedexapp.BuildConfig
 import com.example.pokedexapp.data.local_database.PokemonDatabase
 import com.example.pokedexapp.data.network.PokemonApi
 import com.example.pokedexapp.data.pokedex_server.PokedexServerApi
+import com.example.pokedexapp.domain.repository.ChoosePokemonWidgetRepository
 import com.example.pokedexapp.domain.repository.DailyPokemonWidgetRepository
 import com.example.pokedexapp.domain.repository.PokemonRepository
+import com.example.pokedexapp.domain.use_cases.ChoosePokemonWidgetUseCase
 import com.example.pokedexapp.domain.use_cases.DailyPokemonWidgetUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
@@ -18,6 +20,8 @@ import com.example.pokedexapp.ui.analytics.AnalyticsLogger
 import com.example.pokedexapp.ui.analytics.FirebaseAnalyticsLoggerImpl
 import com.example.pokedexapp.ui.navigation.Navigator
 import com.example.pokedexapp.ui.navigation.NavigatorImpl
+import com.example.pokedexapp.ui.notifications.EnqueueDailyNotificationWorker
+import com.example.pokedexapp.ui.notifications.EnqueueWorker
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
@@ -123,6 +127,12 @@ object PokemonModule {
 
     @Provides
     @Singleton
+    fun provideChoosePokemonWidgetUseCase(choosePokemonWidgetRepository: ChoosePokemonWidgetRepository): ChoosePokemonWidgetUseCase {
+        return ChoosePokemonWidgetUseCase(choosePokemonWidgetRepository)
+    }
+
+    @Provides
+    @Singleton
     fun provideFirebaseAnalytics(): FirebaseAnalytics = Firebase.analytics
 
     @Provides
@@ -135,5 +145,11 @@ object PokemonModule {
     @Singleton
     fun provideNavigator(): Navigator {
         return NavigatorImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideEnqueueWorker(): EnqueueWorker {
+        return EnqueueDailyNotificationWorker()
     }
 }

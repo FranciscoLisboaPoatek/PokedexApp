@@ -31,6 +31,7 @@ class DailyNotificationWorker
         private val appContext: Context,
         @Assisted
         private val params: WorkerParameters,
+        private val enqueueWorker: EnqueueWorker,
         private val randomPokemonUseCase: RandomPokemonUseCase,
         private val pokemonDetailUseCase: PokemonDetailUseCase,
         private val pokemonWidgetUseCase: DailyPokemonWidgetUseCase,
@@ -38,13 +39,15 @@ class DailyNotificationWorker
         override suspend fun doWork(): Result {
             val notificationPokemonResponse = randomPokemonUseCase.getRandomPokemonMinimalInfo()
 
+            enqueueWorker.enqueue(context = appContext)
+
             when (notificationPokemonResponse) {
                 is Response.Error -> {
                     return Result.failure()
                 }
 
                 is Response.Success -> {
-                    var pokemonDetails = PokemonSampleData.pokemonWidgetDataSample()
+                    var pokemonDetails = PokemonSampleData.dailyPokemonWidgetDataSample()
                     withContext(Dispatchers.IO) {
                         var foundPokemonWithImage = false
 

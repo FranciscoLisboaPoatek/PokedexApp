@@ -1,4 +1,4 @@
-package com.example.pokedexapp.ui.widgets.daily_pokemon
+package com.example.pokedexapp.ui.widgets.choose_pokemon
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,11 +7,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
-import com.example.pokedexapp.domain.use_cases.DailyPokemonWidgetUseCase
+import com.example.pokedexapp.domain.use_cases.ChoosePokemonWidgetUseCase
 import com.example.pokedexapp.ui.utils.getImageBitmapFromUrl
 import com.example.pokedexapp.ui.widgets.PokemonWidgetContent
 import dagger.hilt.EntryPoint
@@ -19,30 +20,29 @@ import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
-class DailyPokemonWidget : GlanceAppWidget() {
+class ChoosePokemonWidget : GlanceAppWidget() {
     override suspend fun provideGlance(
         context: Context,
         id: GlanceId,
     ) {
-        val dailyPokemonWidgetUseCase: DailyPokemonWidgetUseCase =
-            DailyPokemonWidgetUseCaseEntrypoint.get(context)
+        val choosePokemonUseCase: ChoosePokemonWidgetUseCase = ChoosePokemonWidgetUseCaseEntrypoint.get(context)
 
-        val dailyPokemonState = dailyPokemonWidgetUseCase.getDailyPokemon()
+        val choosePokemonState = choosePokemonUseCase.getPokemon()
 
         provideContent {
             var imageBitmap by remember {
                 mutableStateOf<Bitmap?>(null)
             }
 
-            LaunchedEffect(dailyPokemonState.imageUrl) {
-                imageBitmap = getImageBitmapFromUrl(context, dailyPokemonState.imageUrl)
+            LaunchedEffect(choosePokemonState.imageUrl) {
+                imageBitmap = getImageBitmapFromUrl(context, choosePokemonState.imageUrl)
             }
 
             PokemonWidgetContent(
                 modifier = GlanceModifier,
-                pokemonId = dailyPokemonState.id,
+                pokemonId = choosePokemonState.id,
                 pokemonImage = imageBitmap,
-                backgroundColor = dailyPokemonState.primaryType.color,
+                backgroundColor = Color(choosePokemonState.color),
             )
         }
     }
@@ -50,11 +50,11 @@ class DailyPokemonWidget : GlanceAppWidget() {
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
-internal interface DailyPokemonWidgetUseCaseEntrypoint {
-    fun getDailyPokemonWidgetUseCase(): DailyPokemonWidgetUseCase
+internal interface ChoosePokemonWidgetUseCaseEntrypoint {
+    fun getChoosePokemonWidgetUseCase(): ChoosePokemonWidgetUseCase
 
     companion object {
-        fun get(context: Context): DailyPokemonWidgetUseCase =
-            EntryPoints.get(context, DailyPokemonWidgetUseCaseEntrypoint::class.java).getDailyPokemonWidgetUseCase()
+        fun get(context: Context): ChoosePokemonWidgetUseCase =
+            EntryPoints.get(context, ChoosePokemonWidgetUseCaseEntrypoint::class.java).getChoosePokemonWidgetUseCase()
     }
 }

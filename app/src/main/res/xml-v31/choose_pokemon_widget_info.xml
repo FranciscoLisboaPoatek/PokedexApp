@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minHeight="120dp"
-    android:minWidth="120dp"
-    android:previewImage="@drawable/bulbasaur_front_default_sprite"
+    android:targetCellHeight="2"
+    android:targetCellWidth="2"
+    android:previewLayout="@layout/daily_pokemon_widget_preview"
     android:updatePeriodMillis="0"
-    android:description="@string/daily_pokemon_widget_description"
+    android:description="@string/choose_pokemon_widget_description"
     android:resizeMode="horizontal | vertical"
     />

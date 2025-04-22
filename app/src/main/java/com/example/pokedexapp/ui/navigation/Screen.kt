@@ -23,9 +23,24 @@ sealed class Screen(val route: String) {
             return "${PokemonDetailScreen.route}/$pokemonId"
         }
     }
+
+    data object ChoosePokemonWidgetScreen : Screen(ScreenRoute.CHOOSE_POKEMON_WIDGET_SCREEN.route) {
+        val routeWithArgs = "$route/{$POKEMON_ID_KEY}"
+        val arguments =
+            listOf(
+                navArgument(POKEMON_ID_KEY) {
+                    type = NavType.StringType
+                },
+            )
+
+        fun navigateToChoosePokemonWidget(pokemonId: String): String {
+            return "${ChoosePokemonWidgetScreen.route}/$pokemonId"
+        }
+    }
 }
 
 enum class ScreenRoute(val route: String) {
     LIST_SCREEN("pokemon_list_screen"),
     DETAIL_SCREEN("pokemon_detail_screen"),
+    CHOOSE_POKEMON_WIDGET_SCREEN("choose_pokemon_widget_screen"),
 }

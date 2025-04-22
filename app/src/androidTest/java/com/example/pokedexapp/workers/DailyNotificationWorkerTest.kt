@@ -15,6 +15,7 @@ import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
 import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.domain.utils.Response
 import com.example.pokedexapp.ui.notifications.DailyNotificationWorker
+import com.example.pokedexapp.ui.notifications.EnqueueWorker
 import com.example.pokedexapp.ui.notifications.MAX_DAILY_NOTIFICATION_WORKER_REQUESTS
 import com.example.pokedexapp.ui.notifications.POKEMON_IMAGE_URL_OUTPUT_KEY
 import io.mockk.coEvery
@@ -27,6 +28,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DailyNotificationWorkerTest {
+    private val enqueueWorker: EnqueueWorker = mockk(relaxed = true)
     private val randomPokemonUseCase: RandomPokemonUseCase = mockk(relaxed = true)
     private val pokemonDetailUseCase: PokemonDetailUseCase = mockk()
     private val pokemonWidgetUseCase: DailyPokemonWidgetUseCase = mockk(relaxed = true)
@@ -40,6 +42,7 @@ class DailyNotificationWorkerTest {
                 TestListenableWorkerBuilder<DailyNotificationWorker>(context)
                     .setWorkerFactory(
                         ExampleWorkerFactory(
+                            enqueueWorker,
                             randomPokemonUseCase,
                             pokemonDetailUseCase,
                             pokemonWidgetUseCase,
@@ -77,7 +80,7 @@ class DailyNotificationWorkerTest {
                 pokemonDetailUseCase.getPokemonById(any())
             }
 
-            assertEquals(PokemonSampleData.pokemonWidgetDataSample().imageUrl, pokemonDetailImageUrl)
+            assertEquals(PokemonSampleData.dailyPokemonWidgetDataSample().imageUrl, pokemonDetailImageUrl)
         }
 
     @Test
@@ -87,6 +90,7 @@ class DailyNotificationWorkerTest {
                 TestListenableWorkerBuilder<DailyNotificationWorker>(context)
                     .setWorkerFactory(
                         ExampleWorkerFactory(
+                            enqueueWorker,
                             randomPokemonUseCase,
                             pokemonDetailUseCase,
                             pokemonWidgetUseCase,
@@ -155,6 +159,7 @@ class DailyNotificationWorkerTest {
                 TestListenableWorkerBuilder<DailyNotificationWorker>(context)
                     .setWorkerFactory(
                         ExampleWorkerFactory(
+                            enqueueWorker,
                             randomPokemonUseCase,
                             pokemonDetailUseCase,
                             pokemonWidgetUseCase,
@@ -218,6 +223,7 @@ class DailyNotificationWorkerTest {
 }
 
 class ExampleWorkerFactory(
+    private val enqueueWorker: EnqueueWorker,
     private val randomPokemonUseCase: RandomPokemonUseCase,
     private val pokemonDetailUseCase: PokemonDetailUseCase,
     private val pokemonWidgetUseCase: DailyPokemonWidgetUseCase,
@@ -230,6 +236,7 @@ class ExampleWorkerFactory(
         return DailyNotificationWorker(
             appContext,
             workerParameters,
+            enqueueWorker,
             randomPokemonUseCase,
             pokemonDetailUseCase,
             pokemonWidgetUseCase,

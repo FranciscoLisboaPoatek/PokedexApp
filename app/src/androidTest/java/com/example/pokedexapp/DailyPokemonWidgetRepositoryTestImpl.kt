@@ -11,5 +11,5 @@ class DailyPokemonWidgetRepositoryTestImpl
         override suspend fun saveDailyPokemon(pokemon: DailyPokemonWidgetModel) {
         }
 
-        override suspend fun getDailyPokemon(): DailyPokemonWidgetModel = PokemonSampleData.pokemonWidgetDataSample()
+        override suspend fun getDailyPokemon(): DailyPokemonWidgetModel = PokemonSampleData.dailyPokemonWidgetDataSample()
     }

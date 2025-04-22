@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
-import com.example.pokedexapp.domain.models.DailyPokemonWidgetModel
+import com.example.pokedexapp.domain.models.ChoosePokemonWidgetModel
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,30 +13,30 @@ import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
-val Context.dailyPokemonDataStore by dataStore("daily_pokemon.json", DailyPokemonWidgetModelSerializer)
+val Context.choosePokemonDataStore by dataStore("choose_pokemon.json", ChoosePokemonWidgetModelSerializer)
 
-object DailyPokemonWidgetModelSerializer : Serializer<DailyPokemonWidgetModel> {
-    override val defaultValue: DailyPokemonWidgetModel
-        get() = PokemonSampleData.dailyPokemonWidgetDataSample()
+object ChoosePokemonWidgetModelSerializer : Serializer<ChoosePokemonWidgetModel> {
+    override val defaultValue: ChoosePokemonWidgetModel
+        get() = PokemonSampleData.choosePokemonWidgetDataSample()
 
-    override suspend fun readFrom(input: InputStream): DailyPokemonWidgetModel {
+    override suspend fun readFrom(input: InputStream): ChoosePokemonWidgetModel {
         try {
             return Json.decodeFromString(
-                DailyPokemonWidgetModel.serializer(),
+                ChoosePokemonWidgetModel.serializer(),
                 input.readBytes().decodeToString(),
             )
         } catch (serialization: SerializationException) {
-            throw CorruptionException("Unable to read DailyPokemonWidgetModel", serialization)
+            throw CorruptionException("Unable to read ChoosePokemonWidgetModel", serialization)
         }
     }
 
     override suspend fun writeTo(
-        t: DailyPokemonWidgetModel,
+        t: ChoosePokemonWidgetModel,
         output: OutputStream,
     ) {
         withContext(Dispatchers.IO) {
             output.write(
-                Json.encodeToString(DailyPokemonWidgetModel.serializer(), t)
+                Json.encodeToString(ChoosePokemonWidgetModel.serializer(), t)
                     .encodeToByteArray(),
             )
         }

@@ -1,7 +1,6 @@
 package com.example.pokedexapp.ui.pokemon_detail_screen.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
@@ -10,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.pokedexapp.ui.components.NoPokemonImageIcon
@@ -18,24 +16,22 @@ import com.example.pokedexapp.ui.components.NoPokemonImageIcon
 @Composable
 fun PokemonImageWrapper(
     image: String?,
-    imageSize: Dp?,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = modifier,
     ) {
         if (image != null) {
             AsyncImage(
                 model = image,
                 contentDescription = null,
-                modifier = if (imageSize != null) Modifier.size(imageSize) else Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
             )
         } else {
             NoPokemonImageIcon(
                 tint = MaterialTheme.colorScheme.onSurface,
-                modifier = if (imageSize != null) Modifier.size(imageSize / 2) else Modifier.fillMaxSize(0.5f),
+                modifier = Modifier.fillMaxSize(0.5f),
             )
         }
     }
@@ -45,7 +41,7 @@ fun PokemonImageWrapper(
 @Composable
 private fun PokemonImageWrapperPreview() {
     Surface {
-        PokemonImageWrapper(image = "", imageSize = 200.dp)
+        PokemonImageWrapper(image = "", modifier = Modifier.size(200.dp))
     }
 }
 
@@ -53,6 +49,6 @@ private fun PokemonImageWrapperPreview() {
 @Composable
 private fun PokemonImageWrapperNoImagePreview() {
     Surface {
-        PokemonImageWrapper(image = null, imageSize = 200.dp)
+        PokemonImageWrapper(image = null, modifier = Modifier.size(200.dp))
     }
 }

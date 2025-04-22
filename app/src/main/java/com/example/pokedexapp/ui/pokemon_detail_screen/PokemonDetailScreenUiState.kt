@@ -13,4 +13,5 @@ data class PokemonDetailScreenUiState(
     val receiverToken: String = "",
     val isSharingPokemonToReceiver: Boolean = false,
     val isErrorSharingPokemonToReceiver: Boolean = false,
+    val isSettingPokemonAsWidget: Boolean = false,
 )

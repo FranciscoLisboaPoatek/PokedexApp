@@ -1,10 +1,14 @@
 package com.example.pokedexapp.ui.pokemon_detail_screen
 
+import android.content.Context
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pokedexapp.domain.models.ChoosePokemonWidgetModel
 import com.example.pokedexapp.domain.models.SharePokemonModel
 import com.example.pokedexapp.domain.models.SpriteType
+import com.example.pokedexapp.domain.use_cases.ChoosePokemonWidgetUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
@@ -14,6 +18,7 @@ import com.example.pokedexapp.ui.navigation.Screen
 import com.example.pokedexapp.ui.utils.AudioPlayer
 import com.example.pokedexapp.ui.utils.POKEMON_ID_KEY
 import com.example.pokedexapp.ui.utils.updateState
+import com.example.pokedexapp.ui.widgets.choose_pokemon.ChoosePokemonWidget
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -27,6 +32,7 @@ class PokemonDetailViewModel
         private val pokemonDetailUseCase: PokemonDetailUseCase,
         private val sharePokemonUseCase: SharePokemonUseCase,
         private val pokemonEvolutionChainUseCase: PokemonEvolutionChainUseCase,
+        private val choosePokemonWidgetUseCase: ChoosePokemonWidgetUseCase,
         private val navigator: Navigator,
     ) : ViewModel() {
         private val pokemonId: String = checkNotNull(savedStateHandle[POKEMON_ID_KEY])
@@ -74,11 +80,35 @@ class PokemonDetailViewModel
                         )
                     }
                 }
+
+                is PokemonDetailScreenOnEvent.SwitchIsSettingPokemonAsWidget -> {
+                    switchSetPokemonAsWidgetDialog()
+                }
+
+                is PokemonDetailScreenOnEvent.SetChoosePokemonWidgetModel -> {
+                    setChoosePokemonWidgetModel(event.pokemon, event.context)
+                }
             }
         }
 
         fun switchSharePokemonToReceiverDialog() {
             _state.updateState { copy(isSharingPokemonToReceiver = !isSharingPokemonToReceiver) }
+        }
+
+        fun switchSetPokemonAsWidgetDialog() {
+            _state.value.pokemonDetailModel?.let {
+                navigator.navigateTo(Screen.ChoosePokemonWidgetScreen.navigateToChoosePokemonWidget(it.id))
+            }
+        }
+
+        fun setChoosePokemonWidgetModel(
+            pokemon: ChoosePokemonWidgetModel,
+            context: Context,
+        ) {
+            viewModelScope.launch {
+                choosePokemonWidgetUseCase.savePokemon(pokemon)
+                ChoosePokemonWidget().updateAll(context)
+            }
         }
 
         fun updateReceiverToken(newToken: String) {
