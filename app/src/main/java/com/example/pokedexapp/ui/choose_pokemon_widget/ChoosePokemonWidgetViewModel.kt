@@ -21,94 +21,102 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ChoosePokemonWidgetViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val pokemonDetailUseCase: PokemonDetailUseCase,
-    private val choosePokemonWidgetUseCase: ChoosePokemonWidgetUseCase,
-    private val navigator: Navigator,
-): ViewModel() {
+class ChoosePokemonWidgetViewModel
+    @Inject
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        private val pokemonDetailUseCase: PokemonDetailUseCase,
+        private val choosePokemonWidgetUseCase: ChoosePokemonWidgetUseCase,
+        private val navigator: Navigator,
+    ) : ViewModel() {
+        private val pokemonId: String = checkNotNull(savedStateHandle[POKEMON_ID_KEY])
 
-    private val pokemonId: String = checkNotNull(savedStateHandle[POKEMON_ID_KEY])
+        private val _state: MutableStateFlow<ChoosePokemonAsWidgetUiState> = MutableStateFlow(ChoosePokemonAsWidgetUiState())
+        val state get() = _state
 
-    private val _state: MutableStateFlow<ChoosePokemonAsWidgetUiState> = MutableStateFlow(ChoosePokemonAsWidgetUiState())
-    val state get() = _state
+        init {
+            loadData()
+        }
 
-    init {
-        loadData()
-    }
-
-    fun onEvent(event: ChoosePokemonAsWidgetScreenOnEvent) {
-        when(event) {
-            ChoosePokemonAsWidgetScreenOnEvent.onCancel -> {
-                onCancel()
-            }
-            is ChoosePokemonAsWidgetScreenOnEvent.onChoosePokemonWidgetModel -> {
-                onChoosePokemonWidgetModel(event.pokemon, event.context)
+        fun onEvent(event: ChoosePokemonAsWidgetScreenOnEvent) {
+            when (event) {
+                ChoosePokemonAsWidgetScreenOnEvent.OnCancel -> {
+                    onCancel()
+                }
+                is ChoosePokemonAsWidgetScreenOnEvent.OnChoosePokemonWidgetModel -> {
+                    onChoosePokemonWidgetModel(event.pokemon, event.context)
+                }
             }
         }
-    }
 
-    private fun onChoosePokemonWidgetModel(pokemon: ChoosePokemonWidgetModel, context: Context) {
-        viewModelScope.launch {
-            choosePokemonWidgetUseCase.savePokemon(pokemon)
-            ChoosePokemonWidget().updateAll(context)
+        private fun onChoosePokemonWidgetModel(
+            pokemon: ChoosePokemonWidgetModel,
+            context: Context,
+        ) {
+            viewModelScope.launch {
+                choosePokemonWidgetUseCase.savePokemon(pokemon)
+                ChoosePokemonWidget().updateAll(context)
+                navigator.navigateUp()
+            }
+        }
+
+        private fun onCancel() {
             navigator.navigateUp()
         }
-    }
 
-    private fun onCancel() {
-        navigator.navigateUp()
-    }
+        private fun loadData() {
+            _state.update {
+                it.copy(
+                    isLoading = true,
+                )
+            }
+            viewModelScope.launch {
+                val pokemonDetailResponse = pokemonDetailUseCase.getPokemonById(pokemonId)
 
-    private fun loadData() {
-        _state.update {
-            it.copy(
-                isLoading = true
-            )
-        }
-        viewModelScope.launch {
-            val pokemonDetailResponse = pokemonDetailUseCase.getPokemonById(pokemonId)
-
-            when(pokemonDetailResponse) {
-                is Response.Error -> {
-
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            isError = true
-                        )
-                    }
-                }
-                is Response.Success -> {
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            isError = false,
-                            choosePokemonAsWidgetScreenModel = ChoosePokemonAsWidgetScreenModel(
-                                pokemonId = pokemonDetailResponse.data.id,
-                                pokemonFrontSpriteImageUrl =pokemonDetailResponse.data.frontDefaultSprite,
-                                pokemonFrontShinySpriteImageUrl = pokemonDetailResponse.data.frontShinySprite,
-                                pokemonBackSpriteImageUrl = pokemonDetailResponse.data.backDefaultSprite,
-                                pokemonBackShinySpriteImageUrl = pokemonDetailResponse.data.backShinySprite,
-                                pokemonPrimaryType = pokemonDetailResponse.data.primaryType,
+                when (pokemonDetailResponse) {
+                    is Response.Error -> {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                isError = true,
                             )
-                        )
+                        }
+                    }
+                    is Response.Success -> {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                isError = false,
+                                choosePokemonAsWidgetScreenModel =
+                                    ChoosePokemonAsWidgetScreenModel(
+                                        pokemonId = pokemonDetailResponse.data.id,
+                                        pokemonFrontSpriteImageUrl = pokemonDetailResponse.data.frontDefaultSprite,
+                                        pokemonFrontShinySpriteImageUrl = pokemonDetailResponse.data.frontShinySprite,
+                                        pokemonBackSpriteImageUrl = pokemonDetailResponse.data.backDefaultSprite,
+                                        pokemonBackShinySpriteImageUrl = pokemonDetailResponse.data.backShinySprite,
+                                        pokemonPrimaryType = pokemonDetailResponse.data.primaryType,
+                                    ),
+                            )
+                        }
                     }
                 }
             }
-
         }
     }
-}
 
 sealed class ChoosePokemonAsWidgetScreenOnEvent {
-    data class onChoosePokemonWidgetModel(val pokemon: ChoosePokemonWidgetModel, val context: Context) : ChoosePokemonAsWidgetScreenOnEvent()
-    data object onCancel: ChoosePokemonAsWidgetScreenOnEvent()
+    data class OnChoosePokemonWidgetModel(
+        val pokemon: ChoosePokemonWidgetModel,
+        val context: Context,
+    ) : ChoosePokemonAsWidgetScreenOnEvent()
+
+    data object OnCancel : ChoosePokemonAsWidgetScreenOnEvent()
 }
-data class ChoosePokemonAsWidgetUiState (
+
+data class ChoosePokemonAsWidgetUiState(
     val isLoading: Boolean = true,
     val isError: Boolean = false,
-    val choosePokemonAsWidgetScreenModel: ChoosePokemonAsWidgetScreenModel? = null
+    val choosePokemonAsWidgetScreenModel: ChoosePokemonAsWidgetScreenModel? = null,
 )
 
 data class ChoosePokemonAsWidgetScreenModel(

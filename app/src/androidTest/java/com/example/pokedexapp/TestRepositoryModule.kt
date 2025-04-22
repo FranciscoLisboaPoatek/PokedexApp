@@ -29,6 +29,6 @@ abstract class TestRepositoryModule {
     @Binds
     @Singleton
     abstract fun bindChoosePokemonWidgetRepository(
-        choosePokemonWidgetRepositoryTestImpl: ChoosePokemonWidgetRepositoryTestImpl
+        choosePokemonWidgetRepositoryTestImpl: ChoosePokemonWidgetRepositoryTestImpl,
     ): ChoosePokemonWidgetRepository
 }

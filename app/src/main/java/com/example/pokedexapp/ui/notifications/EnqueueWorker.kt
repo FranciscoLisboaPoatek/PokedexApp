@@ -4,5 +4,8 @@ import android.content.Context
 import java.util.Calendar
 
 interface EnqueueWorker {
-    fun enqueue(context: Context, calendar: Calendar = Calendar.getInstance())
+    fun enqueue(
+        context: Context,
+        calendar: Calendar = Calendar.getInstance(),
+    )
 }

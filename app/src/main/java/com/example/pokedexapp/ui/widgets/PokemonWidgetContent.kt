@@ -18,7 +18,6 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.size
 import com.example.pokedexapp.MainActivity
 import com.example.pokedexapp.R
-import com.example.pokedexapp.domain.models.PokemonTypes
 import com.example.pokedexapp.ui.navigation.Screen
 import com.example.pokedexapp.ui.utils.INTENT_EXTRA_DEEPLINK_KEY
 

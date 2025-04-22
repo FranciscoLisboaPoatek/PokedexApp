@@ -11,28 +11,38 @@ import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class EnqueueDailyNotificationWorker @Inject constructor(): EnqueueWorker {
-    override fun enqueue(context: Context, calendar: Calendar) {
-        val delayToSchedule = calculateDelayToSchedule(calendar)
+class EnqueueDailyNotificationWorker
+    @Inject
+    constructor() : EnqueueWorker {
+        override fun enqueue(
+            context: Context,
+            calendar: Calendar,
+        ) {
+            val delayToSchedule = calculateDelayToSchedule(calendar)
 
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
+            val constraints =
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
 
-        val dailyWorkRequest = OneTimeWorkRequestBuilder<DailyNotificationWorker>()
-            .setInitialDelay(delayToSchedule, TimeUnit.MILLISECONDS)
-            .setConstraints(constraints)
-            .build()
+            val dailyWorkRequest =
+                OneTimeWorkRequestBuilder<DailyNotificationWorker>()
+                    .setInitialDelay(delayToSchedule, TimeUnit.MILLISECONDS)
+                    .setConstraints(constraints)
+                    .build()
 
-        WorkManager.getInstance(context).enqueueUniqueWork(
-            DAILY_NOTIFICATION_WORKER_ID_KEY,
-            ExistingWorkPolicy.APPEND_OR_REPLACE,
-            dailyWorkRequest
-        )
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                DAILY_NOTIFICATION_WORKER_ID_KEY,
+                ExistingWorkPolicy.APPEND_OR_REPLACE,
+                dailyWorkRequest,
+            )
+        }
     }
-}
 
-private fun calculateDelayToSchedule(currentCalendar: Calendar, hourOfTheDay: Int = 12): Long {
+private fun calculateDelayToSchedule(
+    currentCalendar: Calendar,
+    hourOfTheDay: Int = 12,
+): Long {
     val calendar = currentCalendar.clone() as Calendar
 
     calendar.set(Calendar.HOUR_OF_DAY, hourOfTheDay)

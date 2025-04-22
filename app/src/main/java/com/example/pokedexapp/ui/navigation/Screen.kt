@@ -24,7 +24,7 @@ sealed class Screen(val route: String) {
         }
     }
 
-    data object ChoosePokemonWidgetScreen: Screen(ScreenRoute.CHOOSE_POKEMON_WIDGET_SCREEN.route) {
+    data object ChoosePokemonWidgetScreen : Screen(ScreenRoute.CHOOSE_POKEMON_WIDGET_SCREEN.route) {
         val routeWithArgs = "$route/{$POKEMON_ID_KEY}"
         val arguments =
             listOf(
@@ -42,5 +42,5 @@ sealed class Screen(val route: String) {
 enum class ScreenRoute(val route: String) {
     LIST_SCREEN("pokemon_list_screen"),
     DETAIL_SCREEN("pokemon_detail_screen"),
-    CHOOSE_POKEMON_WIDGET_SCREEN("choose_pokemon_widget_screen")
+    CHOOSE_POKEMON_WIDGET_SCREEN("choose_pokemon_widget_screen"),
 }

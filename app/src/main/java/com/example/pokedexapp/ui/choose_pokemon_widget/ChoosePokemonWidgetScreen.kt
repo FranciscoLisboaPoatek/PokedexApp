@@ -57,7 +57,7 @@ import com.example.pokedexapp.ui.theme.TopBarBlueColor
 fun ChoosePokemonWidgetScreen(
     modifier: Modifier = Modifier,
     state: ChoosePokemonAsWidgetUiState,
-    onEvent: (ChoosePokemonAsWidgetScreenOnEvent) -> Unit
+    onEvent: (ChoosePokemonAsWidgetScreenOnEvent) -> Unit,
 ) {
     if (state.isLoading) {
         Box(
@@ -76,7 +76,7 @@ fun ChoosePokemonWidgetScreen(
             Content(
                 modifier = modifier,
                 pokemonAsWidgetScreenModel = it,
-                onEvent = onEvent
+                onEvent = onEvent,
             )
         }
     }
@@ -106,26 +106,26 @@ private fun Content(
                     Text(
                         text = stringResource(R.string.topbar_configure_widget),
                         color = Color.White,
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                     )
                 },
                 navigateUpIcon = {
                     NavigateUpIconButton(
-                        { onEvent(ChoosePokemonAsWidgetScreenOnEvent.onCancel) },
-                        Color.White
+                        { onEvent(ChoosePokemonAsWidgetScreenOnEvent.OnCancel) },
+                        Color.White,
                     )
-                }
+                },
             )
-        }
+        },
     ) {
         Column(
-            modifier = modifier
-                .padding(it)
-                .padding(horizontal = 24.dp)
-                .verticalScroll(rememberScrollState()),
+            modifier =
+                modifier
+                    .padding(it)
+                    .padding(horizontal = 24.dp)
+                    .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
             Spacer(Modifier.height(24.dp))
 
             Box(
@@ -135,9 +135,10 @@ private fun Content(
             ) {
                 PokemonImageWrapper(
                     image = selectedImage.spriteUrl,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.Center),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .align(Alignment.Center),
                 )
             }
 
@@ -145,14 +146,14 @@ private fun Content(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     SelectablePokemonImage(
                         selectedImage == pokemonAsWidgetScreenModel.pokemonFrontSpriteImageUrl,
-                        pokemonAsWidgetScreenModel.pokemonFrontSpriteImageUrl
+                        pokemonAsWidgetScreenModel.pokemonFrontSpriteImageUrl,
                     ) {
                         selectedImage =
                             pokemonAsWidgetScreenModel.pokemonFrontSpriteImageUrl
@@ -160,26 +161,25 @@ private fun Content(
 
                     SelectablePokemonImage(
                         selectedImage == pokemonAsWidgetScreenModel.pokemonFrontShinySpriteImageUrl,
-                        pokemonAsWidgetScreenModel.pokemonFrontShinySpriteImageUrl
+                        pokemonAsWidgetScreenModel.pokemonFrontShinySpriteImageUrl,
                     ) {
                         selectedImage =
                             pokemonAsWidgetScreenModel.pokemonFrontShinySpriteImageUrl
                     }
-
                 }
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     SelectablePokemonImage(
                         selectedImage == pokemonAsWidgetScreenModel.pokemonBackSpriteImageUrl,
-                        pokemonAsWidgetScreenModel.pokemonBackSpriteImageUrl
+                        pokemonAsWidgetScreenModel.pokemonBackSpriteImageUrl,
                     ) {
                         selectedImage =
                             pokemonAsWidgetScreenModel.pokemonBackSpriteImageUrl
                     }
                     SelectablePokemonImage(
                         selectedImage == pokemonAsWidgetScreenModel.pokemonBackShinySpriteImageUrl,
-                        pokemonAsWidgetScreenModel.pokemonBackShinySpriteImageUrl
+                        pokemonAsWidgetScreenModel.pokemonBackShinySpriteImageUrl,
                     ) {
                         selectedImage =
                             pokemonAsWidgetScreenModel.pokemonBackShinySpriteImageUrl
@@ -201,7 +201,7 @@ private fun Content(
                                 type.color,
                             ) {
                                 selectedColor = type.color
-                            }
+                            },
                     )
                 }
                 Box(
@@ -209,7 +209,7 @@ private fun Content(
                         Modifier
                             .colorPick(selectedColor, Color.White, Color.Black) {
                                 selectedColor = Color.White
-                            }
+                            },
                 )
 
                 Box(
@@ -217,7 +217,7 @@ private fun Content(
                         Modifier
                             .colorPick(selectedColor, Color.Black, Color.White) {
                                 selectedColor = Color.Black
-                            }
+                            },
                 )
 
                 Icon(
@@ -228,7 +228,7 @@ private fun Content(
                             },
                     painter = painterResource(R.drawable.ic_baseline_format_color_reset_24),
                     tint = Color.Gray,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
 
@@ -237,20 +237,21 @@ private fun Content(
             Row {
                 OutlinedButton(
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = TopBarBlueColor,
-                    ),
+                    colors =
+                        ButtonDefaults.outlinedButtonColors(
+                            contentColor = TopBarBlueColor,
+                        ),
                     shape = ButtonDefaults.outlinedShape,
                     onClick = {
                         onEvent(
-                            ChoosePokemonAsWidgetScreenOnEvent.onChoosePokemonWidgetModel(
+                            ChoosePokemonAsWidgetScreenOnEvent.OnChoosePokemonWidgetModel(
                                 ChoosePokemonWidgetModel(
                                     id = pokemonAsWidgetScreenModel.pokemonId,
                                     imageUrl = selectedImage.spriteUrl,
                                     color = selectedColor.toArgb(),
                                 ),
-                                context
-                            )
+                                context,
+                            ),
                         )
                     },
                 ) {
@@ -266,15 +267,15 @@ private fun Content(
                             containerColor = TopBarBlueColor,
                         ),
                     onClick = {
-                        onEvent( 
-                            ChoosePokemonAsWidgetScreenOnEvent.onChoosePokemonWidgetModel(
+                        onEvent(
+                            ChoosePokemonAsWidgetScreenOnEvent.OnChoosePokemonWidgetModel(
                                 ChoosePokemonWidgetModel(
                                     id = pokemonAsWidgetScreenModel.pokemonId,
                                     imageUrl = selectedImage.spriteUrl,
                                     color = selectedColor.toArgb(),
                                 ),
-                                context
-                            )
+                                context,
+                            ),
                         )
                     },
                 ) {
@@ -283,7 +284,6 @@ private fun Content(
             }
 
             Spacer(Modifier.height(12.dp))
-
         }
     }
 }
@@ -292,27 +292,28 @@ private fun Content(
 private fun SelectablePokemonImage(
     selected: Boolean,
     pokemonSprite: PokemonSprite,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     PokemonImageWrapper(
         image = pokemonSprite.spriteUrl,
-        modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
-            .sizeIn(maxHeight = 120.dp, maxWidth = 120.dp)
-            .aspectRatio(1f)
-            .conditional(
-                selected,
-                {
-                    border(
-                        1.dp,
-                        MaterialTheme.colorScheme.onSurface,
-                        RoundedCornerShape(16.dp),
-                    )
+        modifier =
+            Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .sizeIn(maxHeight = 120.dp, maxWidth = 120.dp)
+                .aspectRatio(1f)
+                .conditional(
+                    selected,
+                    {
+                        border(
+                            1.dp,
+                            MaterialTheme.colorScheme.onSurface,
+                            RoundedCornerShape(16.dp),
+                        )
+                    },
+                )
+                .clickable(pokemonSprite.spriteUrl != null) {
+                    onClick()
                 },
-            )
-            .clickable(pokemonSprite.spriteUrl != null) {
-                onClick()
-            }
     )
 }
 
@@ -332,21 +333,20 @@ private inline fun Modifier.colorPick(
     selectedColor: Color,
     color: Color,
     selectedBorderColor: Color = MaterialTheme.colorScheme.onSurface,
-    crossinline onClick: () -> Unit
-) =
-    clip(CircleShape)
-        .size(36.dp)
-        .background(color)
-        .clickable {
-            onClick()
-        }
-        .conditional(
-            selectedColor == color,
-            {
-                border(
-                    2.dp,
-                    selectedBorderColor,
-                    CircleShape,
-                )
-            },
-        )
+    crossinline onClick: () -> Unit,
+) = clip(CircleShape)
+    .size(36.dp)
+    .background(color)
+    .clickable {
+        onClick()
+    }
+    .conditional(
+        selectedColor == color,
+        {
+            border(
+                2.dp,
+                selectedBorderColor,
+                CircleShape,
+            )
+        },
+    )

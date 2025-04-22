@@ -12,7 +12,7 @@ fun ChoosePokemonWidgetScreenNavGraphComposable() {
     val viewModel = hiltViewModel<ChoosePokemonWidgetViewModel>()
     val state by viewModel.state.collectAsState()
     ChoosePokemonWidgetScreen(
-       state = state,
+        state = state,
     ) {
         viewModel.onEvent(it)
     }

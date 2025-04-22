@@ -10,12 +10,15 @@ import androidx.compose.ui.res.stringResource
 import com.example.pokedexapp.R
 
 @Composable
-fun NavigateUpIconButton(navigateUp: () -> Unit, color: Color) {
+fun NavigateUpIconButton(
+    navigateUp: () -> Unit,
+    color: Color,
+) {
     IconButton(onClick = { navigateUp() }) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(R.string.navigate_up),
-            tint = color
+            tint = color,
         )
     }
 }

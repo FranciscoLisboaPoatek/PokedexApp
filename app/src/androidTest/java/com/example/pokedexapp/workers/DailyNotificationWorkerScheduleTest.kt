@@ -19,16 +19,16 @@ import java.util.Calendar
 
 @RunWith(AndroidJUnit4::class)
 class DailyNotificationWorkerScheduleTest {
-
     private lateinit var context: Context
 
     @Before
     fun setup() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        val config = Configuration.Builder()
-            .setMinimumLoggingLevel(Log.DEBUG)
-            .setExecutor(SynchronousExecutor())
-            .build()
+        val config =
+            Configuration.Builder()
+                .setMinimumLoggingLevel(Log.DEBUG)
+                .setExecutor(SynchronousExecutor())
+                .build()
 
         WorkManagerTestInitHelper.initializeTestWorkManager(context, config)
     }
@@ -45,18 +45,19 @@ class DailyNotificationWorkerScheduleTest {
 
         EnqueueDailyNotificationWorker().enqueue(context, currentTime)
 
-        val workInfo = workManager.getWorkInfosForUniqueWork(DAILY_NOTIFICATION_WORKER_ID_KEY)
-            .get()
-            .firstOrNull()
+        val workInfo =
+            workManager.getWorkInfosForUniqueWork(DAILY_NOTIFICATION_WORKER_ID_KEY)
+                .get()
+                .firstOrNull()
 
         assertEquals(WorkInfo.State.ENQUEUED, workInfo?.state)
 
-        val workSpec = workInfo?.run {
-            workManager.getWorkInfoById(id).get()
-        }
+        val workSpec =
+            workInfo?.run {
+                workManager.getWorkInfoById(id).get()
+            }
 
         assertEquals(expectedTime.timeInMillis - currentTime.timeInMillis, workSpec?.initialDelayMillis)
-
     }
 
     @Test
@@ -71,15 +72,17 @@ class DailyNotificationWorkerScheduleTest {
 
         EnqueueDailyNotificationWorker().enqueue(context, currentTime)
 
-        val workInfo = workManager.getWorkInfosForUniqueWork(DAILY_NOTIFICATION_WORKER_ID_KEY)
-            .get()
-            .firstOrNull()
+        val workInfo =
+            workManager.getWorkInfosForUniqueWork(DAILY_NOTIFICATION_WORKER_ID_KEY)
+                .get()
+                .firstOrNull()
 
         assertEquals(WorkInfo.State.ENQUEUED, workInfo?.state)
 
-        val workSpec = workInfo?.run {
-            workManager.getWorkInfoById(id).get()
-        }
+        val workSpec =
+            workInfo?.run {
+                workManager.getWorkInfoById(id).get()
+            }
 
         assertEquals(expectedTime.timeInMillis - currentTime.timeInMillis, workSpec?.initialDelayMillis)
     }

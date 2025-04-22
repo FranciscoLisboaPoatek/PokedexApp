@@ -219,14 +219,14 @@ private fun PokemonEvolution(
 private fun EvolvesToIcon(
     modifier: Modifier = Modifier,
     tint: Color = Color.Gray,
-    contentDescription: String? = null
+    contentDescription: String? = null,
 ) {
     Icon(
         painter = painterResource(R.drawable.ic_baseline_arrow_right_alt_24),
         contentDescription = contentDescription,
         modifier =
-            modifier,
-        tint = tint
+        modifier,
+        tint = tint,
     )
 }
 

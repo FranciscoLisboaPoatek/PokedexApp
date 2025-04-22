@@ -24,6 +24,6 @@ fun BasicAppBar(
         colors =
             TopAppBarDefaults.topAppBarColors(
                 containerColor = TopBarBlueColor,
-            )
+            ),
     )
 }
