@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.example.pokedexapp.domain.models.PokemonEvolutionChainModel
 import com.example.pokedexapp.domain.models.SpriteType
 import com.example.pokedexapp.domain.sample_data.PokemonSampleData
+import com.example.pokedexapp.domain.use_cases.ChoosePokemonWidgetUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonDetailUseCase
 import com.example.pokedexapp.domain.use_cases.PokemonEvolutionChainUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
@@ -38,6 +39,8 @@ class PokemonDetailViewModelTest {
 
     private val pokemonEvolutionChainUseCaseMock = mockk<PokemonEvolutionChainUseCase>()
 
+    private val choosePokemonWidgetUseCase = mockk<ChoosePokemonWidgetUseCase>()
+
     private val navigatorMock = mockk<Navigator>()
 
     private val savedStateHandleMock = SavedStateHandle()
@@ -65,6 +68,7 @@ class PokemonDetailViewModelTest {
                 pokemonDetailUseCase = pokemonDetailUseCaseMock,
                 sharePokemonUseCase = sharePokemonUseCaseMock,
                 pokemonEvolutionChainUseCase = pokemonEvolutionChainUseCaseMock,
+                choosePokemonWidgetUseCase = choosePokemonWidgetUseCase,
                 navigator = navigatorMock,
             )
 
