@@ -10,6 +10,7 @@ import com.example.pokedexapp.domain.use_cases.RandomPokemonUseCase
 import com.example.pokedexapp.domain.use_cases.SharePokemonUseCase
 import com.example.pokedexapp.ui.analytics.AnalyticsLogger
 import com.example.pokedexapp.ui.navigation.Navigator
+import com.example.pokedexapp.ui.notifications.EnqueueWorker
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -66,5 +67,11 @@ object TestPokemonModule {
     @Singleton
     fun provideNavigator(): Navigator {
         return FakeNavigator()
+    }
+
+    @Provides
+    @Singleton
+    fun provideEnqueueWorker(): EnqueueWorker {
+        return FakeEnqueueWorker()
     }
 }

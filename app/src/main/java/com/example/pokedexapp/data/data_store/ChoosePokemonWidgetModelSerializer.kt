@@ -1,7 +1,6 @@
 package com.example.pokedexapp.data.data_store
 
 import android.content.Context
-import androidx.compose.ui.graphics.toArgb
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
@@ -18,12 +17,7 @@ val Context.choosePokemonDataStore by dataStore("choose_pokemon.json", ChoosePok
 
 object ChoosePokemonWidgetModelSerializer : Serializer<ChoosePokemonWidgetModel> {
     override val defaultValue: ChoosePokemonWidgetModel
-        get() =
-            ChoosePokemonWidgetModel(
-                PokemonSampleData.pokemonWidgetDataSample().id,
-                PokemonSampleData.pokemonWidgetDataSample().imageUrl,
-                PokemonSampleData.pokemonWidgetDataSample().primaryType.color.toArgb(),
-            )
+        get() = PokemonSampleData.choosePokemonWidgetDataSample()
 
     override suspend fun readFrom(input: InputStream): ChoosePokemonWidgetModel {
         try {

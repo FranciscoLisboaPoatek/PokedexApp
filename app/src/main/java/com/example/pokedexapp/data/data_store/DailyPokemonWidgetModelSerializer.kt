@@ -17,12 +17,7 @@ val Context.dailyPokemonDataStore by dataStore("daily_pokemon.json", DailyPokemo
 
 object DailyPokemonWidgetModelSerializer : Serializer<DailyPokemonWidgetModel> {
     override val defaultValue: DailyPokemonWidgetModel
-        get() =
-            DailyPokemonWidgetModel(
-                PokemonSampleData.pokemonWidgetDataSample().id,
-                PokemonSampleData.pokemonWidgetDataSample().imageUrl,
-                PokemonSampleData.pokemonWidgetDataSample().primaryType,
-            )
+        get() = PokemonSampleData.dailyPokemonWidgetDataSample()
 
     override suspend fun readFrom(input: InputStream): DailyPokemonWidgetModel {
         try {

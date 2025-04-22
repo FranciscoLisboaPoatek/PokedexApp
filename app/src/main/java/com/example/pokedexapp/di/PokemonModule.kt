@@ -20,6 +20,8 @@ import com.example.pokedexapp.ui.analytics.AnalyticsLogger
 import com.example.pokedexapp.ui.analytics.FirebaseAnalyticsLoggerImpl
 import com.example.pokedexapp.ui.navigation.Navigator
 import com.example.pokedexapp.ui.navigation.NavigatorImpl
+import com.example.pokedexapp.ui.notifications.EnqueueDailyNotificationWorker
+import com.example.pokedexapp.ui.notifications.EnqueueWorker
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
@@ -143,5 +145,11 @@ object PokemonModule {
     @Singleton
     fun provideNavigator(): Navigator {
         return NavigatorImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideEnqueueWorker(): EnqueueWorker {
+        return EnqueueDailyNotificationWorker()
     }
 }

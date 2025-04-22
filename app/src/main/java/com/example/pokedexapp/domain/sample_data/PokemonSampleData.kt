@@ -1,6 +1,8 @@
 package com.example.pokedexapp.domain.sample_data
 
+import androidx.compose.ui.graphics.toArgb
 import com.example.pokedexapp.domain.models.ChainModel
+import com.example.pokedexapp.domain.models.ChoosePokemonWidgetModel
 import com.example.pokedexapp.domain.models.DailyPokemonWidgetModel
 import com.example.pokedexapp.domain.models.PokemonBaseStats
 import com.example.pokedexapp.domain.models.PokemonDetailModel
@@ -333,11 +335,18 @@ class PokemonSampleData {
                     ),
             )
 
-        fun pokemonWidgetDataSample() =
+        fun dailyPokemonWidgetDataSample() =
             DailyPokemonWidgetModel(
                 id = singlePokemonDetailSampleData().id,
                 imageUrl = singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
                 primaryType = singlePokemonDetailSampleData().primaryType,
+            )
+
+        fun choosePokemonWidgetDataSample() =
+            ChoosePokemonWidgetModel(
+                id = singlePokemonDetailSampleData().id,
+                imageUrl = singlePokemonDetailSampleData().frontDefaultSprite.spriteUrl,
+                color = singlePokemonDetailSampleData().primaryType.color.toArgb(),
             )
     }
 }

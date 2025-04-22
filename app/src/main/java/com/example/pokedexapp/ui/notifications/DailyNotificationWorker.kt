@@ -25,79 +25,82 @@ const val MAX_DAILY_NOTIFICATION_WORKER_REQUESTS = 3
 
 @HiltWorker
 class DailyNotificationWorker
-    @AssistedInject
-    constructor(
-        @Assisted
-        private val appContext: Context,
-        @Assisted
-        private val params: WorkerParameters,
-        private val randomPokemonUseCase: RandomPokemonUseCase,
-        private val pokemonDetailUseCase: PokemonDetailUseCase,
-        private val pokemonWidgetUseCase: DailyPokemonWidgetUseCase,
-    ) : CoroutineWorker(appContext, params) {
-        override suspend fun doWork(): Result {
-            val notificationPokemonResponse = randomPokemonUseCase.getRandomPokemonMinimalInfo()
+@AssistedInject
+constructor(
+    @Assisted
+    private val appContext: Context,
+    @Assisted
+    private val params: WorkerParameters,
+    private val enqueueWorker: EnqueueWorker,
+    private val randomPokemonUseCase: RandomPokemonUseCase,
+    private val pokemonDetailUseCase: PokemonDetailUseCase,
+    private val pokemonWidgetUseCase: DailyPokemonWidgetUseCase,
+) : CoroutineWorker(appContext, params) {
+    override suspend fun doWork(): Result {
+        val notificationPokemonResponse = randomPokemonUseCase.getRandomPokemonMinimalInfo()
 
-            when (notificationPokemonResponse) {
-                is Response.Error -> {
-                    return Result.failure()
-                }
+        enqueueWorker.enqueue(context = appContext)
 
-                is Response.Success -> {
-                    var pokemonDetails = PokemonSampleData.pokemonWidgetDataSample()
-                    withContext(Dispatchers.IO) {
-                        var foundPokemonWithImage = false
+        when (notificationPokemonResponse) {
+            is Response.Error -> {
+                return Result.failure()
+            }
 
-                        var tries = 0
+            is Response.Success -> {
+                var pokemonDetails = PokemonSampleData.dailyPokemonWidgetDataSample()
+                withContext(Dispatchers.IO) {
+                    var foundPokemonWithImage = false
 
-                        do {
-                            val pokemonRequest =
-                                pokemonDetailUseCase.getPokemonById(notificationPokemonResponse.data.id)
+                    var tries = 0
 
-                            tries++
+                    do {
+                        val pokemonRequest =
+                            pokemonDetailUseCase.getPokemonById(notificationPokemonResponse.data.id)
 
-                            when (pokemonRequest) {
-                                is Response.Error -> {}
-                                is Response.Success -> {
-                                    if (pokemonRequest.data.frontDefaultSprite.spriteUrl != null) {
-                                        foundPokemonWithImage = true
-                                        pokemonDetails =
-                                            DailyPokemonWidgetModel(
-                                                id = pokemonRequest.data.id,
-                                                imageUrl = pokemonRequest.data.frontDefaultSprite.spriteUrl,
-                                                primaryType = pokemonRequest.data.primaryType,
-                                            )
-                                    }
+                        tries++
+
+                        when (pokemonRequest) {
+                            is Response.Error -> {}
+                            is Response.Success -> {
+                                if (pokemonRequest.data.frontDefaultSprite.spriteUrl != null) {
+                                    foundPokemonWithImage = true
+                                    pokemonDetails =
+                                        DailyPokemonWidgetModel(
+                                            id = pokemonRequest.data.id,
+                                            imageUrl = pokemonRequest.data.frontDefaultSprite.spriteUrl,
+                                            primaryType = pokemonRequest.data.primaryType,
+                                        )
                                 }
                             }
-                        } while (!foundPokemonWithImage && tries < MAX_DAILY_NOTIFICATION_WORKER_REQUESTS)
+                        }
+                    } while (!foundPokemonWithImage && tries < MAX_DAILY_NOTIFICATION_WORKER_REQUESTS)
 
-                        pokemonWidgetUseCase.saveDailyPokemon(
-                            DailyPokemonWidgetModel(
-                                id = pokemonDetails.id,
-                                imageUrl = pokemonDetails.imageUrl,
-                                primaryType = pokemonDetails.primaryType,
-                            ),
-                        )
-
-                        DailyPokemonWidget().updateAll(context = appContext)
-                    }
-                    DailyPokemonNotification(appContext).showNotification(
-                        pokemonId = notificationPokemonResponse.data.id,
-                        pokemonName = notificationPokemonResponse.data.name,
+                    pokemonWidgetUseCase.saveDailyPokemon(
+                        DailyPokemonWidgetModel(
+                            id = pokemonDetails.id,
+                            imageUrl = pokemonDetails.imageUrl,
+                            primaryType = pokemonDetails.primaryType,
+                        ),
                     )
 
-                    val outputData =
-                        Data.Builder().putAll(
-                            mapOf(
-                                POKEMON_ID_OUTPUT_KEY to pokemonDetails.id,
-                                POKEMON_IMAGE_URL_OUTPUT_KEY to pokemonDetails.imageUrl,
-                                POKEMON_PRIMARY_TYPE_NAME_OUTPUT_KEY to pokemonDetails.primaryType.name,
-                            ),
-                        ).build()
-
-                    return Result.success(outputData)
+                    DailyPokemonWidget().updateAll(context = appContext)
                 }
+                DailyPokemonNotification(appContext).showNotification(
+                    pokemonId = notificationPokemonResponse.data.id,
+                    pokemonName = notificationPokemonResponse.data.name,
+                )
+
+                val outputData =
+                    Data.Builder().putAll(
+                        mapOf(
+                            POKEMON_ID_OUTPUT_KEY to pokemonDetails.id,
+                            POKEMON_IMAGE_URL_OUTPUT_KEY to pokemonDetails.imageUrl,
+                            POKEMON_PRIMARY_TYPE_NAME_OUTPUT_KEY to pokemonDetails.primaryType.name,
+                        ),
+                    ).build()
+
+                return Result.success(outputData)
             }
         }
     }
+}
