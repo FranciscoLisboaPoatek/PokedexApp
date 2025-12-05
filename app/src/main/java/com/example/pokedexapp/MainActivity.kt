@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun PokedexApp(navigator: Navigator) {
     val navController = rememberNavController()
-
+//test
     val state = navigator.state.collectAsStateWithLifecycle().value
 
     LaunchedEffect(key1 = state) {
